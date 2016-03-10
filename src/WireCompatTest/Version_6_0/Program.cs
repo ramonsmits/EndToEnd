@@ -31,7 +31,7 @@ class Program
         busConfiguration.ScaleOut().InstanceDiscriminator("1");
         busConfiguration.RegisterComponents(c => c.ConfigureComponent<EncryptionVerifier>(DependencyLifecycle.SingleInstance));
         busConfiguration.EnableInstallers();
-
+        
         return Endpoint.Start(busConfiguration);
     }
 }
