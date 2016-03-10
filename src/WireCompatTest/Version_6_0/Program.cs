@@ -1,36 +1,37 @@
 using System.Reflection;
+using System.Threading.Tasks;
 using NServiceBus;
 
 class Program
 {
     static string endpointName = "WireCompat" + Assembly.GetExecutingAssembly().GetName().Name;
+
     static void Main()
     {
-        var bus = CreateBus(); 
-        TestRunner.EndpointName = endpointName;
-        TestRunner.RunTests(bus);
+        AsyncMain().GetAwaiter().GetResult();
     }
 
-    static IBus CreateBus()
+    static async Task AsyncMain()
     {
-        var busConfiguration = new BusConfiguration();
+        var bus = await CreateBus(); 
+        TestRunner.EndpointName = endpointName;
+        await TestRunner.RunTests(bus);
+    }
+
+    static Task<IEndpointInstance> CreateBus()
+    {
+        var busConfiguration = new EndpointConfiguration();
         busConfiguration.EndpointName(endpointName);
         busConfiguration.Conventions().ApplyMessageConventions();
         busConfiguration.UseSerialization<JsonSerializer>();
         busConfiguration.UseTransport<MsmqTransport>();
         busConfiguration.UsePersistence<InMemoryPersistence>();
         busConfiguration.RijndaelEncryptionService();
-#if (Version6)
         busConfiguration.UseDataBus<FileShareDataBus>().BasePath("..\\..\\..\\tempstorage");
-#else
-#pragma warning disable 618
-        busConfiguration.FileShareDataBus("..\\..\\..\\tempstorage");
-#pragma warning restore 618
-#endif
+        busConfiguration.ScaleOut().InstanceDiscriminator("1");
         busConfiguration.RegisterComponents(c => c.ConfigureComponent<EncryptionVerifier>(DependencyLifecycle.SingleInstance));
         busConfiguration.EnableInstallers();
-        var startableBus = Bus.Create(busConfiguration);
-        return startableBus.Start();
-    }
 
+        return Endpoint.Start(busConfiguration);
+    }
 }

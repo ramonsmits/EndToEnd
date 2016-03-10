@@ -1,0 +1,27 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using NServiceBus;
+
+public static class TestRunner
+{
+    public static string EndpointName { get; set; }
+
+    public static async Task RunTests(IEndpointInstance bus)
+    {
+        await Task.Delay(TimeSpan.FromSeconds(25));
+        await bus.InitiateDataBus();
+        await bus.InitiatePubSub();
+        await bus.InitiateSaga();
+        await bus.InitiateSendReply();
+        await bus.InitiateSendReturn();
+
+        await Task.Delay(TimeSpan.FromSeconds(30));
+        await bus.Stop();
+        DataBusVerifier.AssertExpectations();
+        PubSubVerifier.AssertExpectations();
+        SagaVerifier.AssertExpectations();
+        SendReplyVerifier.AssertExpectations();
+        SendReturnVerifier.AssertExpectations();
+    }
+}
