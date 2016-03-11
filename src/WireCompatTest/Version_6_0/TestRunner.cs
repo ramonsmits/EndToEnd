@@ -14,7 +14,7 @@ public static class TestRunner
         await bus.InitiatePubSub();
         await bus.InitiateSaga();
         await bus.InitiateSendReply();
-        await bus.InitiateSendReturn();
+        bus.InitiateSendReturn();
 
         await Task.Delay(TimeSpan.FromSeconds(30));
         await bus.Stop();
