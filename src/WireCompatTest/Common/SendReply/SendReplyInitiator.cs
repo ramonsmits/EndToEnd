@@ -1,17 +1,18 @@
-﻿using CommonMessages;
+﻿using System.Threading.Tasks;
+using CommonMessages;
 using NServiceBus;
 
 public static class SendReplyInitiator
 {
     public static void InitiateSendReply(this IBus bus)
     {
-        foreach (var endpoint in EndpointNames.All)
+        Parallel.ForEach(EndpointNames.All, endpointName =>
         {
-            bus.Send(endpoint, new SendReplyFirstMessage
-                {
-                    Sender = TestRunner.EndpointName,
-                    EncryptedProperty = "Secret"
-                });
-        }
+            bus.Send(endpointName, new SendReplyFirstMessage
+            {
+                Sender = TestRunner.EndpointName,
+                EncryptedProperty = "Secret"
+            });
+        });
     }
 }

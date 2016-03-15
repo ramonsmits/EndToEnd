@@ -1,16 +1,17 @@
-﻿using CommonMessages;
+﻿using System.Threading.Tasks;
+using CommonMessages;
 using NServiceBus;
 
 public static class SagaInitiator
 {
     public static void InitiateSaga(this IBus bus)
     {
-        foreach (var endpoint in EndpointNames.All)
+        Parallel.ForEach(EndpointNames.All, endpoint =>
         {
             bus.SendLocal(new SagaInitiateRequestingMessage
-                {
-                    TargetEndpoint = endpoint
-                });
-        }
+            {
+                TargetEndpoint = endpoint
+            });
+        });
     }
 }

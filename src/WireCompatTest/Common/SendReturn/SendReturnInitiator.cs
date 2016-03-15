@@ -1,4 +1,5 @@
-﻿using CommonMessages;
+﻿using System.Threading.Tasks;
+using CommonMessages;
 using NServiceBus;
 
 public static class SendReturnInitiator
@@ -6,7 +7,7 @@ public static class SendReturnInitiator
 
     public static void InitiateSendReturn(this IBus bus)
     {
-        foreach (var endpointName in EndpointNames.All)
+        Parallel.ForEach(EndpointNames.All, endpointName =>
         {
             var remoteName = endpointName;
             bus.Send(endpointName, new SendReturnMessage())
@@ -15,6 +16,6 @@ public static class SendReturnInitiator
                     Asserter.IsTrue(5 == i, "Incorrect property value");
                     SendReturnVerifier.ReplyReceivedFrom.Add(remoteName);
                 });
-        }
+        });
     }
 }
