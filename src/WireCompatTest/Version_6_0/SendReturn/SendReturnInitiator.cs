@@ -7,14 +7,17 @@ public static class SendReturnInitiator
 
     public static void InitiateSendReturn(this IEndpointInstance bus)
     {
-        Parallel.ForEach(EndpointNames.All, endpointName =>
+        foreach (var endpoint in EndpointNames.All)
         {
-            var sendOptions = new SendOptions();
-            sendOptions.SetDestination(endpointName);
+            Task.Run(() =>
+            {
+                var sendOptions = new SendOptions();
+                sendOptions.SetDestination(endpoint);
 
-            var result = bus.Request<int>(new SendReturnMessage(), sendOptions).Result;
-            Asserter.IsTrue(5 == result, "Incorrect property value");
-            SendReturnVerifier.ReplyReceivedFrom.Add(endpointName);
-        });
+                var result = bus.Request<int>(new SendReturnMessage(), sendOptions).Result;
+                Asserter.IsTrue(5 == result, "Incorrect property value");
+                SendReturnVerifier.ReplyReceivedFrom.Add(endpoint);
+            });
+        }
     }
 }

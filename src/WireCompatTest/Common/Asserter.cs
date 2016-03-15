@@ -24,7 +24,7 @@ public static class Asserter
         }
     }
 
-    public static void VerifyContains(this List<string> existing, string expecting, string message)
+    public static void VerifyContains(this IEnumerable<string> existing, string expecting, string message)
     {
         IsTrue(existing.Any(x => x.ToLowerInvariant() == expecting.ToLowerInvariant()), message);
     }

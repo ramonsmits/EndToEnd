@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 
 public class SendReturnVerifier
 {
@@ -11,5 +11,5 @@ public class SendReturnVerifier
         }
     }
 
-    public static List<string> ReplyReceivedFrom = new List<string>();
+    public static ConcurrentBag<string> ReplyReceivedFrom = new ConcurrentBag<string>();
 }
