@@ -146,7 +146,7 @@ Hosting
 - [ ] AppDomain
 - [ ] External process
 
-CPU Architecture
+.NET Architecture
 
 - [x] x86
 - [x] x64
