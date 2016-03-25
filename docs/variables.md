@@ -13,9 +13,13 @@ RavenDB
 SQL Server
 
 - [ ] Local
-- [x] Remote (SQL2014)
+- [x] Remote (SQL2012, because of enterprise adoption)
 - [ ] SQL Azure
 
+PostgreSQL
+
+- [ ] Local
+- [ ] Remote
 
 Oracle
 
