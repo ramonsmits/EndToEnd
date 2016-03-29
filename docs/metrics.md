@@ -2,11 +2,11 @@
 
  **Excluding warmup**
 
-- [ ] Time / Duration
-- [ ] Total number of messages
-- [ ] Average message throughput
-- [ ] Peak message throughput (if we have multiple measurement intervals)
-- [ ] Time to first message
+- [x] Time / Duration
+- [x] Total number of messages
+- [x] Average message throughput
+- [x] Peak message throughput (if we have multiple measurement intervals)
+- [x] Time to first message
 - [ ] Concurrency
 - [ ] FLR count (could set to zero, error goes to error queue immediately)
 - [ ] Message age (sum, average)
@@ -15,9 +15,9 @@
 - [ ] Header size
 - [ ] Body to Header ratio
 - System & Endpoint process utilization
-  - [ ] CPU Utilization
-  - [ ] Disk Utilization
-  - [ ] Memory Utilization
-  - [ ] Network Utilization
+  - [x] CPU Utilization
+  - [x] Disk Utilization
+  - [x] Memory Utilization
+  - [x] Network Utilization
 - [ ] Messages in error queue
-- [ ] .NET Performance counters
+- [x] .NET Performance counters
