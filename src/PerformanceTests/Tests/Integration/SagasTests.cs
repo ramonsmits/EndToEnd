@@ -1,4 +1,4 @@
-﻿namespace Tests.Integration
+﻿namespace Integration
 {
     using NUnit.Framework;
     using Tests.Tools;
@@ -6,7 +6,7 @@
     [TestFixture]
     public class SagasTests
     {
-        [TestCaseSource(typeof(EndpointGenerator), "Generate", Category = "Performance")]
+        [TestCaseSource(typeof(EndpointGenerator), nameof(EndpointGenerator.Generate), Category = "Performance")]
         public void Concurrency0(TestInfo testInfo)
         {
             testInfo.Runner.Start("--saga",

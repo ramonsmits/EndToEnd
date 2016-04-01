@@ -1,4 +1,4 @@
-﻿namespace Tests.Integration
+﻿namespace Integration
 {
     using System;
     using System.Diagnostics;

@@ -59,13 +59,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MutatorsTests.cs" />
-    <Compile Include="SagasTests.cs" />
+    <Compile Include="Categories\AuditOnVsOffFixture.cs" />
+    <Compile Include="Categories\Base.cs" />
+    <Compile Include="Categories\OutboxVsDtcFixture.cs" />
+    <Compile Include="Categories\Permutation.cs" />
+    <Compile Include="Categories\PermutationGenerator.cs" />
+    <Compile Include="Categories\Permutations.cs" />
+    <Compile Include="Categories\PublishVsSendFixture - Copy.cs" />
+    <Compile Include="Categories\PublishVsSendFixture.cs" />
+    <Compile Include="Categories\ResourceUtilizationFixture.cs" />
+    <Compile Include="Integration\AppDomainCreatorTests.cs" />
+    <Compile Include="Integration\NuGetPackageResolverTests.cs" />
+    <Compile Include="Integration\MutatorsTests.cs" />
+    <Compile Include="Integration\SagasTests.cs" />
     <Compile Include="Tools\TestInfo.cs" />
     <Compile Include="Tools\EndpointGenerator.cs" />
     <Compile Include="Tools\Extensions.cs" />
-    <Compile Include="Integration\AppDomainCreatorTests.cs" />
-    <Compile Include="Integration\NuGetPackageResolverTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\TestsGlobal.cs" />
     <Compile Include="Variables\NServiceBusVersion.cs" />
