@@ -1,22 +1,32 @@
 ### Current action items
 
- - [x] Migrate performance test code
  - [ ] Identify what is the generated code is currently testing? @dvdstelt 
-   - [ ] What are the shortcomings?
+   - [x] What are the shortcomings?
+     - There is no clean up after the tests
    - [ ] Is the seeding of data in-process going to affect the validity of the results?
-   - [ ] Is the capturing of metrics in-process going to affect the validity of the results?
+   - [x] Is the capturing of metrics in-process going to affect the validity of the results?
+     - We assume yes. We can extract the performance counter capturing to be out of process, but we will still have to capture the Message Counter metric in process.  All of the tests will be capturing similar metrics so the impact should be the same across all scenarios.
  - [ ] Create NUnit fixtures for each category in [the google sheet](https://docs.google.com/spreadsheets/d/1avUW8Y5gpcPqTxIBaq7X5OXXaE4lDU0e0ZA9FDFNygs/edit#gid=771631393) where the fixture generates all permutations for all variable values in that category @ramonsmits 
     - [ ] How would these isolated tests look?
     - [ ] How are we going to generate tests for each isolated operation?
- - [ ] Include Metrics.Net to track [required metrics](https://github.com/Particular/EndToEnd/blob/docs/docs/metrics.md) @williambza
+ - [ ] Spike the output options for metrics @williambza (timing estimates by end of 01/04/2016)
+     - [ ] Investigate Elastic + Kibana
+     - [ ] Investigate Graphite
+     - [ ] Microsoft Power BI
+     - [ ] Influx DB
+     - [ ] Defined file structure for separate CSVs @ramonsmits
+     - [ ] Combined CSV + excel
+     - [ ] Splunk @hadi (@williambza to send sample csv files for start, will also add to google drive folder)
  - [ ] Include basic [test configurations](https://github.com/Particular/EndToEnd/blob/docs/docs/variables.md) @hmemcpy
  - [ ] Setup environments: @gbiellem 
    - Queues
     - [ ] SQL2012 (Queues), 
     - [ ] Rabbit, 
+    - [ ] Azure Storage Queues
    - Persistence
      - [ ] SQL2012 (Persistence),
      - [ ] RavenDB v3, 
+     - [ ] Azure Storage Persistence
    - Runners:
      - [ ] Master (MSMQ)
      - [ ] Worker 3x (MSMQ)
@@ -29,6 +39,7 @@
 - [ ] Collect initial results and provide feedback for V6 Launch TF.
 - [ ] Allow customization of maximum run-time (so we don't ever have unbounded runs)
 - [ ] Implement test source for test permutations of persistence and transport providers @hmemcpy 
+- [ ] Setup tests for ASB and ASQ
 - [ ] Can TC setup multiple VM's for a task?
  - Database VM
  - Transport VM
@@ -36,6 +47,8 @@
  
  ### Completed actions
 
+- [X] Include Metrics.Net to track [required metrics](https://github.com/Particular/EndToEnd/blob/docs/docs/metrics.md) @williambza
+- [x] Migrate performance test code
 - [x] Decide on test variables
 - [x] Decide on metrics to capture
 - [x] Can we capture all metrics when running in an AppDomain? @hmemcpy
