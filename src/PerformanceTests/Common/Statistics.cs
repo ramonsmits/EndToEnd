@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Metrics;
+using System;
+using System.IO;
+using System.Reflection;
 using System.Threading;
 
 [Serializable]
@@ -13,6 +16,9 @@ public class Statistics
     public long NumberOfRetries;
     public TimeSpan SendTimeNoTx = TimeSpan.Zero;
     public TimeSpan SendTimeWithTx = TimeSpan.Zero;
+
+    [NonSerialized]
+    public Meter Meter;
 
     private static Statistics instance;
     public static Statistics Instance
@@ -34,6 +40,8 @@ public class Statistics
     private Statistics(int numberOfMessages)
     {
         countdownEvent = new CountdownEvent(numberOfMessages);
+
+        ConfigureMetrics();
     }
 
     public void Dump()
@@ -68,11 +76,23 @@ public class Statistics
 
     public void Signal()
     {
+        Meter.Mark();
         countdownEvent.Signal();
     }
 
     public static void WaitUntilCompleted()
     {
         countdownEvent.Wait();
+    }
+
+    void ConfigureMetrics()
+    {
+        Meter = Metric.Meter("", Unit.Commands, TimeUnit.Seconds);
+
+        var folder = Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "reports");
+
+        Metric
+            .Config.WithAllCounters()
+            .WithReporting(report => report.WithCSVReports(folder, TimeSpan.FromSeconds(1)));
     }
 }
