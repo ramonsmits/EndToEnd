@@ -46,7 +46,7 @@ NServiceBus
 Transports:
 
 - [x] MSMQ
-- [ ] RabbitMQ
+- [x] RabbitMQ
 - SqlServer
  - [ ] 1.x
  - [x] 2.x
@@ -61,6 +61,7 @@ Persistence Multiple major versions per core major version e.g. NServiceBus V5 -
 - [x] NHibernate 
 - [x] RavenDB
 - [x] InMemory
+- [ ] MSMQ
 
 Serialization
 
