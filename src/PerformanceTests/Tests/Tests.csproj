@@ -68,6 +68,7 @@
     <Compile Include="Integration\NuGetPackageResolverTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\TestsGlobal.cs" />
+    <Compile Include="Variables\NServiceBusVersion.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
