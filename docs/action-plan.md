@@ -9,11 +9,11 @@
  - [ ] Create NUnit fixtures for each category in [the google sheet](https://docs.google.com/spreadsheets/d/1avUW8Y5gpcPqTxIBaq7X5OXXaE4lDU0e0ZA9FDFNygs/edit#gid=771631393) where the fixture generates all permutations for all variable values in that category @ramonsmits 
     - [ ] How would these isolated tests look?
     - [ ] How are we going to generate tests for each isolated operation?
- - [ ] Spike the output options for metrics @williambza (timing estimates by end of 01/04/2016)
-     - [ ] Investigate Elastic + Kibana
-     - [ ] Investigate Graphite
-     - [ ] Microsoft Power BI
-     - [ ] Influx DB
+ - [ ] Spike the output options for metrics @williambza
+     - [ ] Investigate Elastic + Kibana - EOD 04/04/2016
+     - [ ] Investigate Graphite - EOD 05/04/2016
+     - [ ] Microsoft Power BI - EOD 04/04/2016
+     - [ ] Influx DB - EOD 05/04/2016
      - [ ] Defined file structure for separate CSVs @ramonsmits
      - [ ] Combined CSV + excel
      - [ ] Splunk @hadi (@williambza to send sample csv files for start, will also add to google drive folder)
