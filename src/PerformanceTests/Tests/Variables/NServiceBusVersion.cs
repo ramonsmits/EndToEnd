@@ -1,80 +1,92 @@
-﻿enum NServiceBusVersion
+﻿namespace Variables
 {
-    V5,
-    V6
-}
+    public enum NServiceBusVersion
+    {
+        V5,
+        V6
+    }
 
-enum IOPS
-{
-    Slow, // HDD
-    Normal, // SSD
-    Fast // SSD M2
-}
+    public enum IOPS
+    {
+        Slow, // HDD
+        Normal, // SSD
+        Fast // SSD M2
+    }
 
 
-enum Platform
-{
-    x86,
-    x64
-}
+    public enum Platform
+    {
+        x86,
+        x64
+    }
 
-enum gcServer
-{
-    On,
-    Off
-}
+    public enum GarbageCollector
+    {
+        Client,
+        Server
+    }
 
-enum Transport
-{
-    MSMQ,
-    RMQ,
-    ASQ,
-    ASB,
-}
+    public enum Transport
+    {
+        MSMQ,
+        RMQ,
+        ASQ,
+        ASB,
+        SQL
+    }
 
-enum Persistence
-{
-    InMemory,
-    NHibernate,
-    RavenDB,
-    MSMQ
-}
+    public enum Persistence
+    {
+        InMemory,
+        NHibernate,
+        RavenDB,
+        //MSMQ
+    }
 
-enum Serialization
-{
-    Json,
-    Xml
-}
+    public enum Serialization
+    {
+        Json,
+        Xml
+    }
 
-enum MessageSize
-{
-    Tiny,
-    Small,
-    Medium,
-    Large
-}
+    public enum MessageSize
+    {
+        Tiny,
+        Small,
+        Medium,
+        Large
+    }
 
-enum Outbox
-{
-    On,
-    Off
-}
+    public enum Outbox
+    {
+        On,
+        Off
+    }
 
-enum DTC
-{
-    On,
-    Off
-}
+    public enum DTC
+    {
+        On,
+        Off
+    }
 
-enum TransactionMode
-{
-    Receive,
-    Unreliable,
-    AtomicSends
-}
+    public enum TransactionMode
+    {
+        Default,
+        Receive,
+        Unreliable,
+        AtomicSends
+    }
 
-enum Audit
-{
-    On,
-    Off
+    public enum Audit
+    {
+        On,
+        Off
+    }
+
+    public enum ConcurrencyLevel
+    {
+        Sequential,
+        EnvCores,
+        EnvCores4x
+    }
 }
