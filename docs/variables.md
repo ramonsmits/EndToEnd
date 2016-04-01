@@ -51,8 +51,8 @@ Transports:
  - [ ] 1.x
  - [x] 2.x
  - [x] 3.x
-- [ ] ASQ
-- [ ] ASB
+- [x] ASQ
+- [x] ASB
 
 Persistence Multiple major versions per core major version e.g. NServiceBus V5 - SQL Transport 1.x &  NServiceBus V5 - SQL Transport 2.x
 
