@@ -57,6 +57,8 @@ namespace NServiceBus6
                 configuration.UsePersistence<InMemoryPersistence>();
             }
 
+            configuration.ApplyProfiles();
+
             var endpoint = Endpoint.Create(configuration).GetAwaiter().GetResult();
             return endpoint.Start().GetAwaiter().GetResult();
         }
