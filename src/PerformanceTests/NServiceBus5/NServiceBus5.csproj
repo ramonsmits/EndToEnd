@@ -71,6 +71,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IProfile.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <Import Project="..\Common.Data\Common.Data.projitems" Label="Shared" />
