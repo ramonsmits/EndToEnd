@@ -13,10 +13,6 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common", "Common.Data\Commo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus5", "NServiceBus5\NServiceBus5.csproj", "{BE2C7B5E-7A71-4B0C-9020-343ED2010993}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus3", "NServiceBus3\NServiceBus3.csproj", "{17FD8B87-AB4D-4663-8C9F-A3B1213D046D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus4", "NServiceBus4\NServiceBus4.csproj", "{2428412D-C9C5-4006-BFC4-DF7CCB90B12E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus6", "NServiceBus6\NServiceBus6.csproj", "{10D11044-C92C-42AD-830E-57012FF4F039}"
 EndProject
 Global
@@ -24,8 +20,6 @@ Global
 		Common.Data\Common.Data.projitems*{10d11044-c92c-42ad-830e-57012ff4f039}*SharedItemsImports = 4
 		Common.Data\Common.Data.projitems*{be2c7b5e-7a71-4b0c-9020-343ed2010993}*SharedItemsImports = 4
 		Common.Data\Common.Data.projitems*{19307507-7c7a-433e-9752-7a3e63876991}*SharedItemsImports = 13
-		Common.Data\Common.Data.projitems*{17fd8b87-ab4d-4663-8c9f-a3b1213d046d}*SharedItemsImports = 4
-		Common.Data\Common.Data.projitems*{2428412d-c9c5-4006-bfc4-df7ccb90b12e}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,14 +42,6 @@ Global
 		{BE2C7B5E-7A71-4B0C-9020-343ED2010993}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE2C7B5E-7A71-4B0C-9020-343ED2010993}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE2C7B5E-7A71-4B0C-9020-343ED2010993}.Release|Any CPU.Build.0 = Release|Any CPU
-		{17FD8B87-AB4D-4663-8C9F-A3B1213D046D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{17FD8B87-AB4D-4663-8C9F-A3B1213D046D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{17FD8B87-AB4D-4663-8C9F-A3B1213D046D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{17FD8B87-AB4D-4663-8C9F-A3B1213D046D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2428412D-C9C5-4006-BFC4-DF7CCB90B12E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2428412D-C9C5-4006-BFC4-DF7CCB90B12E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2428412D-C9C5-4006-BFC4-DF7CCB90B12E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2428412D-C9C5-4006-BFC4-DF7CCB90B12E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{10D11044-C92C-42AD-830E-57012FF4F039}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{10D11044-C92C-42AD-830E-57012FF4F039}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10D11044-C92C-42AD-830E-57012FF4F039}.Release|Any CPU.ActiveCfg = Release|Any CPU
