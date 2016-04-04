@@ -77,7 +77,19 @@
     <Compile Include="Tools\Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\TestsGlobal.cs" />
+    <Compile Include="Variables\Audit.cs" />
+    <Compile Include="Variables\ConcurrencyLevel.cs" />
+    <Compile Include="Variables\DTC.cs" />
+    <Compile Include="Variables\GarbageCollector.cs" />
+    <Compile Include="Variables\IOPS.cs" />
+    <Compile Include="Variables\MessageSize.cs" />
     <Compile Include="Variables\NServiceBusVersion.cs" />
+    <Compile Include="Variables\Outbox.cs" />
+    <Compile Include="Variables\Persistence.cs" />
+    <Compile Include="Variables\Platform.cs" />
+    <Compile Include="Variables\Serialization.cs" />
+    <Compile Include="Variables\TransactionMode.cs" />
+    <Compile Include="Variables\Transport.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
