@@ -5,6 +5,7 @@ namespace Categories
 
     public class Permutation
     {
+        public ICollection<Package> Packages { get; set; }
         public List<string> Tests = new List<string>
         {
             "PublishToSelf",
@@ -29,6 +30,12 @@ namespace Categories
         public override string ToString()
         {
             return $"{AuditMode};{DTCMode};{IOPS};{MessageSize};{Version};{OutboxMode};{Persister};{Platform};{Serializer};{Transport};{GarbageCollector};{TransactionMode};{ConcurrencyLevel}";
+        }
+
+        public class Package
+        {
+            string Name;
+            string PackageVersion;
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Categories
             return PermutationGenerator.Generate(new Permutations
             {
                 Versions = new[] { NServiceBusVersion.V5, NServiceBusVersion.V6, },
-                IOPS = new[] { IOPS.Normal },
+                IOPS = new[] { IOPS.Default },
                 Platforms = new[] { Platform.x86, Platform.x64, },
                 GarbageCollectors = new[] { GarbageCollector.Client,GarbageCollector.Server,  },
                 Transports = new[] { Transport.MSMQ },
