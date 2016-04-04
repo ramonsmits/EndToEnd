@@ -82,7 +82,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>

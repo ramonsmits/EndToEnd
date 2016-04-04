@@ -59,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
