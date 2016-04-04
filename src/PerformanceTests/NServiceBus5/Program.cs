@@ -66,6 +66,8 @@ namespace NServiceBus5
             // needed as a workaround for https://github.com/Particular/NServiceBus/issues/3091
             startableBus.OutgoingHeaders.Add("NServiceBus.RijndaelKeyIdentifier", "20151014");
 
+            configuration.ApplyProfiles();
+
             return startableBus.Start();
         }
     }

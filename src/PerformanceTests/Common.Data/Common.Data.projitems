@@ -9,19 +9,23 @@
     <Import_RootNamespace>Common</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)AssemblyScanner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataBus\DataBusInitiator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Encryption\ClassForNesting.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Encryption\EncryptionTestMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IPermutation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messages\MessageBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messages\MessageHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messages\MyEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messages\TestMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ProfilesExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QueueUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Saga\CompleteSagaMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Saga\SagaData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Saga\SagaInitiator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Saga\StartSagaMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Saga\TestSaga.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SerializerProfile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StatisticsUoW.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TestRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TransportConfigOverride.cs" />

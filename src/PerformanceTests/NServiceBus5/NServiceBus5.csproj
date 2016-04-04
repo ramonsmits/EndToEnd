@@ -60,6 +60,10 @@
       <Name>Utils</Name>
       <Private>True</Private>
     </ProjectReference>
+    <ProjectReference Include="..\Tests\Tests.csproj">
+      <Project>{feaae402-8ed0-47fb-8e54-42b1d7f654cc}</Project>
+      <Name>Tests</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
