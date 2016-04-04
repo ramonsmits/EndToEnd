@@ -1,24 +1,30 @@
 ### Current action items
 
- - [ ] Identify what is the generated code is currently testing? @dvdstelt 
+ - [x] Identify what is the generated code is currently testing? @dvdstelt 
    - [x] What are the shortcomings?
      - There is no clean up after the tests
-   - [ ] Is the seeding of data in-process going to affect the validity of the results?
+   - [ ] Investigate how to separate the seeding from the running of the tests
+       - [ ] Is a separate in-process appdomain feasible?
+       - [ ] Or should we create a separate exe to perform the seeding?
+       - [ ] What about cleanup?
    - [x] Is the capturing of metrics in-process going to affect the validity of the results?
      - We assume yes. We can extract the performance counter capturing to be out of process, but we will still have to capture the Message Counter metric in process.  All of the tests will be capturing similar metrics so the impact should be the same across all scenarios.
- - [ ] Create NUnit fixtures for each category in [the google sheet](https://docs.google.com/spreadsheets/d/1avUW8Y5gpcPqTxIBaq7X5OXXaE4lDU0e0ZA9FDFNygs/edit#gid=771631393) where the fixture generates all permutations for all variable values in that category @ramonsmits 
-    - [ ] How would these isolated tests look?
-    - [ ] How are we going to generate tests for each isolated operation?
+ - [x] Create NUnit fixtures for each category in [the google sheet](https://docs.google.com/spreadsheets/d/1avUW8Y5gpcPqTxIBaq7X5OXXaE4lDU0e0ZA9FDFNygs/edit#gid=771631393) where the fixture generates all permutations for all variable values in that category @ramonsmits 
+    - [x] How would these isolated tests look?
+    - [x] How are we going to generate tests for each isolated operation?
+    - [ ] Generate and configure endpoints from permutations
  - [ ] Spike the output options for metrics @williambza
-     - [ ] Investigate Elastic + Kibana - EOD 04/04/2016
+     - ~[x] Investigate Elastic + Kibana - EOD 04/04/2016~
      - [ ] Investigate Graphite - EOD 05/04/2016
-     - [ ] Microsoft Power BI - EOD 04/04/2016
+     - ~[x] Microsoft Power BI - EOD 04/04/2016~
      - [ ] Influx DB - EOD 05/04/2016
-     - [ ] Defined file structure for separate CSVs @ramonsmits
-     - [ ] Combined CSV + excel
-     - [ ] Splunk @hadi (@williambza to send sample csv files for start, will also add to google drive folder)
+     - ~[ ] Defined file structure for separate CSVs @ramonsmits~
+     - ~[ ] Combined CSV + excel~
+     - [x] Splunk @hadi
+        - [ ] Investigate lightweight logger to replace Metrics.Net (splunk tracelog?)
+        - [ ] Determine where we should deploy splunk
  - [ ] Include basic [test configurations](https://github.com/Particular/EndToEnd/blob/docs/docs/variables.md) @hmemcpy
- - [ ] Setup environments: @gbiellem 
+ - [ ] Setup environments: @gbiellem (what is the hourly cost for the environment?)
    - Queues
     - [ ] SQL2012 (Queues), 
     - [ ] Rabbit, 
@@ -40,6 +46,7 @@
 - [ ] Allow customization of maximum run-time (so we don't ever have unbounded runs)
 - [ ] Implement test source for test permutations of persistence and transport providers @hmemcpy 
 - [ ] Setup tests for ASB and ASQ
+- [ ] Automate runs based on packages changed
 - [ ] Can TC setup multiple VM's for a task?
  - Database VM
  - Transport VM
