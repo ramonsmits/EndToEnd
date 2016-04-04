@@ -5,6 +5,7 @@ class MsmqProfile : IProfile
 {
     public void Configure(EndpointConfiguration endpointConfiguration)
     {
-        endpointConfiguration.UseTransport<MsmqTransport>();
+        var transport = endpointConfiguration.UseTransport<MsmqTransport>();
+        transport.ConnectionString("deadLetter=false;journal=false");
     }
 }
