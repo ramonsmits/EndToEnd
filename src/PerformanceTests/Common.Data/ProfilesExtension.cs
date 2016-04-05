@@ -6,7 +6,7 @@ using Configuration = NServiceBus.BusConfiguration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Categories;
+using Tests.Permutations;
 using Common;
 
 static class ProfilesExtension

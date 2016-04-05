@@ -1,26 +1,57 @@
 namespace Tests.Tools
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
-    using Categories;
-    using Utils.Runner.AppDomains;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Tests.Permutations;
     using Variables;
 
-    public class TestEnvironmentCreator
+    public abstract class TestEnvironment
     {
         PermutationDirectoryResolver resolver;
 
-        public TestEnvironmentCreator(string rootDirectory)
+        protected TestEnvironment()
         {
-            resolver = new PermutationDirectoryResolver(rootDirectory);
+            resolver = new PermutationDirectoryResolver(".");
         }
 
-        public TestDescriptor CreateEnvironment(string startupDirTemplate, Permutation permutation)
+        public IEnumerable<Permutation> Generate()
+        {
+            TestsGlobal.CleanupAfterPreviousRuns();
+
+            var permutations = CreatePermutations().ToArray();
+            CreateTestEnvironments(permutations);
+
+            return permutations;
+        }
+
+        protected abstract IEnumerable<Permutation> CreatePermutations();
+
+        void CreateTestEnvironments(Permutation[] permutations)
+        {
+            var tasks = new List<Task>();
+
+            foreach (var permutation in permutations)
+            {
+                var packageToUse = permutation;
+
+                var task = Task.Factory.StartNew(() =>
+                {
+                    CreateEnvironment(TestsGlobal.BinDirectoryTemplate, packageToUse);
+                });
+
+                tasks.Add(task);
+            }
+
+            Task.WaitAll(tasks.ToArray());
+        }
+
+        TestDescriptor CreateEnvironment(string startupDirTemplate, Permutation permutation)
         {
             var result = resolver.Resolve(permutation);
-
             var startupDir = CreateStartupDir(startupDirTemplate, permutation.Version, Guid.NewGuid());
-
             var sourceAssemblyFiles = Directory.GetFiles(result.RootProjectDirectory, "*");
 
             CopyAssembliesToStarupDir(startupDir, sourceAssemblyFiles, result.Files);

@@ -4,8 +4,8 @@ using Configuration = NServiceBus.EndpointConfiguration;
 using Configuration = NServiceBus.BusConfiguration;
 #endif
 
-using Categories;
 using NServiceBus;
+using Tests.Permutations;
 using Variables;
 
 class SerializerProfile : IProfile, INeedPermutation

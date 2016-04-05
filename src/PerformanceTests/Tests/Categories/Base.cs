@@ -5,6 +5,7 @@ namespace Categories
     using System.Runtime.CompilerServices;
     using NUnit.Framework;
     using System.Diagnostics;
+    using Tests.Permutations;
 
     public class Base
     {

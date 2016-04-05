@@ -1,4 +1,4 @@
-using Categories;
+using Tests.Permutations;
 
 public interface INeedPermutation
 {

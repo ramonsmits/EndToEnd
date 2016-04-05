@@ -1,7 +1,8 @@
-namespace Categories
+namespace Tests.Permutations
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Categories;
 
     public class PermutationGenerator
     {

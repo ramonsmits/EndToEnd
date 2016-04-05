@@ -1,4 +1,4 @@
-namespace Categories
+namespace Tests.Permutations
 {
     using Variables;
 

@@ -1,8 +1,8 @@
 ﻿namespace Integration
 {
     using System.Linq;
-    using Categories;
     using NUnit.Framework;
+    using Tests.Permutations;
     using Tests.Tools;
     using Variables;
 
@@ -21,7 +21,7 @@
             };
 
             var result = resolver.Resolve(permutation);
-            Assert.That(result.RootProjectDirectory, Is.EqualTo("NHibernate6"));
+            Assert.That(result.RootProjectDirectory, Is.EqualTo("NServiceBus6"));
             Assert.That(result.Files, Is.Not.Empty);
         }
 
