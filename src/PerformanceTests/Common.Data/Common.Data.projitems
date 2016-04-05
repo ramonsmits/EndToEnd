@@ -12,6 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)AssemblyScanner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AuditProfile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConcurrentyLevelConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ICreateTestData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataBus\DataBusInitiator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Encryption\ClassForNesting.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Encryption\EncryptionTestMessage.cs" />
@@ -20,6 +21,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Messages\MessageHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messages\MyEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messages\TestMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Log.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocalRunner.V6.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocalRunner.V5.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocalRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ProfilesExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QueueUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Saga\CompleteSagaMessage.cs" />
@@ -27,6 +32,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Saga\SagaInitiator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Saga\StartSagaMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Saga\TestSaga.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\IStartAndStop.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\LoopRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializerProfile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StatisticsUoW.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TestRunner.cs" />

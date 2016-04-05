@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Categories;
+using Common;
 
 static class ProfilesExtension
 {
@@ -20,6 +21,18 @@ static class ProfilesExtension
                 injectPermutation.Permutation = permutation;
             }
             profile.Configure(configuration);
+            
+            var createTestData = profile as ICreateTestData;
+            createTestData?.CreateTestData(configuration);
+        }
+    }
+
+    public static void CleanUp(this Configuration configuration)
+    {
+        foreach (var profile in GetProfiles())
+        {
+            var createTestData = profile as ICreateTestData;
+            createTestData?.CleanUpTestData(configuration);
         }
     }
 
@@ -30,7 +43,7 @@ static class ProfilesExtension
         var type = typeof(IProfile);
         var types = assemblies
             .SelectMany(s => s.GetTypes())
-            .Where(p => type.IsAssignableFrom(p));
+            .Where(p => type.IsAssignableFrom(p) && !p.IsAbstract && !p.IsInterface);
 
 
         return types.Select(t => (IProfile)Activator.CreateInstance(t));
