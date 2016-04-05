@@ -8,7 +8,7 @@ using Categories;
 using NServiceBus;
 using Variables;
 
-public class SerializerProfile : IProfile, INeedPermutation
+class SerializerProfile : IProfile, INeedPermutation
 {
     public Permutation Permutation { private get; set; }
 
