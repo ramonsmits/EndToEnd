@@ -15,18 +15,18 @@
 
         private static PackageInfo[] PackageInfos =
         {
-            // latest v3 (3.3)
-            "NServiceBus:(3.0,4.0)",
+            //// latest v3 (3.3)
+            //"NServiceBus:(3.0,4.0)",
 
-            // v4 (4.0 - 4.7)
-            "NServiceBus:(4.0,4.1)",
-            "NServiceBus:(4.1,4.2)",
-            "NServiceBus:(4.2,4.3)",
-            "NServiceBus:(4.3,4.4)",
-            "NServiceBus:(4.4,4.5)",
-            "NServiceBus:(4.5,4.6)",
-            "NServiceBus:(4.6,4.7)",
-            "NServiceBus:(4.0,5.0)",
+            //// v4 (4.0 - 4.7)
+            //"NServiceBus:(4.0,4.1)",
+            //"NServiceBus:(4.1,4.2)",
+            //"NServiceBus:(4.2,4.3)",
+            //"NServiceBus:(4.3,4.4)",
+            //"NServiceBus:(4.4,4.5)",
+            //"NServiceBus:(4.5,4.6)",
+            //"NServiceBus:(4.6,4.7)",
+            //"NServiceBus:(4.0,5.0)",
 
             // v5 (5.0 - 5.2)
             "NServiceBus:(5.0,5.1)",
@@ -40,17 +40,18 @@
 
         public IEnumerable<TestInfo> Generate()
         {
-            TestsGlobal.CleanupAfterPreviousRuns();
+            return Enumerable.Empty<TestInfo>();
+            //TestsGlobal.CleanupAfterPreviousRuns();
 
-            var packages = DownloadPackages(PackageInfos);
+            //var packages = DownloadPackages(PackageInfos);
 
-            var runners = CreateAppDomainRunners(packages);
+            //var runners = CreateAppDomainRunners(packages);
 
-            return packages.Select(p => new TestInfo
-            {
-                RunPackage = p,
-                Runner = runners[p.Version]
-            });
+            //return packages.Select(p => new TestInfo
+            //{
+            //    RunPackage = p,
+            //    Runner = runners[p.Version]
+            //});
         }
 
         private Package[] DownloadPackages(IEnumerable<PackageInfo> packageInfos)

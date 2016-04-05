@@ -72,7 +72,9 @@
     <Compile Include="Integration\AppDomainCreatorTests.cs" />
     <Compile Include="Integration\NuGetPackageResolverTests.cs" />
     <Compile Include="Integration\MutatorsTests.cs" />
+    <Compile Include="Integration\PermutationDirectoryResolverTests.cs" />
     <Compile Include="Integration\SagasTests.cs" />
+    <Compile Include="Tools\PermutationDirectoryResolver.cs" />
     <Compile Include="Tools\TestInfo.cs" />
     <Compile Include="Tools\EndpointGenerator.cs" />
     <Compile Include="Tools\Extensions.cs" />
