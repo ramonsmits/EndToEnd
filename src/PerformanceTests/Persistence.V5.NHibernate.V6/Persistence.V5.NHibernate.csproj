@@ -7,8 +7,8 @@
     <ProjectGuid>{207E1813-EC15-4C3B-ADBC-88E3733257E4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Persistence.V5.NHibernate.V6</RootNamespace>
-    <AssemblyName>Persistence.V5.NHibernate.V6</AssemblyName>
+    <RootNamespace>Persistence.V5.NHibernate</RootNamespace>
+    <AssemblyName>Persistence.V5.NHibernate</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -57,7 +57,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NHibernateProfile.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
@@ -75,6 +74,9 @@
       <Name>Tests</Name>
       <Private>False</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

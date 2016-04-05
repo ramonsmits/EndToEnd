@@ -7,8 +7,8 @@
     <ProjectGuid>{2951D082-F37D-45F1-92FA-19DCFF3D8622}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Persistence.V5.RavenDB.V3</RootNamespace>
-    <AssemblyName>Persistence.V5.RavenDB.V3</AssemblyName>
+    <RootNamespace>Persistence.V5.RavenDB</RootNamespace>
+    <AssemblyName>Persistence.V5.RavenDB</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\Debug\Persistence.V5.RavenDB.V3\</OutputPath>
+    <OutputPath>..\bin\Debug\Persistence.V5.RavenDB\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -24,7 +24,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\bin\Release\Persistence.V5.RavenDB.V3\</OutputPath>
+    <OutputPath>..\bin\Release\Persistence.V5.RavenDB\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -57,7 +57,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RavenDBProfile.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -76,6 +75,9 @@
       <Name>Tests</Name>
       <Private>False</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

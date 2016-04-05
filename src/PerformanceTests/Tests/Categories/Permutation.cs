@@ -11,18 +11,18 @@ namespace Categories
             "SendToSelf"
         };
 
-        public Variables.Audit AuditMode; //0
-        public Variables.DTC DTCMode; //1
-        public Variables.IOPS IOPS;//2
-        public Variables.MessageSize MessageSize;//3
-        public Variables.NServiceBusVersion Version;//4
-        public Variables.Outbox OutboxMode;//5
-        public Variables.Persistence Persister;//6
-        public Variables.Platform Platform;//7
-        public Variables.Serialization Serializer;//8
-        public Variables.Transport Transport;//9
-        public Variables.GarbageCollector GarbageCollector;//10
-        public Variables.TransactionMode TransactionMode;//11
+        public Audit AuditMode; //0
+        public DTC DTCMode; //1
+        public IOPS IOPS;//2
+        public MessageSize MessageSize;//3
+        public NServiceBusVersion Version;//4
+        public Outbox OutboxMode;//5
+        public Persistence Persister;//6
+        public Platform Platform;//7
+        public Serialization Serializer;//8
+        public Transport Transport;//9
+        public GarbageCollector GarbageCollector;//10
+        public TransactionMode TransactionMode;//11
         public ConcurrencyLevel ConcurrencyLevel;//12
 
         public override string ToString()
