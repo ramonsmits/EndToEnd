@@ -34,7 +34,7 @@ public class Statistics
     public static void Initialize(int numberOfMessages)
     {
         instance = new Statistics(numberOfMessages);
-        instance.StartTime = DateTime.Now;
+        instance.StartTime = DateTime.UtcNow;
     }
 
     private Statistics(int numberOfMessages)

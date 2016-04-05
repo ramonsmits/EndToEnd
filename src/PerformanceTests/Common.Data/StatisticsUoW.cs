@@ -28,7 +28,7 @@ public class StatisticsUoW : IManageUnitsOfWork, INeedInitialization
     {
         if (!Statistics.Instance.First.HasValue)
         {
-            Statistics.Instance.First = DateTime.Now;
+            Statistics.Instance.First = DateTime.UtcNow;
         }
 
         if (Transaction.Current != null)
@@ -47,7 +47,7 @@ public class StatisticsUoW : IManageUnitsOfWork, INeedInitialization
 
     void RecordSuccess()
     {
-        Statistics.Instance.Last = DateTime.Now;
+        Statistics.Instance.Last = DateTime.UtcNow;
         Interlocked.Increment(ref Statistics.Instance.NumberOfMessages);
         Statistics.Instance.Signal();
     }
