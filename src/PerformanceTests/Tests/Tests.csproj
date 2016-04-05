@@ -64,6 +64,7 @@
     <Compile Include="Categories\OutboxVsDtcFixture.cs" />
     <Compile Include="Categories\Permutation.cs" />
     <Compile Include="Categories\PermutationGenerator.cs" />
+    <Compile Include="Categories\PermutationParser.cs" />
     <Compile Include="Categories\Permutations.cs" />
     <Compile Include="Categories\PersistersFixture.cs" />
     <Compile Include="Categories\PublishVsSendFixture.cs" />

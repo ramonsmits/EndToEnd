@@ -1,23 +1,25 @@
 namespace NServiceBus5
 {
     using System;
+    using Categories;
     using Common;
     using NServiceBus;
     using NServiceBus.Features;
     using Utils;
-    
+
     class Program
     {
         static string endpointName = "PerformanceTests_" + AppDomain.CurrentDomain.FriendlyName.Replace(' ', '_');
         static void Main(string[] args)
         {
+            var permutation = PermutationParser.FromCommandline();
             var options = BusCreationOptions.Parse(args);
-            var bus = CreateBus(options);
+            var bus = CreateBus(options, permutation);
             TestRunner.EndpointName = endpointName;
             TestRunner.RunTests(bus, options);
         }
 
-        static IBus CreateBus(BusCreationOptions options)
+        static IBus CreateBus(BusCreationOptions options, Permutation permutation)
         {
             if (options.Cleanup)
             {
@@ -66,7 +68,7 @@ namespace NServiceBus5
             // needed as a workaround for https://github.com/Particular/NServiceBus/issues/3091
             startableBus.OutgoingHeaders.Add("NServiceBus.RijndaelKeyIdentifier", "20151014");
 
-            configuration.ApplyProfiles();
+            configuration.ApplyProfiles(permutation);
 
             return startableBus.Start();
         }
