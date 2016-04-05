@@ -12,7 +12,7 @@ namespace NServiceBus5
         static string endpointName = "PerformanceTests_" + AppDomain.CurrentDomain.FriendlyName.Replace(' ', '_');
         static void Main(string[] args)
         {
-            var permutation = PermutationParser.FromCommandline();
+            var permutation = PermutationParser.FromCommandlineArgs();
             var options = BusCreationOptions.Parse(args);
             var bus = CreateBus(options, permutation);
             TestRunner.EndpointName = endpointName;

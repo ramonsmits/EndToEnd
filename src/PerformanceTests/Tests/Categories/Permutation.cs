@@ -1,11 +1,10 @@
 namespace Categories
 {
-    using System.Collections.Generic;
     using Variables;
 
     public class Permutation
     {
-        public List<string> Tests = new List<string>
+        public string[] Tests =
         {
             "PublishToSelf",
             "SendLocal",

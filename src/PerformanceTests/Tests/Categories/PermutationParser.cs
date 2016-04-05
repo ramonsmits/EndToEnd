@@ -1,19 +1,40 @@
 using System;
+using System.Linq;
 using Categories;
 using Variables;
 
 public static class PermutationParser
 {
-    static readonly char Seperator = ';';
+    static readonly string Seperator = ";";
 
-    public static Permutation FromCommandline()
+    public static string ToArgs(Permutation instance)
     {
-        return Parse(Environment.CommandLine);
+        return "--tests:" + string.Join(Seperator, instance.Tests) + " --variables:" + instance;
+    }
+
+    public static Permutation FromCommandlineArgs()
+    {
+        var args = Environment.GetCommandLineArgs();
+        var variables = GetVar(args, "variables");
+        var tests = GetVar(args, "tests").SplitValues();
+
+        var instance = Parse(variables);
+        instance.Tests = tests;
+        return instance;
+    }
+
+    static string[] SplitValues(this string value)
+    {
+        return value.Split(new[] { Seperator }, StringSplitOptions.None);
+    }
+    static string GetVar(string[] args, string name)
+    {
+        return args.Single(a => a.StartsWith("--" + name)).Substring(name.Length + 4); // -- :
     }
 
     public static Permutation Parse(string data)
     {
-        var values = data.Split(Seperator);
+        var values = data.SplitValues();
 
         return new Permutation
         {
