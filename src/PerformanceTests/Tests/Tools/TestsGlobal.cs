@@ -28,7 +28,7 @@
             CleanupDone = true;
         }
 
-        private static void RemoveAppDomainCodeBaseDirs()
+        static void RemoveAppDomainCodeBaseDirs()
         {
             new DirectoryInfo(".")
                 .GetDirectories(BinDriectorySearchPattern).ToList()

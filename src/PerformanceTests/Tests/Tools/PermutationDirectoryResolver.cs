@@ -4,7 +4,7 @@ namespace Tests.Tools
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using Categories;
+    using Tests.Permutations;
     using Variables;
 
     public class PermutationDirectoryResolver

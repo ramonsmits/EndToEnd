@@ -1,7 +1,7 @@
 using NServiceBus;
 using NServiceBus.Config;
 using NServiceBus.Config.ConfigurationSource;
-using Categories;
+using Tests.Permutations;
 
 class ConcurrencyProfile : IProfile, INeedPermutation, IProvideConfiguration<TransportConfig>
 {

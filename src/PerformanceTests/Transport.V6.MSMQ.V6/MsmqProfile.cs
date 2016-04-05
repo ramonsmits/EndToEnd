@@ -1,6 +1,6 @@
 ﻿
-using Categories;
 using NServiceBus;
+using Tests.Permutations;
 using Variables;
 
 class MsmqProfile : IProfile, INeedPermutation
