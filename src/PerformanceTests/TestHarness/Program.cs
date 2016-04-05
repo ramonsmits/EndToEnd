@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NDesk.Options;
+using System.Diagnostics;
 
 class Program
 {
@@ -47,7 +48,7 @@ class Program
         {
             ExecuteConsoleParameters(numberOfRuns, exactOnce, persistence, batches);
         }
-        Console.WriteLine("Press ENTER to quit...");
+        Trace.WriteLine("Press ENTER to quit...");
         Console.ReadLine();
     }
 
@@ -65,20 +66,20 @@ class Program
             using (var container = new HarnessRunContainer(exactOnce, persistence, batchesToSend: batches))
             {
                 times.Add(container.Run());
-                Console.WriteLine("{0}/{1} done in {2:g}", exactOnce, persistence, times.Last());
+                Trace.WriteLine(string.Format("{0}/{1} done in {2:g}", exactOnce, persistence, times.Last()));
             }
         }
 
-        Console.WriteLine("\n\n\nFinished running {0:N0} batches", numberOfRuns);
-        Console.WriteLine("=========================================================");
-        Console.WriteLine("Batch sizes (of 805 messages each): {0:N0}", batches);
-        Console.WriteLine("Total messages each batch: {0:N0}", batches*805);
-        Console.WriteLine("Total messages each: {0:N0}", batches*805*numberOfRuns);
-        Console.WriteLine("=========================================================\n");
+        Trace.WriteLine(string.Format("\n\n\nFinished running {0:N0} batches", numberOfRuns));
+        Trace.WriteLine("=========================================================");
+        Trace.WriteLine(string.Format("Batch sizes (of 805 messages each): {0:N0}", batches));
+        Trace.WriteLine(string.Format("Total messages each batch: {0:N0}", batches*805));
+        Trace.WriteLine(string.Format("Total messages each: {0:N0}", batches*805*numberOfRuns));
+        Trace.WriteLine("=========================================================\n");
 
-        Console.WriteLine("\tTotal time taken for {0}/{1}: {2:g}", exactOnce, persistence, times.Aggregate(TimeSpan.Zero, (acc, current) => acc + current));
-        Console.WriteLine("\tMean time for {0}/{1}: {2:g}", exactOnce, persistence, TimeSpan.FromMilliseconds(times.Sum(time => time.TotalMilliseconds)/numberOfRuns));
-        Console.WriteLine("\tStandard deviation of {0}/{1}: {2:N0}ms\n", exactOnce, persistence, times.Select(time => time.TotalMilliseconds).StandardDeviation());
+        Trace.WriteLine(string.Format("\tTotal time taken for {0}/{1}: {2:g}", exactOnce, persistence, times.Aggregate(TimeSpan.Zero, (acc, current) => acc + current)));
+        Trace.WriteLine(string.Format("\tMean time for {0}/{1}: {2:g}", exactOnce, persistence, TimeSpan.FromMilliseconds(times.Sum(time => time.TotalMilliseconds)/numberOfRuns)));
+        Trace.WriteLine(string.Format("\tStandard deviation of {0}/{1}: {2:N0}ms\n", exactOnce, persistence, times.Select(time => time.TotalMilliseconds).StandardDeviation()));
     }
 
     private static void ExecuteAutomaticBenchmark(int numberOfRuns, int batches)
@@ -90,7 +91,7 @@ class Program
                 for (var x = 0; x < numberOfRuns; x++)
                 {
                     var configuration = Tuple.Create(exactOnce, persistance);
-                    Console.WriteLine("\n== {0} ==\n", configuration);
+                    Trace.WriteLine(string.Format("\n== {0} ==\n", configuration));
                     if (!measurements.ContainsKey(configuration))
                     {
                         measurements[configuration] = new List<TimeSpan>();
@@ -101,18 +102,18 @@ class Program
 
                         var duration = container.Run();
                         measurements[configuration].Add(duration);
-                        Console.WriteLine("{0}/{1} done in {2:g}", exactOnce, persistance, duration);
+                        Trace.WriteLine(string.Format("{0}/{1} done in {2:g}", exactOnce, persistance, duration));
                     }
                 }
 
 
-        Console.WriteLine("\n\n\nFinished running {0:N0} batches", numberOfRuns);
-        Console.WriteLine("=========================================================");
-        Console.WriteLine("Batch sizes (of 805 messages each): {0:N0}", batches);
-        Console.WriteLine("Total messages each batch: {0:N0}", batches*805);
-        Console.WriteLine("Total messages each: {0:N0}", batches*805*numberOfRuns);
-        //Console.WriteLine("Seed size: {0:N0}", HarnessRunContainer.OutboxRecordCount);
-        Console.WriteLine("=========================================================\n");
+        Trace.WriteLine(string.Format("\n\n\nFinished running {0:N0} batches", numberOfRuns));
+        Trace.WriteLine("=========================================================");
+        Trace.WriteLine(string.Format("Batch sizes (of 805 messages each): {0:N0}", batches));
+        Trace.WriteLine(string.Format("Total messages each batch: {0:N0}", batches*805));
+        Trace.WriteLine(string.Format("Total messages each: {0:N0}", batches*805*numberOfRuns));
+        //Trace.WriteLine("Seed size: {0:N0}", HarnessRunContainer.OutboxRecordCount);
+        Trace.WriteLine("=========================================================\n");
 
         var fastestInSeconds = measurements
             .Select(x => x.Value.Sum(y => y.TotalSeconds))
@@ -121,24 +122,24 @@ class Program
 
         foreach (var m in measurements)
         {
-            Console.WriteLine("\n=={0}/{1}==\n", m.Key.Item1, m.Key.Item2);
-            Console.WriteLine("\tTotal time taken    : {0,10:N}s",
-                m.Value.Aggregate(TimeSpan.Zero, (acc, current) => acc + current).TotalSeconds);
-            Console.WriteLine("\tMean time for       : {0,10:N}s",
-                m.Value.Sum(time => time.TotalSeconds)/numberOfRuns);
-            Console.WriteLine("\tStandard deviation  : {0,10:N}s\n",
-                m.Value.Select(time => time.TotalSeconds).StandardDeviation());
-            Console.WriteLine("\tRelative speed      : {0,10:N}%\n",
-                m.Value.Sum(x => x.TotalSeconds)*100/fastestInSeconds);
+            Trace.WriteLine(string.Format("\n=={0}/{1}==\n", m.Key.Item1, m.Key.Item2));
+            Trace.WriteLine(string.Format("\tTotal time taken    : {0,10:N}s",
+                m.Value.Aggregate(TimeSpan.Zero, (acc, current) => acc + current).TotalSeconds));
+            Trace.WriteLine(string.Format("\tMean time for       : {0,10:N}s",
+                m.Value.Sum(time => time.TotalSeconds)/numberOfRuns));
+            Trace.WriteLine(string.Format("\tStandard deviation  : {0,10:N}s\n",
+                m.Value.Select(time => time.TotalSeconds).StandardDeviation()));
+            Trace.WriteLine(string.Format("\tRelative speed      : {0,10:N}%\n",
+                m.Value.Sum(x => x.TotalSeconds)*100/fastestInSeconds));
         }
     }
 
     private static void ExecuteSimpleScenario()
     {
-        Console.WriteLine("Do you want to use Outbox? (y/n)");
+        Trace.WriteLine("Do you want to use Outbox? (y/n)");
         var exactOnce = Console.ReadKey().Key == ConsoleKey.Y ? ExactOnce.Outbox : ExactOnce.DTC;
 
-        Console.WriteLine("Do you want to use RavenDB? (y/n)");
+        Trace.WriteLine("Do you want to use RavenDB? (y/n)");
         var persistance = Console.ReadKey().Key == ConsoleKey.Y ? Persistence.RavenDB : Persistence.MSSQL;
 
         using (var container = new HarnessRunContainer(exactOnce, persistance, 1))
@@ -146,7 +147,7 @@ class Program
             //MetricReaper.ConfigureMetrics(useOutbox, useRaven);
 
             var timeTaken = container.Run();
-            Console.WriteLine("Processing all messages took {0:g}", timeTaken);
+            Trace.WriteLine(string.Format("Processing all messages took {0:g}", timeTaken));
         }
     }
 }

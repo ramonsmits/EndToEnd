@@ -4,25 +4,26 @@ namespace Categories
     using System.Linq;
     using System.Runtime.CompilerServices;
     using NUnit.Framework;
+    using System.Diagnostics;
 
     public class Base
     {
         public virtual void PublishToSelf(Permutation permutation)
         {
             CheckInPermutation(permutation);
-            Console.WriteLine("PublishToSelf");
+            Trace.WriteLine("PublishToSelf");
         }
 
         public virtual void SendLocal(Permutation permutation)
         {
             CheckInPermutation(permutation);
-            Console.WriteLine("SendLocal");
+            Trace.WriteLine("SendLocal");
         }
 
         public virtual void SendToSelf(Permutation permutation)
         {
             CheckInPermutation(permutation);
-            Console.WriteLine("SendToSelf");
+            Trace.WriteLine("SendToSelf");
         }
 
         void CheckInPermutation(Permutation permutation, [CallerMemberName]string memberName = "")

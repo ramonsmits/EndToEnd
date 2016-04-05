@@ -89,7 +89,7 @@ public class HarnessRunContainer : IHandleCompleted, IDisposable
         var endTime = DateTime.UtcNow;
         var numberOfMesssagesBetween = period.TotalSeconds*ThroughputPerSecond;
         var startTime = endTime - period;
-        Console.WriteLine("RavenDB: outbox records seed. Records: {0:N0}, From: {1:s}, To: {2:s}, Throughput: ~{3:N0}/s", numberOfMesssagesBetween, startTime, endTime, numberOfMesssagesBetween/period.TotalSeconds);
+        Trace.WriteLine(string.Format("RavenDB: outbox records seed. Records: {0:N0}, From: {1:s}, To: {2:s}, Throughput: ~{3:N0}/s", numberOfMesssagesBetween, startTime, endTime, numberOfMesssagesBetween/period.TotalSeconds));
         var millisecondsBetweenMessages = (endTime - startTime).TotalMilliseconds/numberOfMesssagesBetween;
 
         using (var store = new DocumentStore
@@ -132,12 +132,12 @@ public class HarnessRunContainer : IHandleCompleted, IDisposable
                 while (store.DatabaseCommands.GetStatistics().StaleIndexes.Length != 0)
                 {
                     System.Threading.Thread.Sleep(10);
-                    Console.Write(".");
+                    Trace.Write(".");
                 }
 
                 if (null == store.DatabaseCommands.GetIndex("OutboxRecordsIndex"))
                 {
-                    Console.WriteLine("Creating index: OutboxRecordsIndex");
+                    Trace.WriteLine("Creating index: OutboxRecordsIndex");
                     store.DatabaseCommands.PutIndex("OutboxRecordsIndex", new IndexDefinition
                     {
                         Map = @"from doc in docs.OutboxRecord select new { MessageId = doc.MessageId, Dispatched = doc.Dispatched, DispatchedAt = doc.DispatchedAt }"
@@ -147,13 +147,13 @@ public class HarnessRunContainer : IHandleCompleted, IDisposable
                 while (store.DatabaseCommands.GetStatistics().StaleIndexes.Length != 0)
                 {
                     System.Threading.Thread.Sleep(10);
-                    Console.Write(".");
+                    Trace.Write(".");
                 }
 
             }
 
             var duration = DateTime.UtcNow - endTime;
-            Console.WriteLine("Outbox records inserted in {0:g} ({1:N0}/s)", duration, numberOfMesssagesBetween/duration.TotalSeconds);
+            Trace.WriteLine(string.Format("Outbox records inserted in {0:g} ({1:N0}/s)", duration, numberOfMesssagesBetween/duration.TotalSeconds));
         }
     }
 
@@ -163,7 +163,7 @@ public class HarnessRunContainer : IHandleCompleted, IDisposable
         var endTime = DateTime.UtcNow;
         var startTime = endTime - period;
         var numberOfMesssagesBetween = period.TotalSeconds*ThroughputPerSecond;
-        Console.WriteLine("SQL: outbox records seed. Records: {0:N0}, From: {1:s}, To: {2:s}, Throughput: ~{3:N0}/s", numberOfMesssagesBetween, startTime, endTime, numberOfMesssagesBetween/period.TotalSeconds);
+        Trace.WriteLine(string.Format("SQL: outbox records seed. Records: {0:N0}, From: {1:s}, To: {2:s}, Throughput: ~{3:N0}/s", numberOfMesssagesBetween, startTime, endTime, numberOfMesssagesBetween/period.TotalSeconds));
         var millisecondsBetweenMessages = (endTime - startTime).TotalMilliseconds/numberOfMesssagesBetween;
 
 
@@ -207,7 +207,7 @@ public class HarnessRunContainer : IHandleCompleted, IDisposable
             }
         }
         var duration = DateTime.UtcNow - endTime;
-        Console.WriteLine("Outbox records inserted in {0:g} ({1:N0}/s)", duration, numberOfMesssagesBetween/duration.TotalSeconds);
+        Trace.WriteLine(string.Format("Outbox records inserted in {0:g} ({1:N0}/s)", duration, numberOfMesssagesBetween/duration.TotalSeconds));
     }
 
 
@@ -392,11 +392,11 @@ END";
                 senderBus.Send(msg);
             });
 
-            Console.WriteLine("Batch of 805 messages added to queue. Total current messages: {0:N0}", MessageCounter.Current());
+            Trace.WriteLine(string.Format("Batch of 805 messages added to queue. Total current messages: {0:N0}", MessageCounter.Current()));
         }
 
         var duration = start.ElapsedMilliseconds;
-        Console.WriteLine("Message seed duration: {0:N0}ms, {1:N0} messages, {2:N0} msg/s", duration, MessageCounter.Current(), MessageCounter.Current()*1000/duration);
+        Trace.WriteLine(string.Format("Message seed duration: {0:N0}ms, {1:N0} messages, {2:N0} msg/s", duration, MessageCounter.Current(), MessageCounter.Current()*1000/duration));
     }
 
     Task<long> ProcessIncomingMessages()
