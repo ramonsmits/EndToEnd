@@ -23,7 +23,16 @@ static class ProfilesExtension
             profile.Configure(configuration);
             
             var createTestData = profile as ICreateTestData;
-            createTestData?.CreateTestData();
+            createTestData?.CreateTestData(configuration);
+        }
+    }
+
+    public static void CleanUp(this Configuration configuration)
+    {
+        foreach (var profile in GetProfiles())
+        {
+            var createTestData = profile as ICreateTestData;
+            createTestData?.CleanUpTestData(configuration);
         }
     }
 

@@ -4,6 +4,7 @@ namespace NServiceBus5
     using System.Linq;
     using Categories;
     using Common;
+    using Common.Saga;
     using NServiceBus;
     using Utils;
 
