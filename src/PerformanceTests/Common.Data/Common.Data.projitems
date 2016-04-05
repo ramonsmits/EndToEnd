@@ -12,6 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)AssemblyScanner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AuditProfile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConcurrentyLevelConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ICreateTestData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataBus\DataBusInitiator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Encryption\ClassForNesting.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Encryption\EncryptionTestMessage.cs" />
