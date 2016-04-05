@@ -7,7 +7,7 @@ namespace Utils.Runner.AppDomains
 
     public class CustomAssemblyLoader : MarshalByRefObject
     {
-        private AppDomain appDomain;
+        AppDomain appDomain;
 
         public CustomAssemblyLoader(AppDomain appDomain)
         {
@@ -22,11 +22,11 @@ namespace Utils.Runner.AppDomains
         }
 
         [Serializable]
-        private class BindingRedirectResolver
+        class BindingRedirectResolver
         {
-            private byte[] publicKeyToken;
-            private string shortName;
-            private Version targetVersion;
+            byte[] publicKeyToken;
+            string shortName;
+            Version targetVersion;
 
             public BindingRedirectResolver(string shortName, Version targetVersion, byte[] publicKeyToken)
             {

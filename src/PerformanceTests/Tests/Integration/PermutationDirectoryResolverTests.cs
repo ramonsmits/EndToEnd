@@ -20,10 +20,9 @@
                 Version = NServiceBusVersion.V6
             };
 
-            var result = resolver.Resolve(permutation).ToList();
-            Assert.That(result.Count > 0);
-            Assert.That(result[0].ComponentName, Is.EqualTo("Persistence.V6.NHibernate"));
-            Assert.That(result[0].Files, Is.Not.Empty);
+            var result = resolver.Resolve(permutation);
+            Assert.That(result.RootProjectDirectory, Is.EqualTo("NHibernate6"));
+            Assert.That(result.Files, Is.Not.Empty);
         }
 
         [Test]
@@ -37,7 +36,7 @@
                 Version = NServiceBusVersion.V6
             };
 
-            var result = resolver.Resolve(permutation).First();
+            var result = resolver.Resolve(permutation);
             Assert.That(result.Files.All(info => info.Name != "NServiceBus.Core.dll"));
         }
     }

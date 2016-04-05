@@ -2,20 +2,20 @@
 {
     public class AppDomainRunner
     {
-        readonly AppDomainDescriptor appDomainDescriptor;
+        readonly TestDescriptor testDescriptor;
 
-        public string PackageVersion => appDomainDescriptor.PackageVersion;
+        public string PackageVersion => testDescriptor.PackageVersion;
 
-        public AppDomainRunner(AppDomainDescriptor appDomainDescriptor)
+        public AppDomainRunner(TestDescriptor testDescriptor)
         {
-            this.appDomainDescriptor = appDomainDescriptor;
+            this.testDescriptor = testDescriptor;
         }
 
         public void Start(params string[] args)
         {
-            appDomainDescriptor.AppDomain.ExecuteAssembly(appDomainDescriptor.ProjectAssemblyPath, args);
+            testDescriptor.AppDomain.ExecuteAssembly(testDescriptor.ProjectAssemblyPath, args);
 
-            var stats = (Statistics)appDomainDescriptor.AppDomain.GetData("Statistics");
+            var stats = (Statistics)testDescriptor.AppDomain.GetData("Statistics");
 
             stats.Dump();
         }

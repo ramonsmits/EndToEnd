@@ -7,7 +7,6 @@ namespace Categories
     [TestFixture(Description = "Persisters")]
     public class PersistersFixture : Base
     {
-        [Test]
         [TestCaseSource(nameof(Generate))]
         public override void SendLocal(Permutation permutation)
         {

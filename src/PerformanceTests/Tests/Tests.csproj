@@ -69,14 +69,12 @@
     <Compile Include="Categories\PersistersFixture.cs" />
     <Compile Include="Categories\PublishVsSendFixture.cs" />
     <Compile Include="Categories\ResourceUtilizationFixture.cs" />
-    <Compile Include="Integration\AppDomainCreatorTests.cs" />
-    <Compile Include="Integration\NuGetPackageResolverTests.cs" />
     <Compile Include="Integration\MutatorsTests.cs" />
     <Compile Include="Integration\PermutationDirectoryResolverTests.cs" />
     <Compile Include="Integration\SagasTests.cs" />
     <Compile Include="Tools\PermutationDirectoryResolver.cs" />
+    <Compile Include="Tools\TestEnvironmentCreator.cs" />
     <Compile Include="Tools\TestInfo.cs" />
-    <Compile Include="Tools\EndpointGenerator.cs" />
     <Compile Include="Tools\Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\TestsGlobal.cs" />
