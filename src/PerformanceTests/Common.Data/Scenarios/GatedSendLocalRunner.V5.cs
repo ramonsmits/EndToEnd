@@ -1,22 +1,27 @@
 ﻿#if Version5
 using NServiceBus;
 
-    partial class GatedSendLocalRunner
+partial class GatedSendLocalRunner : IProfile
+{
+    public IBus Bus { get; set; }
+
+    void SendLocal(Command msg)
     {
-        public IBus Bus { get; set; }
+        Bus.SendLocal(msg);
+    }
 
-        void SendLocal(Command msg)
+    public class Handler : IHandleMessages<Command>
+    {
+        public void Handle(Command message)
         {
-            Bus.SendLocal(msg);
-        }
-
-        public class Handler : IHandleMessages<Command>
-        {
-            public void Handle(Command message)
-            {
-                X.Signal();
-            }
+            X.Signal();
         }
     }
+
+    public void Configure(BusConfiguration cfg)
+    {
+        cfg.PurgeOnStartup(true);
+    }
+}
 
 #endif

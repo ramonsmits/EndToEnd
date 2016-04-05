@@ -2,7 +2,7 @@
 using NServiceBus;
 using System.Threading.Tasks;
 
-partial class GatedSendLocalRunner: IProfile
+partial class SendLocalOneOnOneRunner
 {
     public IEndpointInstance Bus { get; set; }
 
@@ -11,17 +11,14 @@ partial class GatedSendLocalRunner: IProfile
         Bus.SendLocal(msg);
     }
 
-    public class Handler : IHandleMessages<Command>
+    public partial class Handler : IHandleMessages<Command>
     {
         public async Task Handle(Command message, IMessageHandlerContext ctx)
         {
-            X.Signal();
+            if (Shutdown) return;
+            await ctx.SendLocal(message);
+            System.Threading.Interlocked.Increment(ref Count);
         }
-    }
-
-    public void Configure(EndpointConfiguration cfg)
-    {
-        cfg.PurgeOnStartup(true);
     }
 }
 

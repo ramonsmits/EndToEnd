@@ -22,6 +22,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Messages\MyEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messages\TestMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Log.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SendLocalOneOnOneRunner.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SendLocalOneOnOneRunner.V5.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SendLocalOneOnOneRunner.V6.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocalRunner.V6.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocalRunner.V5.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocalRunner.cs" />
