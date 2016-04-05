@@ -4,6 +4,7 @@ using System.Threading;
 using System.Transactions;
 using NServiceBus;
 using NServiceBus.UnitOfWork;
+using System.Diagnostics;
 #if Version3
 using NServiceBus.Config;
 #endif
@@ -50,6 +51,7 @@ public class StatisticsUoW : IManageUnitsOfWork, INeedInitialization
         Statistics.Instance.Last = DateTime.Now;
         Interlocked.Increment(ref Statistics.Instance.NumberOfMessages);
         Statistics.Instance.Signal();
+        Trace.WriteLine("Message processed");
     }
 
 #if Version6
