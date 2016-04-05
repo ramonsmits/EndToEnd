@@ -20,12 +20,12 @@ class AzureStorageQueuesProfile : IProfile, ICreateTestData
         endpointConfiguration.UseTransport<AzureStorageQueueTransport>();
     }
 
-    public void CreateTestData()
+    public void CreateTestData(EndpointConfiguration configuration)
     {
         throw new NotImplementedException();
     }
 
-    public void CleanUpTestData()
+    public void CleanUpTestData(EndpointConfiguration configuration)
     {
         var connectionString = endpointConfiguration.GetSettings().GetOrDefault<string>(WellKnownConfigurationKeys.ReceiverConnectionString);
 
