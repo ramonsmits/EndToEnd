@@ -34,7 +34,7 @@ static class ProfilesExtension
         var type = typeof(IProfile);
         var types = assemblies
             .SelectMany(s => s.GetTypes())
-            .Where(p => type.IsAssignableFrom(p));
+            .Where(p => type.IsAssignableFrom(p) && !p.IsAbstract && !p.IsInterface);
 
 
         return types.Select(t => (IProfile)Activator.CreateInstance(t));
