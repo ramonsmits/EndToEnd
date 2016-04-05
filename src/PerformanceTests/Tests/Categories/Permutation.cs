@@ -5,7 +5,6 @@ namespace Categories
 
     public class Permutation
     {
-        public ICollection<Package> Packages { get; set; }
         public List<string> Tests = new List<string>
         {
             "PublishToSelf",
@@ -13,29 +12,23 @@ namespace Categories
             "SendToSelf"
         };
 
-        public Variables.Audit AuditMode;
-        public Variables.DTC DTCMode;
-        public Variables.IOPS IOPS;
-        public Variables.MessageSize MessageSize;
-        public Variables.NServiceBusVersion Version;
-        public Variables.Outbox OutboxMode;
-        public Variables.Persistence Persister;
-        public Variables.Platform Platform;
-        public Variables.Serialization Serializer;
-        public Variables.Transport Transport;
-        public Variables.GarbageCollector GarbageCollector;
-        public Variables.TransactionMode TransactionMode;
-        public ConcurrencyLevel ConcurrencyLevel;
+        public Variables.Audit AuditMode; //0
+        public Variables.DTC DTCMode; //1
+        public Variables.IOPS IOPS;//2
+        public Variables.MessageSize MessageSize;//3
+        public Variables.NServiceBusVersion Version;//4
+        public Variables.Outbox OutboxMode;//5
+        public Variables.Persistence Persister;//6
+        public Variables.Platform Platform;//7
+        public Variables.Serialization Serializer;//8
+        public Variables.Transport Transport;//9
+        public Variables.GarbageCollector GarbageCollector;//10
+        public Variables.TransactionMode TransactionMode;//11
+        public ConcurrencyLevel ConcurrencyLevel;//12
 
         public override string ToString()
         {
             return $"{AuditMode};{DTCMode};{IOPS};{MessageSize};{Version};{OutboxMode};{Persister};{Platform};{Serializer};{Transport};{GarbageCollector};{TransactionMode};{ConcurrencyLevel}";
-        }
-
-        public class Package
-        {
-            string Name;
-            string PackageVersion;
         }
     }
 }

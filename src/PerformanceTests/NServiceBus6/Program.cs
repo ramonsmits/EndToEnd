@@ -1,6 +1,7 @@
 namespace NServiceBus6
 {
     using System;
+    using Categories;
     using Common;
     using NServiceBus;
     using NServiceBus.Features;
@@ -11,13 +12,14 @@ namespace NServiceBus6
         static string endpointName = "PerformanceTests_" + AppDomain.CurrentDomain.FriendlyName.Replace(' ', '_');
         static void Main(string[] args)
         {
+            var permutation = PermutationParser.FromCommandline();
             var options = BusCreationOptions.Parse(args);
-            var endpointInstance = CreateBus(options);
+            var endpointInstance = CreateBus(options, permutation);
             TestRunner.EndpointName = endpointName;
             TestRunner.RunTests(endpointInstance, options);
         }
 
-        static IEndpointInstance CreateBus(BusCreationOptions options)
+        static IEndpointInstance CreateBus(BusCreationOptions options, Permutation permutation)
         {
             if (options.Cleanup)
             {
@@ -57,7 +59,7 @@ namespace NServiceBus6
                 configuration.UsePersistence<InMemoryPersistence>();
             }
 
-            configuration.ApplyProfiles();
+            configuration.ApplyProfiles(permutation);
 
             var endpoint = Endpoint.Create(configuration).GetAwaiter().GetResult();
             return endpoint.Start().GetAwaiter().GetResult();
