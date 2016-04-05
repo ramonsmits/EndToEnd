@@ -32,7 +32,7 @@
   <ItemGroup>
     <Reference Include="NServiceBus.Core, Version=6.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\NServiceBus.6.0.0-unstable1783\lib\net452\NServiceBus.Core.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -61,6 +61,7 @@
     <ProjectReference Include="..\Tests\Tests.csproj">
       <Project>{feaae402-8ed0-47fb-8e54-42b1d7f654cc}</Project>
       <Name>Tests</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

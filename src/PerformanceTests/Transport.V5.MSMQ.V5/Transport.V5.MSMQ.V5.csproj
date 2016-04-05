@@ -57,7 +57,7 @@
     <ProjectReference Include="..\NServiceBus5\NServiceBus5.csproj">
       <Project>{be2c7b5e-7a71-4b0c-9020-343ed2010993}</Project>
       <Name>NServiceBus5</Name>
-      <Private>True</Private>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Tests\Tests.csproj">
       <Project>{feaae402-8ed0-47fb-8e54-42b1d7f654cc}</Project>
