@@ -1,6 +1,6 @@
 using Categories;
 
-interface INeedPermutation
+public interface INeedPermutation
 {
     Permutation Permutation { set; }
 }

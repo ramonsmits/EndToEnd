@@ -75,6 +75,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConcurrencyProfile.cs" />
     <Compile Include="IProfile.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
