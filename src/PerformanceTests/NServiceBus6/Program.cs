@@ -32,19 +32,6 @@ namespace NServiceBus6
             configuration.RijndaelEncryptionService();
             configuration.LimitMessageProcessingConcurrencyTo(options.NumberOfThreads);
 
-            switch (options.Serialization)
-            {
-                case SerializationKind.Xml:
-                    configuration.UseSerialization<XmlSerializer>();
-                    break;
-                case SerializationKind.Json:
-                    configuration.UseSerialization<JsonSerializer>();
-                    break;
-                case SerializationKind.Bson:
-                case SerializationKind.Bin:
-                    throw new NotSupportedException(options.Serialization.ToString());
-            }
-
             if (options.Transport == TransportKind.Msmq)
             {
                 var transport = configuration.UseTransport<MsmqTransport>();

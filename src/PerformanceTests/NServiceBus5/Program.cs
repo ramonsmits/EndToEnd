@@ -35,22 +35,6 @@ namespace NServiceBus5
             configuration.DisableFeature<Audit>();
             configuration.RijndaelEncryptionService();
 
-            switch (options.Serialization)
-            {
-                case SerializationKind.Xml:
-                    configuration.UseSerialization<XmlSerializer>();
-                    break;
-                case SerializationKind.Json:
-                    configuration.UseSerialization<JsonSerializer>();
-                    break;
-                case SerializationKind.Bson:
-                    configuration.UseSerialization<BsonSerializer>();
-                    break;
-                case SerializationKind.Bin:
-                    configuration.UseSerialization<BinarySerializer>();
-                    break;
-            }
-
             if (options.Transport == TransportKind.Msmq)
                 configuration.UseTransport<MsmqTransport>().ConnectionString("deadLetter=false;journal=false");
 
