@@ -12,11 +12,8 @@ using NServiceBus.Configuration.AdvanceExtensibility;
 
 class AzureStorageQueuesProfile : IProfile, ICreateTestData
 {
-    EndpointConfiguration endpointConfiguration;
-
     public void Configure(EndpointConfiguration endpointConfiguration)
     {
-        this.endpointConfiguration = this.endpointConfiguration;
         endpointConfiguration.UseTransport<AzureStorageQueueTransport>();
     }
 
@@ -27,7 +24,7 @@ class AzureStorageQueuesProfile : IProfile, ICreateTestData
 
     public void CleanUpTestData(EndpointConfiguration configuration)
     {
-        var connectionString = endpointConfiguration.GetSettings().GetOrDefault<string>(WellKnownConfigurationKeys.ReceiverConnectionString);
+        var connectionString = configuration.GetSettings().GetOrDefault<string>(WellKnownConfigurationKeys.ReceiverConnectionString);
 
         var storageAccount = CloudStorageAccount.Parse(connectionString);
         var queueClient = storageAccount.CreateCloudQueueClient();
