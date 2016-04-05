@@ -5,6 +5,12 @@ using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Logging;
 
+/// <summary>
+/// Performs a continious test where a batch of messages is send via the bus without
+/// a transaction and a handler processes these in parallel. Once all messages are
+/// received it repeats this. Due to the fact that the sending is not transactional
+/// the handler will already process messages while the batch is still being send.
+/// </summary>
 partial class GatedSendLocalRunner : LoopRunner
 {
     const int batchSize = 4096;
