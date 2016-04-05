@@ -8,9 +8,9 @@ using Categories;
 using NServiceBus;
 using Variables;
 
-public class SerializerProfile : IProfile, IPermutation
+public class SerializerProfile : IProfile, INeedPermutation
 {
-    public Permutation Permutation { get; set; }
+    public Permutation Permutation { private get; set; }
 
     public void Configure(Configuration cfg)
     {
