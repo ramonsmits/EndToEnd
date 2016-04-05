@@ -14,9 +14,9 @@
     - [x] How are we going to generate tests for each isolated operation?
     - [ ] Generate and configure endpoints from permutations
  - [ ] Spike the output options for metrics @williambza
-     - ~~~[x] Investigate Elastic + Kibana - EOD 04/04/2016~~~
+     - ~~[x] Investigate Elastic + Kibana - EOD 04/04/2016~~
      - [ ] Investigate Graphite - EOD 05/04/2016
-     - ~~~[x] Microsoft Power BI - EOD 04/04/2016~~~
+     - ~~[x] Microsoft Power BI - EOD 04/04/2016~~
      - [ ] Influx DB - EOD 05/04/2016
      - ~[ ] Defined file structure for separate CSVs @ramonsmits~
      - ~[ ] Combined CSV + excel~
