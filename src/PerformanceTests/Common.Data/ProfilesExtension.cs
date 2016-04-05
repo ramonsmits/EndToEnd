@@ -6,15 +6,19 @@ using Configuration = NServiceBus.BusConfiguration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Categories;
 
 static class ProfilesExtension
 {
-    public static void ApplyProfiles(this Configuration configuration)
+    public static void ApplyProfiles(this Configuration configuration, Permutation permutation)
     {
         foreach (var profile in GetProfiles())
         {
-            var permutation = profile as IPermutation;
-            if (permutation != null) throw new NotImplementedException("Get permutation instance here for injection.");
+            var injectPermutation = profile as INeedPermutation;
+            if (injectPermutation != null)
+            {
+                injectPermutation.Permutation = permutation;
+            }
             profile.Configure(configuration);
         }
     }
