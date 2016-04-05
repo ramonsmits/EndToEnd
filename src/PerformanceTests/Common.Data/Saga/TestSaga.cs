@@ -3,8 +3,6 @@
     using NServiceBus;
 #if !Version6
     using NServiceBus.Saga;
-#else
-    using NServiceBus.Sagas;
 #endif
 
     class TestSaga : Saga<SagaData>, IAmStartedByMessages<StartSagaMessage>, IHandleMessages<CompleteSagaMessage>
