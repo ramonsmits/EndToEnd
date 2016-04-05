@@ -20,6 +20,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Messages\MessageHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messages\MyEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messages\TestMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocalRunner.V6.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocalRunner.V5.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocalRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ProfilesExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QueueUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Saga\CompleteSagaMessage.cs" />
@@ -27,6 +30,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Saga\SagaInitiator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Saga\StartSagaMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Saga\TestSaga.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\IStartAndStop.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\LoopRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializerProfile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StatisticsUoW.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TestRunner.cs" />
