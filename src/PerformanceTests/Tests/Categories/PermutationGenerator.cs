@@ -38,7 +38,7 @@ namespace Categories
                     AuditMode = AuditMode,
                     ConcurrencyLevel = ConcurrencyLevel,
 
-                    Tests = new List<string>
+                    Tests = new[]
                     {
                         nameof(Base.PublishToSelf),
                         nameof(Base.SendToSelf),
