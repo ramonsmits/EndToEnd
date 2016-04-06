@@ -9,9 +9,9 @@ namespace Categories
     public class PersistersFixture : Base
     {
         [TestCaseSource(nameof(CreatePermutations))]
-        public override void SendLocal(Permutation permutation)
+        public override void GatedSendLocalRunner(Permutation permutation)
         {
-            base.SendLocal(permutation);
+            base.GatedSendLocalRunner(permutation);
         }
 
         static IEnumerable<Permutation> CreatePermutations()

@@ -9,9 +9,9 @@ namespace Categories
     public class AuditOnVsOffFixture : Base
     {
         [TestCaseSource(nameof(CreatePermutations))]
-        public override void SendLocal(Permutation permutation)
+        public override void GatedSendLocalRunner(Permutation permutation)
         {
-            base.SendLocal(permutation);
+            base.GatedSendLocalRunner(permutation);
         }
 
         static IEnumerable<Permutation> CreatePermutations()
@@ -33,5 +33,5 @@ namespace Categories
                 ConcurrencyLevels = new[] { ConcurrencyLevel.EnvCores }
             });
         }
-}
+    }
 }

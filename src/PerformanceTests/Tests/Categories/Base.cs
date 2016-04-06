@@ -2,7 +2,6 @@ namespace Categories
 {
     using System.Diagnostics;
     using System.IO;
-    using System.Linq;
     using System.Runtime.CompilerServices;
     using NUnit.Framework;
     using Tests.Permutations;
@@ -10,35 +9,25 @@ namespace Categories
 
     public class Base
     {
-        public virtual void SendLocal(Permutation permutation)
+        public virtual void GatedSendLocalRunner(Permutation permutation)
         {
             Tasks(permutation);
         }
 
-        public virtual void PublishToSelf(Permutation permutation)
-        {
-            Tasks(permutation);
-        }
-
-        public virtual void SendToSelf(Permutation permutation)
+        public virtual void SendLocalOneOnOneRunner(Permutation permutation)
         {
             Tasks(permutation);
         }
 
         void Tasks(Permutation permutation, [CallerMemberName] string memberName = "")
         {
+            permutation.Tests = new[] { memberName };
             var environment = new TestEnvironment();
             environment.CreateTestEnvironments(permutation);
-            CheckInPermutation(permutation, memberName);
-            Invoke(permutation, memberName);
+            Invoke(permutation);
         }
 
-        static void CheckInPermutation(Permutation permutation, string memberName)
-        {
-            if (!permutation.Tests.Contains(memberName)) Assert.Inconclusive("Not in category" + memberName);
-        }
-
-        static void Invoke(Permutation permutation, string memberName)
+        static void Invoke(Permutation permutation)
         {
             var fi = new FileInfo(permutation.Exe);
             var pi = new ProcessStartInfo(permutation.Exe, PermutationParser.ToArgs(permutation))

@@ -9,9 +9,9 @@ namespace Categories
     public class ResourceUtilizationFixture : Base
     {
         [TestCaseSource(nameof(CreatePermutations))]
-        public override void SendLocal(Permutation permutation)
+        public override void SendLocalOneOnOneRunner(Permutation permutation)
         {
-            base.SendLocal(permutation);
+            base.SendLocalOneOnOneRunner(permutation);
         }
 
         static IEnumerable<Permutation> CreatePermutations()
