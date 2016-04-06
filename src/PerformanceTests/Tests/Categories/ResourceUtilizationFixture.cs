@@ -6,7 +6,7 @@ namespace Categories
     using Tests.Tools;
     using Variables;
 
-    [TestFixture]
+    [TestFixture(Description = "Resources utilization", Category = "Performace"), Explicit]
     public class ResourceUtilizationFixture : Base
     {
         [TestCaseSource(typeof(ResourceUtilization), nameof(TestEnvironment.Generate))]

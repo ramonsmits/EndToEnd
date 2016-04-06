@@ -6,7 +6,7 @@ namespace Categories
     using Tests.Tools;
     using Variables;
 
-    [TestFixture(Description = "Publish vs Send")]
+    [TestFixture(Description = "Publish vs Send", Category = "Performance"), Explicit]
     public class PublishVsSendFixture : Base
     {
         [TestCaseSource(typeof(PublishVsSend), nameof(TestEnvironment.Generate))]
@@ -37,7 +37,7 @@ namespace Categories
                     IOPS = new[] { IOPS.Default },
                     Platforms = new[] { Platform.x86, },
                     GarbageCollectors = new[] { GarbageCollector.Client, },
-                    Transports = new[] { Transport.MSMQ, Transport.ASB, Transport.ASQ, Transport.MSMQ, Transport.RMQ, Transport.SQL, },
+                    Transports = new[] { Transport.MSMQ, Transport.AzureServiceBus, Transport.AzureStorageQueues, Transport.MSMQ, Transport.RabbitMQ, Transport.SQLServer, },
                     Persisters = new[] { Persistence.InMemory },
                     Serializers = new[] { Serialization.Json, },
                     MessageSizes = new[] { MessageSize.Tiny, },

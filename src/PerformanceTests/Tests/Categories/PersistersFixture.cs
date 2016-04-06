@@ -6,7 +6,7 @@ namespace Categories
     using Tests.Tools;
     using Variables;
 
-    [TestFixture(Description = "Persisters")]
+    [TestFixture(Description = "Persisters", Category = "Performance"), Explicit]
     public class PersistersFixture : Base
     {
         [TestCaseSource(typeof(Persisters), nameof(TestEnvironment.Generate))]

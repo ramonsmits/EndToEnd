@@ -38,6 +38,7 @@
                     {
                         d.Delete(true);
                     }
+                    // ReSharper disable once EmptyGeneralCatchClause
                     catch { }
                 });
         }
