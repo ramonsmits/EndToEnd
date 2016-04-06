@@ -51,7 +51,6 @@ public class StatisticsUoW : IManageUnitsOfWork, INeedInitialization
         Statistics.Instance.Last = DateTime.UtcNow;
         Interlocked.Increment(ref Statistics.Instance.NumberOfMessages);
         Statistics.Instance.Signal();
-        Trace.WriteLine("Message processed");
     }
 
 #if Version6
@@ -85,23 +84,23 @@ public class StatisticsUoW : IManageUnitsOfWork, INeedInitialization
 #if Version5
     public void Customize(BusConfiguration configuration)
     {
-        configuration.RegisterComponents(c => c.ConfigureComponent<StatisticsUoW>(DependencyLifecycle.InstancePerUnitOfWork));
+        configuration.RegisterComponents(c => c.ConfigureComponent<StatisticsUoW>(DependencyLifecycle.SingleInstance));
     }
 #endif
 
 #if Version6
     public void Customize(EndpointConfiguration configuration)
     {
-        configuration.RegisterComponents(c => c.ConfigureComponent<StatisticsUoW>(DependencyLifecycle.InstancePerUnitOfWork));
+        configuration.RegisterComponents(c => c.ConfigureComponent<StatisticsUoW>(DependencyLifecycle.SingleInstance));
     }
 #endif
 
     public void Init()
     {
 #if Version3
-        Configure.Instance.Configurer.ConfigureComponent<StatisticsUoW>(DependencyLifecycle.InstancePerUnitOfWork);
+        Configure.Instance.Configurer.ConfigureComponent<StatisticsUoW>(DependencyLifecycle.SingleInstance);
 #elif Version4
-        Configure.Component<StatisticsUoW>(DependencyLifecycle.InstancePerUnitOfWork);
+        Configure.Component<StatisticsUoW>(DependencyLifecycle.SingleInstance);
 #endif
     }
 }
