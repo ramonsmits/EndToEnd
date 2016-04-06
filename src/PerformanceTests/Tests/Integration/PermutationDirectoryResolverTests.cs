@@ -47,7 +47,7 @@
             };
 
             var result = resolver.Resolve(permutation);
-            Assert.That(() => result.Files.Any(info => info.Name == fileName), "The name {0} was not found in {1}", fileName, string.Join(", ", result.Files.Select(f => f.Name)));
+            Assert.That(() => result.Files.Any(info => info.Name == fileName), Is.True, "The name {0} was not found in {1}", fileName, string.Join(", ", result.Files.Select(f => f.Name)));
         }
 
         [TestCase(NServiceBusVersion.V5, Transport.MSMQ, "Transport.V5.MSMQ.dll")]
@@ -69,7 +69,7 @@
             };
 
             var result = resolver.Resolve(permutation);
-            Assert.That(() => result.Files.Any(info => info.Name == fileName), "The name {0} was not found in {1}", fileName, string.Join(", ", result.Files.Select(f => f.Name)));
+            Assert.That(() => result.Files.Any(info => info.Name == fileName), Is.True, "The name {0} was not found in {1}", fileName, string.Join(", ", result.Files.Select(f => f.Name)));
         }
 
         [Test]
