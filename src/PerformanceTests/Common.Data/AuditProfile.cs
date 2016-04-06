@@ -5,9 +5,9 @@ using Configuration = NServiceBus.BusConfiguration;
 #endif
 namespace NServiceBus5
 {
-    using Categories;
     using NServiceBus;
     using NServiceBus.Features;
+    using Tests.Permutations;
 
     class AuditProfile : IProfile, INeedPermutation
     {

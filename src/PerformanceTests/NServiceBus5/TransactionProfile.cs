@@ -1,5 +1,5 @@
-using Categories;
 using NServiceBus;
+using Tests.Permutations;
 using Variables;
 
 class TransactionProfile : IProfile, INeedPermutation

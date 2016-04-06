@@ -2,9 +2,9 @@ namespace NServiceBus6
 {
     using System;
     using System.Linq;
-    using Categories;
     using Common;
     using NServiceBus;
+    using Tests.Permutations;
     using Utils;
 
     class Program
