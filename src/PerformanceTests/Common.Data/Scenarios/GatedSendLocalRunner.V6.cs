@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 
 partial class GatedSendLocalRunner: IProfile
 {
-    public IEndpointInstance Bus { get; set; }
-
     void SendLocal(Command msg)
     {
         NServiceBus6.Program.Instance.SendLocal(msg);
