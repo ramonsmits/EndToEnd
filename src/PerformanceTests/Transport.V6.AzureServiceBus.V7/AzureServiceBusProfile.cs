@@ -4,6 +4,10 @@ class AzureServiceBusProfile : IProfile
 {
     public void Configure(EndpointConfiguration endpointConfiguration)
     {
-        endpointConfiguration.UseTransport<AzureServiceBusTransport>();
+        endpointConfiguration
+            .UseTransport<AzureServiceBusTransport>()
+            .ConnectionStringName("AzureServiceBus");
+
+        endpointConfiguration.PurgeOnStartup(false);
     }
 }
