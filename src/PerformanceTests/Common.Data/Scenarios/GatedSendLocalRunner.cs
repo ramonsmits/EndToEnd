@@ -27,22 +27,23 @@ partial class GatedSendLocalRunner : LoopRunner
 
         var po = new ParallelOptions
         {
-            MaxDegreeOfParallelism = Environment.ProcessorCount - 1 // Leave one core for transport and persistence
+            MaxDegreeOfParallelism = Environment.ProcessorCount - 1, // Leave one core for transport and persistence,
+            CancellationToken = stopLoop.Token
         };
 
         while (!Shutdown)
         {
-            Console.Write("1");
-            X.Reset();
-
-            Parallel.For(0, X.InitialCount, po, i =>
-            {
-                SendLocal(CommandGenerator.Create());
-            });
-            Console.Write("2");
-
             try
             {
+                Console.Write("1");
+                X.Reset();
+
+                Parallel.For(0, X.InitialCount, po, i =>
+                {
+                    SendLocal(CommandGenerator.Create());
+                });
+                Console.Write("2");
+
                 X.Wait(stopLoop.Token);
             }
             catch (OperationCanceledException)
@@ -50,6 +51,7 @@ partial class GatedSendLocalRunner : LoopRunner
                 break;
             }
         }
+        Log.Info("Stopped");
     }
 
     static class CommandGenerator
