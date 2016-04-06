@@ -16,10 +16,10 @@ class SymbolicLink
         Directory = 1
     }
 
-    public static void Create(string source, string destination)
+    public static bool Create(string source, string destination)
     {
         if (!File.Exists(source)) throw new FileNotFoundException("Source file not found.", source);
-        Win32.CreateSymbolicLink(destination, source, LinkType.File);
+        return Win32.CreateSymbolicLink(destination, source, LinkType.File);
     }
 
     public static bool IsSymbolic(string path)

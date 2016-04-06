@@ -62,6 +62,7 @@
     <Compile Include="Permutations\PermutationGenerator.cs" />
     <Compile Include="Permutations\PermutationParser.cs" />
     <Compile Include="Permutations\Permutations.cs" />
+    <Compile Include="SymbolicLink.cs" />
     <Compile Include="Tools\PermutationDirectoryResolver.cs" />
     <Compile Include="Tools\TestDescriptor.cs" />
     <Compile Include="Tools\TestEnvironment.cs" />
