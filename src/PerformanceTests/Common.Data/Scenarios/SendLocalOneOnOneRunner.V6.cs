@@ -4,11 +4,9 @@ using System.Threading.Tasks;
 
 partial class SendLocalOneOnOneRunner
 {
-    public IEndpointInstance Bus { get; set; }
-
     void SendLocal(Command msg)
     {
-        Bus.SendLocal(msg);
+        NServiceBus6.Program.Instance.SendLocal(msg);
     }
 
     public partial class Handler : IHandleMessages<Command>
