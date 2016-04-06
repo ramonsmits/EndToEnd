@@ -79,8 +79,8 @@ namespace Tests.Tools
         {
             src = Path.GetFullPath(src);
             if (File.Exists(dst)) return;
-            if (!SymbolicLink.Create(src, dst))
-                File.Copy(src, dst);
+            if (!SymbolicLink.Create(src, dst)) File.Copy(src, dst);
+            File.SetLastWriteTimeUtc(dst, File.GetLastWriteTimeUtc(src));
         }
 
         static DirectoryInfo GetStartupDir(string codeBaseDirTemplate, NServiceBusVersion version, string id)
