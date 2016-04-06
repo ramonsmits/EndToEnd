@@ -1,5 +1,6 @@
 ﻿using Metrics;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading;
@@ -46,8 +47,8 @@ public class Statistics
 
     public void Dump()
     {
-        Console.Out.WriteLine("");
-        Console.Out.WriteLine("---------------- Statistics ----------------");
+        Trace.WriteLine("");
+        Trace.WriteLine("---------------- Statistics ----------------");
 
         var durationSeconds = (Last - First.Value).TotalSeconds;
 
@@ -57,7 +58,7 @@ public class Statistics
 
         PrintStats("Throughput", throughput, "msg/s");
 
-        Console.Out.WriteLine("##teamcity[buildStatisticValue key='ReceiveThroughput' value='{0}']", Math.Round(throughput));
+        Trace.WriteLine(string.Format("##teamcity[buildStatisticValue key='ReceiveThroughput' value='{0}']", Math.Round(throughput)));
 
         PrintStats("NumberOfRetries", NumberOfRetries, "#");
         PrintStats("TimeToFirstMessage", (First - StartTime).Value.TotalSeconds, "s");
@@ -71,7 +72,7 @@ public class Statistics
 
     static void PrintStats(string key, double value, string unit)
     {
-        Console.Out.WriteLine($"{key}: {value:0.0} ({unit})");
+        Trace.WriteLine($"{key}: {value:0.0} ({unit})");
     }
 
     public void Signal()
