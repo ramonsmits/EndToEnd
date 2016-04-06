@@ -3,13 +3,10 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Threading;
 
 [Serializable]
 public class Statistics
 {
-    private static CountdownEvent countdownEvent;
-
     public DateTime? First;
     public DateTime Last;
     public DateTime StartTime;
@@ -32,16 +29,14 @@ public class Statistics
         }
     }
 
-    public static void Initialize(int numberOfMessages)
+    public static void Initialize()
     {
-        instance = new Statistics(numberOfMessages);
+        instance = new Statistics();
         instance.StartTime = DateTime.UtcNow;
     }
 
-    private Statistics(int numberOfMessages)
+    private Statistics()
     {
-        countdownEvent = new CountdownEvent(numberOfMessages);
-
         ConfigureMetrics();
     }
 
@@ -78,12 +73,6 @@ public class Statistics
     public void Signal()
     {
         Meter.Mark();
-        countdownEvent.Signal();
-    }
-
-    public static void WaitUntilCompleted()
-    {
-        countdownEvent.Wait();
     }
 
     void ConfigureMetrics()

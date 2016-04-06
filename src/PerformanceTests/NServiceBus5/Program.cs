@@ -9,25 +9,28 @@ namespace NServiceBus5
 
     class Program
     {
+        public static IBus Instance;
         static string endpointName = "PerformanceTests_" + AppDomain.CurrentDomain.FriendlyName.Replace(' ', '_');
         static void Main(string[] args)
         {
             try
             {
+                Statistics.Initialize();
+
                 Log.Env();
 
                 var permutation = PermutationParser.FromCommandlineArgs();
                 var options = BusCreationOptions.Parse(args);
 
                 var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-                var tasks = permutation.Tests.Select(x => (IStartAndStop)assembly.CreateInstance(x)).ToArray();
+                var tasks = permutation.Tests.Select(x => (IStartAndStop) assembly.CreateInstance(x)).ToArray();
 
-                var runDuration = TimeSpan.FromMinutes(1);
+                var runDuration = TimeSpan.FromSeconds(30);
 
-                using (var bus = CreateBus(options, permutation))
+                using (Instance = CreateBus(options, permutation))
                 {
-                    TestRunner.EndpointName = endpointName;
-                    TestRunner.RunTests(bus, options);
+                    //TestRunner.EndpointName = endpointName;
+                    //TestRunner.RunTests(bus, options);
                     foreach (var t in tasks) t.Start();
                     System.Threading.Thread.Sleep(runDuration);
                     foreach (var t in tasks) t.Stop();
@@ -37,6 +40,10 @@ namespace NServiceBus5
             {
                 NServiceBus.Logging.LogManager.GetLogger(typeof(Program)).Fatal("Main", ex);
                 throw;
+            }
+            finally
+            {
+                Statistics.Instance.Dump();
             }
         }
 
@@ -51,10 +58,10 @@ namespace NServiceBus5
             configuration.EndpointName(endpointName);
             configuration.EnableInstallers();
             configuration.DiscardFailedMessagesInsteadOfSendingToErrorQueue();
+            configuration.ApplyProfiles(permutation);
 
             var startableBus = Bus.Create(configuration);
 
-            configuration.ApplyProfiles(permutation);
 
             return startableBus.Start();
         }

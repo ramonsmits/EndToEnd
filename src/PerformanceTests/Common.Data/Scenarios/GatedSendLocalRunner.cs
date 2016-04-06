@@ -21,6 +21,7 @@ partial class GatedSendLocalRunner : LoopRunner
     {
         Log.Warn("Sleeping for the bus to purge the queue. Loop requires the queue to be empty.");
         Thread.Sleep(5000);
+        Log.Info("Starting");
 
         X = new CountdownEvent(batchSize);
 
@@ -31,12 +32,14 @@ partial class GatedSendLocalRunner : LoopRunner
 
         while (!Shutdown)
         {
+            Console.Write("1");
             X.Reset();
 
             Parallel.For(0, X.InitialCount, po, i =>
             {
                 SendLocal(CommandGenerator.Create());
             });
+            Console.Write("2");
 
             try
             {

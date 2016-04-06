@@ -8,7 +8,7 @@ partial class GatedSendLocalRunner: IProfile
 
     void SendLocal(Command msg)
     {
-        Bus.SendLocal(msg);
+        NServiceBus6.Program.Instance.SendLocal(msg);
     }
 
     public class Handler : IHandleMessages<Command>
