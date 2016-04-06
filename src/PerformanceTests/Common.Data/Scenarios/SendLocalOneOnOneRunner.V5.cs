@@ -3,11 +3,9 @@ using NServiceBus;
 
 partial class SendLocalOneOnOneRunner
 {
-    public IBus Bus { get; set; }
-
     void SendLocal(Command msg)
     {
-        Bus.SendLocal(msg);
+        NServiceBus5.Program.Instance.SendLocal(msg);
     }
 
     public partial class Handler : IHandleMessages<Command>
