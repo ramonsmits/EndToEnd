@@ -38,7 +38,12 @@ namespace Categories
 
             using (var p = Process.Start(pi))
             {
-                Assert.IsTrue(p.WaitForExit(25000), "Process still running.");
+                if (!p.WaitForExit(70000))
+                {
+                    p.Kill();
+                    Assert.Fail("Killed!");
+
+                }
                 Assert.AreEqual(0, p.ExitCode, "Execution failed.");
             }
         }
