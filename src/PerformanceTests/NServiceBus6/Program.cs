@@ -34,7 +34,10 @@ namespace NServiceBus6
                     //TestRunner.EndpointName = endpointName;
                     //TestRunner.RunTests(endpointInstance, options);
                     foreach (var t in tasks) t.Start();
+                    System.Threading.Thread.Sleep(5000);
+                    Statistics.Instance.Reset();
                     System.Threading.Thread.Sleep(runDuration);
+                    Statistics.Instance.Dump();
                     foreach (var t in tasks) t.Stop();
                 }
                 finally
@@ -46,10 +49,6 @@ namespace NServiceBus6
             {
                 NServiceBus.Logging.LogManager.GetLogger(typeof(Program)).Fatal("Main", ex);
                 throw;
-            }
-            finally
-            {
-                Statistics.Instance.Dump();
             }
         }
 

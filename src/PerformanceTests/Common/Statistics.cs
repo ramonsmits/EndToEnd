@@ -3,13 +3,16 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 
 [Serializable]
 public class Statistics
 {
     public DateTime? First;
     public DateTime Last;
+    public readonly DateTime AplicationStart = DateTime.UtcNow;
     public DateTime StartTime;
+    public DateTime Warmup;
     public long NumberOfMessages;
     public long NumberOfRetries;
     public TimeSpan SendTimeNoTx = TimeSpan.Zero;
@@ -40,23 +43,32 @@ public class Statistics
         ConfigureMetrics();
     }
 
+    public void Reset()
+    {
+        Warmup = DateTime.UtcNow;
+        Interlocked.Exchange(ref NumberOfMessages, 0);
+        Interlocked.Exchange(ref NumberOfRetries, 0);
+        SendTimeNoTx = TimeSpan.Zero;
+        SendTimeWithTx = TimeSpan.Zero;
+    }
+
     public void Dump()
     {
         Trace.WriteLine("");
         Trace.WriteLine("---------------- Statistics ----------------");
 
-        var durationSeconds = (Last - First.Value).TotalSeconds;
+        var durationSeconds = (Last - Warmup).TotalSeconds;
 
         PrintStats("NumberOfMessages", NumberOfMessages, "#");
 
-        var throughput = Convert.ToDouble(NumberOfMessages) / durationSeconds;
+        var throughput = NumberOfMessages / durationSeconds;
 
         PrintStats("Throughput", throughput, "msg/s");
 
         Trace.WriteLine(string.Format("##teamcity[buildStatisticValue key='ReceiveThroughput' value='{0}']", Math.Round(throughput)));
 
         PrintStats("NumberOfRetries", NumberOfRetries, "#");
-        PrintStats("TimeToFirstMessage", (First - StartTime).Value.TotalSeconds, "s");
+        PrintStats("TimeToFirstMessage", (First - AplicationStart).Value.TotalSeconds, "s");
 
         if (SendTimeNoTx != TimeSpan.Zero)
             PrintStats("Sending", Convert.ToDouble(NumberOfMessages / 2) / SendTimeNoTx.TotalSeconds, "msg/s");
@@ -79,7 +91,7 @@ public class Statistics
     {
         Meter = Metric.Meter("", Unit.Commands, TimeUnit.Seconds);
 
-        var folder = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "reports");
+        var folder = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "reports", DateTime.UtcNow.ToString("s"));
 
         Metric
             .Config.WithAllCounters()

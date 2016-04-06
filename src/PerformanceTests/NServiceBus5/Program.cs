@@ -32,7 +32,10 @@ namespace NServiceBus5
                     //TestRunner.EndpointName = endpointName;
                     //TestRunner.RunTests(bus, options);
                     foreach (var t in tasks) t.Start();
+                    System.Threading.Thread.Sleep(5000); // Warmup
+                    Statistics.Instance.Reset();
                     System.Threading.Thread.Sleep(runDuration);
+                    Statistics.Instance.Dump();
                     foreach (var t in tasks) t.Stop();
                 }
             }
@@ -40,10 +43,6 @@ namespace NServiceBus5
             {
                 NServiceBus.Logging.LogManager.GetLogger(typeof(Program)).Fatal("Main", ex);
                 throw;
-            }
-            finally
-            {
-                Statistics.Instance.Dump();
             }
         }
 
