@@ -4,6 +4,9 @@ namespace Tests.Permutations
 
     public class Permutation
     {
+        public string Id { get; set; }
+        public string Exe { get; set; }
+
         public string[] Tests =
         {
             "PublishToSelf",
