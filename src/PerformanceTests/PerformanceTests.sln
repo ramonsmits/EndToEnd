@@ -43,11 +43,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transport.V6.AzureServiceBu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transport.V5.AzureStorageQueues_v6", "Transport.V5.AzureStorageQueues.V6\Transport.V5.AzureStorageQueues_v6.csproj", "{152520F2-7D43-443B-B929-73BDFE9CE792}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transport.V6.AzureStorageQueues_7", "Transport.V6.AzureStorageQueues.V7\Transport.V6.AzureStorageQueues_7.csproj", "{B8CD6B76-6416-4C10-8746-EC65CA09B191}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transport.V6.AzureStorageQueues_v7", "Transport.V6.AzureStorageQueues.V7\Transport.V6.AzureStorageQueues_v7.csproj", "{B8CD6B76-6416-4C10-8746-EC65CA09B191}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistence", "Persistence", "{3CB57DB2-A0E9-4C56-B3D4-9051F34BD2C1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transport", "Transport", "{CF9C0BCF-E877-47A2-BEF4-F0068F16F074}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence.V6.InMemory", "Persistence.V6.InMemory\Persistence.V6.InMemory.csproj", "{FAC26029-1E00-43E5-B7DB-13318FC1092A}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -140,6 +142,10 @@ Global
 		{B8CD6B76-6416-4C10-8746-EC65CA09B191}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8CD6B76-6416-4C10-8746-EC65CA09B191}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8CD6B76-6416-4C10-8746-EC65CA09B191}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAC26029-1E00-43E5-B7DB-13318FC1092A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAC26029-1E00-43E5-B7DB-13318FC1092A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAC26029-1E00-43E5-B7DB-13318FC1092A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAC26029-1E00-43E5-B7DB-13318FC1092A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -160,5 +166,6 @@ Global
 		{3F77A6DF-9683-4450-A0FE-45259461947F} = {CF9C0BCF-E877-47A2-BEF4-F0068F16F074}
 		{152520F2-7D43-443B-B929-73BDFE9CE792} = {CF9C0BCF-E877-47A2-BEF4-F0068F16F074}
 		{B8CD6B76-6416-4C10-8746-EC65CA09B191} = {CF9C0BCF-E877-47A2-BEF4-F0068F16F074}
+		{FAC26029-1E00-43E5-B7DB-13318FC1092A} = {3CB57DB2-A0E9-4C56-B3D4-9051F34BD2C1}
 	EndGlobalSection
 EndGlobal
