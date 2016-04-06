@@ -6,7 +6,7 @@ namespace Utils
     /// This class is taken from the NCrunch helper assembly. It is needed to access the NCrunch-specific workspacing locations, so the appdomains correctly load assemblies
     /// when running under NCrunch.
     /// </summary>
-    internal static class NCrunchEnvironment
+    static class NCrunchEnvironment
     {
         public static bool NCrunchIsResident()
         {

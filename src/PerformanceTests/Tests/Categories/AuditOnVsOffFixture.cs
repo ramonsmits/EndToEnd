@@ -6,10 +6,9 @@ namespace Categories
     using Tests.Tools;
     using Variables;
 
-    [TestFixture(Description = "Audit forwarding On / Off")]
+    [TestFixture(Description = "Audit forwarding On / Off", Category = "Performance"), Explicit]
     public class AuditOnVsOffFixture : Base
     {
-        [Test]
         [TestCaseSource(typeof(AuditOnVsOff), nameof(TestEnvironment.Generate))]
         public override void SendLocal(Permutation permutation)
         {

@@ -6,7 +6,7 @@ namespace Categories
     using Tests.Tools;
     using Variables;
 
-    [TestFixture(Description = "Outbox vs DTC")]
+    [TestFixture(Description = "Outbox vs DTC", Category = "Performance"), Explicit]
     public class OutboxVsDtcFixture : Base
     {
         [TestCaseSource(typeof(OutboxVsDtc), nameof(TestEnvironment.Generate))]

@@ -20,8 +20,9 @@ namespace Tests.Tools
         public PermutationResult Resolve(Permutation permutation)
         {
             var components = GetPermutationComponents(permutation);
-
-            var files = components.Select(s => new DirectoryInfo(Path.Combine(rootDirectory, s)))
+        
+            var files = components
+                .SelectMany(s => Directory.GetDirectories(rootDirectory, s + "*").Select(path => new DirectoryInfo(path)))
                 .Where(di => di.Exists)
                 .SelectMany(di =>
                 {
@@ -51,6 +52,7 @@ namespace Tests.Tools
         IEnumerable<string> GetPermutationComponents(Permutation permutation)
         {
             yield return $"Persistence.{permutation.Version}.{permutation.Persister}";
+            yield return $"Transport.{permutation.Version}.{permutation.Transport}";
         }
 
         public class PermutationResult

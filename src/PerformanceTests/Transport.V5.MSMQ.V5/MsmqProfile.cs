@@ -17,10 +17,9 @@ class MsmqProfile : IProfile, ICreateTestData
 
     public void CreateTestData(BusConfiguration configuration)
     {
-        var someSetting = configuration.GetSettings().Get<IWantQueueCreated>();
+        configuration.GetSettings().Get<IWantQueueCreated>();
         
-        var xxx = configuration.GetSettings().EndpointName();
-
+        configuration.GetSettings().EndpointName();
     }
 
     public void CleanUpTestData(BusConfiguration configuration)

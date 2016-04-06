@@ -3,7 +3,6 @@ namespace NServiceBus5
     using System;
     using System.Linq;
     using Common;
-    using Common.Saga;
     using NServiceBus;
     using Tests.Permutations;
     using Utils;
