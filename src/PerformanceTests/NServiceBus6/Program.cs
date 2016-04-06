@@ -12,28 +12,36 @@ namespace NServiceBus6
         static string endpointName = "PerformanceTests_" + AppDomain.CurrentDomain.FriendlyName.Replace(' ', '_');
         static void Main(string[] args)
         {
-            Log.Env();
-
-            var permutation = PermutationParser.FromCommandlineArgs();
-            var options = BusCreationOptions.Parse(args);
-
-            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-            var tasks = permutation.Tests.Select(x => (IStartAndStop)assembly.CreateInstance(x)).ToArray();
-
-            var runDuration = TimeSpan.FromMinutes(1);
-
-            var endpointInstance = CreateBus(options, permutation);
             try
             {
-                TestRunner.EndpointName = endpointName;
-                TestRunner.RunTests(endpointInstance, options);
-                foreach (var t in tasks) t.Start();
-                System.Threading.Thread.Sleep(runDuration);
-                foreach (var t in tasks) t.Stop();
+                Log.Env();
+
+                var permutation = PermutationParser.FromCommandlineArgs();
+                var options = BusCreationOptions.Parse(args);
+
+                var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+                var tasks = permutation.Tests.Select(x => (IStartAndStop)assembly.CreateInstance(x)).ToArray();
+
+                var runDuration = TimeSpan.FromMinutes(1);
+
+                var endpointInstance = CreateBus(options, permutation);
+                try
+                {
+                    TestRunner.EndpointName = endpointName;
+                    TestRunner.RunTests(endpointInstance, options);
+                    foreach (var t in tasks) t.Start();
+                    System.Threading.Thread.Sleep(runDuration);
+                    foreach (var t in tasks) t.Stop();
+                }
+                finally
+                {
+                    endpointInstance.Stop();
+                }
             }
-            finally
+            catch (Exception ex)
             {
-                endpointInstance.Stop();
+                NServiceBus.Logging.LogManager.GetLogger(typeof(Program)).Fatal("Main", ex);
+                throw;
             }
         }
 
