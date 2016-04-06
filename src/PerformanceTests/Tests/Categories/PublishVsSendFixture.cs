@@ -9,21 +9,15 @@ namespace Categories
     public class PublishVsSendFixture : Base
     {
         [TestCaseSource(nameof(CreatePermutations))]
-        public override void PublishToSelf(Permutation permutation)
+        public override void GatedSendLocalRunner(Permutation permutation)
         {
-            base.PublishToSelf(permutation);
+            base.GatedSendLocalRunner(permutation);
         }
 
         [TestCaseSource(nameof(CreatePermutations))]
-        public override void SendLocal(Permutation permutation)
+        public override void SendLocalOneOnOneRunner(Permutation permutation)
         {
-            base.SendLocal(permutation);
-        }
-
-        [TestCaseSource(nameof(CreatePermutations))]
-        public override void SendToSelf(Permutation permutation)
-        {
-            base.SendToSelf(permutation);
+            base.SendLocalOneOnOneRunner(permutation);
         }
 
         static IEnumerable<Permutation> CreatePermutations()

@@ -7,12 +7,7 @@ namespace Tests.Permutations
         public string Id { get; set; }
         public string Exe { get; set; }
 
-        public string[] Tests =
-        {
-            "PublishToSelf",
-            "SendLocal",
-            "SendToSelf"
-        };
+        public string[] Tests;
 
         public Audit AuditMode; //0
         public DTC DTCMode; //1

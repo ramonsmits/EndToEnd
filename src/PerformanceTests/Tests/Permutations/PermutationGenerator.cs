@@ -2,7 +2,6 @@ namespace Tests.Permutations
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Categories;
 
     public class PermutationGenerator
     {
@@ -38,12 +37,6 @@ namespace Tests.Permutations
                     TransactionMode = TransactionMode,
                     AuditMode = AuditMode,
                     ConcurrencyLevel = ConcurrencyLevel,
-
-                    Tests = new[]
-                    {
-                        nameof(Base.PublishToSelf),
-                        nameof(Base.SendToSelf),
-                    },
                 };
             return items;
         }
