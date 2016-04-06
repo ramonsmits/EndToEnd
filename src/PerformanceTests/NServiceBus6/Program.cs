@@ -2,6 +2,7 @@ namespace NServiceBus6
 {
     using System;
     using System.Linq;
+    using System.Threading.Tasks;
     using Common;
     using NServiceBus;
     using Tests.Permutations;
@@ -9,11 +10,14 @@ namespace NServiceBus6
 
     class Program
     {
+        public static IEndpointInstance Instance;
         static string endpointName = "PerformanceTests_" + AppDomain.CurrentDomain.FriendlyName.Replace(' ', '_');
         static void Main(string[] args)
         {
             try
             {
+                Statistics.Initialize();
+
                 Log.Env();
 
                 var permutation = PermutationParser.FromCommandlineArgs();
@@ -22,20 +26,20 @@ namespace NServiceBus6
                 var assembly = System.Reflection.Assembly.GetExecutingAssembly();
                 var tasks = permutation.Tests.Select(x => (IStartAndStop)assembly.CreateInstance(x)).ToArray();
 
-                var runDuration = TimeSpan.FromMinutes(1);
+                var runDuration = TimeSpan.FromSeconds(30);
 
-                var endpointInstance = CreateBus(options, permutation);
+                Instance = CreateBus(options, permutation).Result;
                 try
                 {
-                    TestRunner.EndpointName = endpointName;
-                    TestRunner.RunTests(endpointInstance, options);
+                    //TestRunner.EndpointName = endpointName;
+                    //TestRunner.RunTests(endpointInstance, options);
                     foreach (var t in tasks) t.Start();
                     System.Threading.Thread.Sleep(runDuration);
                     foreach (var t in tasks) t.Stop();
                 }
                 finally
                 {
-                    endpointInstance.Stop();
+                    Instance.Stop();
                 }
             }
             catch (Exception ex)
@@ -43,9 +47,13 @@ namespace NServiceBus6
                 NServiceBus.Logging.LogManager.GetLogger(typeof(Program)).Fatal("Main", ex);
                 throw;
             }
+            finally
+            {
+                Statistics.Instance.Dump();
+            }
         }
 
-        static IEndpointInstance CreateBus(BusCreationOptions options, Permutation permutation)
+        static async Task<IEndpointInstance> CreateBus(BusCreationOptions options, Permutation permutation)
         {
             if (options.Cleanup)
             {
@@ -55,11 +63,10 @@ namespace NServiceBus6
             var configuration = new EndpointConfiguration(endpointName);
             configuration.EnableInstallers();
             configuration.LimitMessageProcessingConcurrencyTo(options.NumberOfThreads);
-
             configuration.ApplyProfiles(permutation);
 
-            var endpoint = Endpoint.Create(configuration).GetAwaiter().GetResult();
-            return endpoint.Start().GetAwaiter().GetResult();
+            var endpoint = await Endpoint.Create(configuration);
+            return await endpoint.Start();
         }
     }
 }
