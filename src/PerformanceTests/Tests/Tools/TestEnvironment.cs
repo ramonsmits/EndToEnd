@@ -25,12 +25,16 @@ namespace Tests.Tools
             var result = resolver.Resolve(permutation);
             var startupDir = GetStartupDir(startupDirTemplate, permutation.Version, id.ToString());
 
-            if (!startupDir.Exists)
+            if (startupDir.Exists)
             {
-                startupDir.Create();
-                var sourceAssemblyFiles = Directory.GetFiles(result.RootProjectDirectory, "*");
-                CopyAssembliesToStarupDir(startupDir, sourceAssemblyFiles, result.Files);
+                startupDir.Delete(true);
             }
+
+            startupDir.Create();
+
+            var sourceAssemblyFiles = Directory.GetFiles(result.RootProjectDirectory, "*");
+            CopyAssembliesToStarupDir(startupDir, sourceAssemblyFiles, result.Files);
+
 
             var projectAssemblyPath = Path.Combine(startupDir.FullName, result.RootProjectDirectory + ".exe");
 
