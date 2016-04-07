@@ -23,6 +23,8 @@ namespace NServiceBus6
                 var permutation = PermutationParser.FromCommandlineArgs();
                 var options = BusCreationOptions.Parse(args);
 
+                if (Environment.UserInteractive) Console.Title = permutation.ToString();
+
                 var assembly = System.Reflection.Assembly.GetExecutingAssembly();
                 var tasks = permutation.Tests.Select(x => (IStartAndStop)assembly.CreateInstance(x)).ToArray();
 
@@ -63,6 +65,7 @@ namespace NServiceBus6
             configuration.EnableInstallers();
             configuration.LimitMessageProcessingConcurrencyTo(options.NumberOfThreads);
             configuration.ApplyProfiles(permutation);
+            configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
 
             var endpoint = await Endpoint.Create(configuration);
             return await endpoint.Start();
