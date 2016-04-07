@@ -99,7 +99,7 @@
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "$(TargetDir)NServiceBus5.x86.exe"
 copy "$(TargetPath).config" "$(TargetDir)NServiceBus5.x86.exe.config"
-"C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6 Tools\CorFlags.exe" "$(TargetDir)NServiceBus5.x86.exe" /32bit+</PostBuildEvent>
+"%25programFiles(x86)%25\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6.1 Tools\CorFlags.exe" "$(TargetDir)NServiceBus5.x86.exe" /32bit+</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
