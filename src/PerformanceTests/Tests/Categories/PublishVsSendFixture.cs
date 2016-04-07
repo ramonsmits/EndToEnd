@@ -32,11 +32,11 @@ namespace Categories
                 Persisters = new[] { Persistence.InMemory },
                 Serializers = new[] { Serialization.Json, },
                 MessageSizes = new[] { MessageSize.Tiny, },
-                OutboxModes = new[] { Outbox.Off, Outbox.On, },
-                DTCModes = new[] { DTC.Off, DTC.On, },
+                OutboxModes = new[] { Outbox.Off, },
+                DTCModes = new[] { DTC.On, },
                 TransactionMode = new[] { TransactionMode.Default, },
                 AuditModes = new[] { Audit.Off },
-                ConcurrencyLevels = new[] { ConcurrencyLevel.EnvCores }
+                ConcurrencyLevels = new[] { ConcurrencyLevel.EnvCores4x }
             });
         }
     }
