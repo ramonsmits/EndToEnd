@@ -15,6 +15,8 @@ namespace NServiceBus5
         {
             try
             {
+                TraceLogger.Initialize();
+
                 Statistics.Initialize();
 
                 Log.Env();
