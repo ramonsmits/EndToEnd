@@ -49,6 +49,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transport", "Transport", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence.V6.InMemory", "Persistence.V6.InMemory\Persistence.V6.InMemory.csproj", "{FAC26029-1E00-43E5-B7DB-13318FC1092A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FE378DAF-B1F4-418B-B521-C472E541CC0F}"
+	ProjectSection(SolutionItems) = preProject
+		readme.md = readme.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Common.Data\Common.Data.projitems*{10d11044-c92c-42ad-830e-57012ff4f039}*SharedItemsImports = 4
