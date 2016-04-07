@@ -38,9 +38,9 @@ partial class GatedSendLocalRunner : LoopRunner
                 Console.Write("1");
                 X.Reset();
 
-                Parallel.For(0, X.InitialCount, po, i =>
+                Parallel.For(0, X.InitialCount, po, async i =>
                 {
-                    SendLocal(CommandGenerator.Create());
+                    await SendLocal(CommandGenerator.Create());
                 });
                 Console.Write("2");
 
