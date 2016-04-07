@@ -6,6 +6,7 @@ namespace Categories
     using NUnit.Framework;
     using Tests.Permutations;
     using Tests.Tools;
+    using Variables;
 
     public class Base
     {
@@ -29,12 +30,26 @@ namespace Categories
 
         static void Invoke(Permutation permutation)
         {
-            var fi = new FileInfo(permutation.Exe);
-            var pi = new ProcessStartInfo(permutation.Exe, PermutationParser.ToArgs(permutation))
+            var x64 = new FileInfo(permutation.Exe);
+            var x86 = new FileInfo(permutation.Exe.Replace(".exe", ".x86.exe"));
+
+            var exe = (permutation.Platform == Platform.x86 ? x86 : x64);
+
+            if (permutation.Platform == Platform.x86)
+            {
+                x64.Delete();
+            }
+            else
+            {
+                x86.Delete();
+            }
+
+            var pi = new ProcessStartInfo(exe.FullName, PermutationParser.ToArgs(permutation))
             {
                 UseShellExecute = false,
-                WorkingDirectory = fi.DirectoryName,
+                WorkingDirectory = exe.DirectoryName,
             };
+
 
             using (var p = Process.Start(pi))
             {
