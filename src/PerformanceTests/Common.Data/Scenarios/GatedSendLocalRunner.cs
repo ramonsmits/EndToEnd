@@ -21,25 +21,29 @@ partial class GatedSendLocalRunner : LoopRunner
     {
         Log.Warn("Sleeping for the bus to purge the queue. Loop requires the queue to be empty.");
         Thread.Sleep(5000);
+        Log.Info("Starting");
 
         X = new CountdownEvent(batchSize);
 
         var po = new ParallelOptions
         {
-            MaxDegreeOfParallelism = Environment.ProcessorCount - 1 // Leave one core for transport and persistence
+            MaxDegreeOfParallelism = Environment.ProcessorCount - 1, // Leave one core for transport and persistence,
+            CancellationToken = stopLoop.Token
         };
 
         while (!Shutdown)
         {
-            X.Reset();
-
-            Parallel.For(0, X.InitialCount, po, i =>
-            {
-                SendLocal(CommandGenerator.Create());
-            });
-
             try
             {
+                Console.Write("1");
+                X.Reset();
+
+                Parallel.For(0, X.InitialCount, po, i =>
+                {
+                    SendLocal(CommandGenerator.Create());
+                });
+                Console.Write("2");
+
                 X.Wait(stopLoop.Token);
             }
             catch (OperationCanceledException)
@@ -47,6 +51,7 @@ partial class GatedSendLocalRunner : LoopRunner
                 break;
             }
         }
+        Log.Info("Stopped");
     }
 
     static class CommandGenerator

@@ -3,39 +3,35 @@ namespace Categories
     using System.Collections.Generic;
     using NUnit.Framework;
     using Tests.Permutations;
-    using Tests.Tools;
     using Variables;
 
     [TestFixture(Description = "Persisters", Category = "Performance"), Explicit]
     public class PersistersFixture : Base
     {
-        [TestCaseSource(typeof(Persisters), nameof(TestEnvironment.Generate))]
-        public override void SendLocal(Permutation permutation)
+        [TestCaseSource(nameof(CreatePermutations))]
+        public override void GatedSendLocalRunner(Permutation permutation)
         {
-            base.SendLocal(permutation);
+            base.GatedSendLocalRunner(permutation);
         }
 
-        class Persisters : TestEnvironment
+        static IEnumerable<Permutation> CreatePermutations()
         {
-            protected override IEnumerable<Permutation> CreatePermutations()
+            return PermutationGenerator.Generate(new Permutations
             {
-                return PermutationGenerator.Generate(new Permutations
-                {
-                    Versions = new[] { NServiceBusVersion.V5, NServiceBusVersion.V6, },
-                    IOPS = new[] { IOPS.Default },
-                    Platforms = new[] { Platform.x86, },
-                    GarbageCollectors = new[] { GarbageCollector.Client, },
-                    Transports = new[] { Transport.MSMQ },
-                    Persisters = new[] { Persistence.InMemory, Persistence.NHibernate, Persistence.RavenDB },
-                    Serializers = new[] { Serialization.Json, },
-                    MessageSizes = new[] { MessageSize.Tiny, },
-                    OutboxModes = new[] { Outbox.Off, Outbox.On, },
-                    DTCModes = new[] { DTC.Off, DTC.On, },
-                    TransactionMode = new[] { TransactionMode.Default, },
-                    AuditModes = new[] { Audit.Off },
-                    ConcurrencyLevels = new[] { ConcurrencyLevel.EnvCores }
-                });
-            }
+                Versions = new[] { NServiceBusVersion.V5, NServiceBusVersion.V6, },
+                IOPS = new[] { IOPS.Default },
+                Platforms = new[] { Platform.x86, },
+                GarbageCollectors = new[] { GarbageCollector.Client, },
+                Transports = new[] { Transport.MSMQ },
+                Persisters = new[] { Persistence.InMemory, Persistence.NHibernate, Persistence.RavenDB },
+                Serializers = new[] { Serialization.Json, },
+                MessageSizes = new[] { MessageSize.Tiny, },
+                OutboxModes = new[] { Outbox.Off, Outbox.On, },
+                DTCModes = new[] { DTC.Off, DTC.On, },
+                TransactionMode = new[] { TransactionMode.Default, },
+                AuditModes = new[] { Audit.Off },
+                ConcurrencyLevels = new[] { ConcurrencyLevel.EnvCores }
+            });
         }
     }
 }

@@ -8,11 +8,11 @@ using System.Threading;
 [Serializable]
 public class Statistics
 {
-    private static CountdownEvent countdownEvent;
-
     public DateTime? First;
     public DateTime Last;
+    public readonly DateTime AplicationStart = DateTime.UtcNow;
     public DateTime StartTime;
+    public DateTime Warmup;
     public long NumberOfMessages;
     public long NumberOfRetries;
     public TimeSpan SendTimeNoTx = TimeSpan.Zero;
@@ -32,17 +32,24 @@ public class Statistics
         }
     }
 
-    public static void Initialize(int numberOfMessages)
+    public static void Initialize()
     {
-        instance = new Statistics(numberOfMessages);
+        instance = new Statistics();
         instance.StartTime = DateTime.UtcNow;
     }
 
-    private Statistics(int numberOfMessages)
+    private Statistics()
     {
-        countdownEvent = new CountdownEvent(numberOfMessages);
-
         ConfigureMetrics();
+    }
+
+    public void Reset()
+    {
+        Warmup = DateTime.UtcNow;
+        Interlocked.Exchange(ref NumberOfMessages, 0);
+        Interlocked.Exchange(ref NumberOfRetries, 0);
+        SendTimeNoTx = TimeSpan.Zero;
+        SendTimeWithTx = TimeSpan.Zero;
     }
 
     public void Dump()
@@ -50,18 +57,18 @@ public class Statistics
         Trace.WriteLine("");
         Trace.WriteLine("---------------- Statistics ----------------");
 
-        var durationSeconds = (Last - First.Value).TotalSeconds;
+        var durationSeconds = (Last - Warmup).TotalSeconds;
 
         PrintStats("NumberOfMessages", NumberOfMessages, "#");
 
-        var throughput = Convert.ToDouble(NumberOfMessages) / durationSeconds;
+        var throughput = NumberOfMessages / durationSeconds;
 
         PrintStats("Throughput", throughput, "msg/s");
 
         Trace.WriteLine(string.Format("##teamcity[buildStatisticValue key='ReceiveThroughput' value='{0}']", Math.Round(throughput)));
 
         PrintStats("NumberOfRetries", NumberOfRetries, "#");
-        PrintStats("TimeToFirstMessage", (First - StartTime).Value.TotalSeconds, "s");
+        PrintStats("TimeToFirstMessage", (First - AplicationStart).Value.TotalSeconds, "s");
 
         if (SendTimeNoTx != TimeSpan.Zero)
             PrintStats("Sending", Convert.ToDouble(NumberOfMessages / 2) / SendTimeNoTx.TotalSeconds, "msg/s");
@@ -78,22 +85,22 @@ public class Statistics
     public void Signal()
     {
         Meter.Mark();
-        countdownEvent.Signal();
-    }
-
-    public static void WaitUntilCompleted()
-    {
-        countdownEvent.Wait();
     }
 
     void ConfigureMetrics()
     {
         Meter = Metric.Meter("", Unit.Commands, TimeUnit.Seconds);
 
-        var folder = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "reports");
+        var assemblyLocation = Assembly.GetEntryAssembly().Location;
+        var assemblyFolder = Path.GetDirectoryName(assemblyLocation);
+        var reportFolder = Path.Combine(assemblyFolder, "reports", DateTime.UtcNow.ToString("yyyy-MM-dd--HH-mm-ss"));
+
+        Trace.WriteLine($"Assembly Location: {assemblyLocation}");
+        Trace.WriteLine($"Assembly folder: {assemblyFolder}");
+        Trace.WriteLine($"Test run report folder: {reportFolder}");
 
         Metric
             .Config.WithAllCounters()
-            .WithReporting(report => report.WithCSVReports(folder, TimeSpan.FromSeconds(1)));
+            .WithReporting(report => report.WithCSVReports(reportFolder, TimeSpan.FromSeconds(1)));
     }
 }

@@ -30,7 +30,7 @@ namespace Tests.Permutations
         }
         static string GetVar(string[] args, string name)
         {
-            return args.Single(a => a.StartsWith("--" + name)).Substring(name.Length + 4); // -- :
+            return args.Single(a => a.StartsWith("--" + name)).Substring(name.Length + 3); // -- :
         }
 
         public static Permutation Parse(string data)
@@ -57,7 +57,14 @@ namespace Tests.Permutations
 
         static T Parse<T>(this string[] values, int index)
         {
-            return (T)Enum.Parse(typeof(T), values[index]);
+            try
+            {
+                return (T)Enum.Parse(typeof(T), values[index]);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Value {values[index]} does not match any enum value: {string.Join(",", Enum.GetNames(typeof(T)))}", ex);
+            }
         }
     }
 }

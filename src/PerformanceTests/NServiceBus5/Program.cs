@@ -9,26 +9,44 @@ namespace NServiceBus5
 
     class Program
     {
+        public static IBus Instance;
         static string endpointName = "PerformanceTests_" + AppDomain.CurrentDomain.FriendlyName.Replace(' ', '_');
         static void Main(string[] args)
         {
-            Log.Env();
-
-            var permutation = PermutationParser.FromCommandlineArgs();
-            var options = BusCreationOptions.Parse(args);
-
-            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-            var tasks = permutation.Tests.Select(x => (IStartAndStop)assembly.CreateInstance(x)).ToArray();
-
-            var runDuration = TimeSpan.FromMinutes(1);
-
-            using (var bus = CreateBus(options, permutation))
+            try
             {
-                TestRunner.EndpointName = endpointName;
-                TestRunner.RunTests(bus, options);
-                foreach (var t in tasks) t.Start();
-                System.Threading.Thread.Sleep(runDuration);
-                foreach (var t in tasks) t.Stop();
+                TraceLogger.Initialize();
+
+                Statistics.Initialize();
+
+                Log.Env();
+
+                var permutation = PermutationParser.FromCommandlineArgs();
+                var options = BusCreationOptions.Parse(args);
+
+                if (Environment.UserInteractive) Console.Title = permutation.ToString();
+
+                var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+                var tasks = permutation.Tests.Select(x => (IStartAndStop) assembly.CreateInstance(x)).ToArray();
+
+                var runDuration = TimeSpan.FromSeconds(30);
+
+                using (Instance = CreateBus(options, permutation))
+                {
+                    //TestRunner.EndpointName = endpointName;
+                    //TestRunner.RunTests(bus, options);
+                    foreach (var t in tasks) t.Start();
+                    System.Threading.Thread.Sleep(5000); // Warmup
+                    Statistics.Instance.Reset();
+                    System.Threading.Thread.Sleep(runDuration);
+                    Statistics.Instance.Dump();
+                    foreach (var t in tasks) t.Stop();
+                }
+            }
+            catch (Exception ex)
+            {
+                NServiceBus.Logging.LogManager.GetLogger(typeof(Program)).Fatal("Main", ex);
+                throw;
             }
         }
 
@@ -43,10 +61,10 @@ namespace NServiceBus5
             configuration.EndpointName(endpointName);
             configuration.EnableInstallers();
             configuration.DiscardFailedMessagesInsteadOfSendingToErrorQueue();
-
+            configuration.ApplyProfiles(permutation);
+            configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
             var startableBus = Bus.Create(configuration);
 
-            configuration.ApplyProfiles(permutation);
 
             return startableBus.Start();
         }

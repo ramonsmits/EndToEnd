@@ -1,89 +1,92 @@
 namespace Tests.Tools
 {
-    using System;
-    using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Tests.Permutations;
     using Variables;
 
-    public abstract class TestEnvironment
+    public class TestEnvironment
     {
         PermutationDirectoryResolver resolver;
 
-        protected TestEnvironment()
+        public TestEnvironment()
         {
             resolver = new PermutationDirectoryResolver(".");
         }
 
-        public IEnumerable<Permutation> Generate()
+        public TestDescriptor CreateTestEnvironments(Permutation permutation)
         {
-            TestsGlobal.CleanupAfterPreviousRuns();
-
-            var permutations = CreatePermutations().ToArray();
-            CreateTestEnvironments(permutations);
-
-            return permutations;
-        }
-
-        protected abstract IEnumerable<Permutation> CreatePermutations();
-
-        void CreateTestEnvironments(Permutation[] permutations)
-        {
-            var tasks = new List<Task>();
-
-            foreach (var permutation in permutations)
-            {
-                var packageToUse = permutation;
-
-                var task = Task.Factory.StartNew(() =>
-                {
-                    CreateEnvironment(TestsGlobal.BinDirectoryTemplate, packageToUse);
-                });
-
-                tasks.Add(task);
-            }
-
-            Task.WaitAll(tasks.ToArray());
+            return CreateEnvironment(TestsGlobal.BinDirectoryTemplate, permutation);
         }
 
         TestDescriptor CreateEnvironment(string startupDirTemplate, Permutation permutation)
         {
+            startupDirTemplate = Path.Combine("permutations", startupDirTemplate);
+            var id = DeterministicUuid.Create(permutation.ToString());
             var result = resolver.Resolve(permutation);
-            var startupDir = CreateStartupDir(startupDirTemplate, permutation.Version, Guid.NewGuid());
-            var sourceAssemblyFiles = Directory.GetFiles(result.RootProjectDirectory, "*");
+            var startupDir = GetStartupDir(startupDirTemplate, permutation.Version, id.ToString());
 
+            if (startupDir.Exists)
+            {
+                startupDir.Delete(true);
+            }
+
+            startupDir.Create();
+
+            var sourceAssemblyFiles = Directory.GetFiles(result.RootProjectDirectory, "*");
             CopyAssembliesToStarupDir(startupDir, sourceAssemblyFiles, result.Files);
+
 
             var projectAssemblyPath = Path.Combine(startupDir.FullName, result.RootProjectDirectory + ".exe");
 
-            return new TestDescriptor
+            var descriptor = new TestDescriptor
             {
+                Permutation = permutation,
                 ProjectAssemblyPath = projectAssemblyPath,
             };
+
+            permutation.Exe = projectAssemblyPath;
+
+            GenerateBat(descriptor);
+
+            return descriptor;
+        }
+
+        void GenerateBat(TestDescriptor value)
+        {
+            var args = PermutationParser.ToArgs(value.Permutation);
+            var exe = new FileInfo(value.ProjectAssemblyPath);
+            var batFile = Path.Combine(exe.DirectoryName, "start.bat");
+
+            if (!File.Exists(batFile)) File.WriteAllText(batFile, exe.Name + " " + args);
         }
 
         void CopyAssembliesToStarupDir(DirectoryInfo destination, string[] baseFiles, FileInfo[] overrides)
         {
             foreach (var file in baseFiles)
             {
-                var newFilename = Path.Combine(destination.FullName, Path.GetFileName(file));
-
-                File.Copy(file, newFilename);
+                var dst = Path.Combine(destination.FullName, Path.GetFileName(file));
+                Clone(file, dst);
             }
 
             foreach (var @override in overrides)
             {
-                @override.CopyTo(Path.Combine(destination.FullName, @override.Name), true);
+                var dst = Path.Combine(destination.FullName, @override.Name);
+                Clone(@override.FullName, dst);
             }
         }
 
-        static DirectoryInfo CreateStartupDir(string codeBaseDirTemplate, NServiceBusVersion version, Guid uniqueId)
+        static void Clone(string src, string dst)
         {
-            var directoryName = string.Format(codeBaseDirTemplate, version, uniqueId);
+            src = Path.GetFullPath(src);
+            if (File.Exists(dst)) return;
+            if (!SymbolicLink.Create(src, dst)) File.Copy(src, dst);
+            File.SetLastWriteTimeUtc(dst, File.GetLastWriteTimeUtc(src));
+        }
 
-            return Directory.CreateDirectory(directoryName);
+        static DirectoryInfo GetStartupDir(string codeBaseDirTemplate, NServiceBusVersion version, string id)
+        {
+            var directoryName = string.Format(codeBaseDirTemplate, version, id);
+            return new DirectoryInfo(directoryName);
         }
     }
 }

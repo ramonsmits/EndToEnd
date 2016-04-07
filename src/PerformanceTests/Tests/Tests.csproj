@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Categories\MsmqV5vsV6Fixture.cs" />
     <Compile Include="Categories\AuditOnVsOffFixture.cs" />
     <Compile Include="Categories\Base.cs" />
     <Compile Include="Categories\OutboxVsDtcFixture.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="Permutations\PermutationGenerator.cs" />
     <Compile Include="Permutations\PermutationParser.cs" />
     <Compile Include="Permutations\Permutations.cs" />
+    <Compile Include="SymbolicLink.cs" />
     <Compile Include="Tools\PermutationDirectoryResolver.cs" />
     <Compile Include="Tools\TestDescriptor.cs" />
     <Compile Include="Tools\TestEnvironment.cs" />

@@ -1,35 +1,51 @@
 namespace Categories
 {
-    using System;
-    using System.Linq;
+    using System.Diagnostics;
+    using System.IO;
     using System.Runtime.CompilerServices;
     using NUnit.Framework;
-    using System.Diagnostics;
     using Tests.Permutations;
+    using Tests.Tools;
 
     public class Base
     {
-        public virtual void PublishToSelf(Permutation permutation)
+        public virtual void GatedSendLocalRunner(Permutation permutation)
         {
-            CheckInPermutation(permutation);
-            Trace.WriteLine("PublishToSelf");
+            Tasks(permutation);
         }
 
-        public virtual void SendLocal(Permutation permutation)
+        public virtual void SendLocalOneOnOneRunner(Permutation permutation)
         {
-            CheckInPermutation(permutation);
-            Trace.WriteLine("SendLocal");
+            Tasks(permutation);
         }
 
-        public virtual void SendToSelf(Permutation permutation)
+        void Tasks(Permutation permutation, [CallerMemberName] string memberName = "")
         {
-            CheckInPermutation(permutation);
-            Trace.WriteLine("SendToSelf");
+            permutation.Tests = new[] { memberName };
+            var environment = new TestEnvironment();
+            environment.CreateTestEnvironments(permutation);
+            Invoke(permutation);
         }
 
-        void CheckInPermutation(Permutation permutation, [CallerMemberName]string memberName = "")
+        static void Invoke(Permutation permutation)
         {
-            if (!permutation.Tests.Contains(memberName)) Assert.Inconclusive("Not in category" + memberName);
+            var fi = new FileInfo(permutation.Exe);
+            var pi = new ProcessStartInfo(permutation.Exe, PermutationParser.ToArgs(permutation))
+            {
+                UseShellExecute = false,
+                WorkingDirectory = fi.DirectoryName,
+            };
+
+            using (var p = Process.Start(pi))
+            {
+                if (!p.WaitForExit(70000))
+                {
+                    p.Kill();
+                    Assert.Fail("Killed!");
+
+                }
+                Assert.AreEqual(0, p.ExitCode, "Execution failed.");
+            }
         }
     }
 }

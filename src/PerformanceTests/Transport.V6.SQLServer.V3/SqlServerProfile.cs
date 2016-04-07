@@ -4,6 +4,8 @@ class SqlServerProfile : IProfile
 {
     public void Configure(EndpointConfiguration endpointConfiguration)
     {
-        endpointConfiguration.UseTransport<SqlServerTransport>();
+        endpointConfiguration
+            .UseTransport<SqlServerTransport>()
+            .ConnectionStringName("SqlServer");
     }
 }

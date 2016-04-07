@@ -5,13 +5,19 @@ namespace Categories
     using Tests.Permutations;
     using Variables;
 
-    [TestFixture(Description = "Outbox vs DTC", Category = "Performance"), Explicit]
-    public class OutboxVsDtcFixture : Base
+    [TestFixture(Description = "Audit forwarding On / Off", Category = "Performance"), Explicit]
+    public class MsmqV5vsV6Fixture : Base
     {
         [TestCaseSource(nameof(CreatePermutations))]
         public override void GatedSendLocalRunner(Permutation permutation)
         {
             base.GatedSendLocalRunner(permutation);
+        }
+
+        [TestCaseSource(nameof(CreatePermutations))]
+        public override void SendLocalOneOnOneRunner(Permutation permutation)
+        {
+            base.SendLocalOneOnOneRunner(permutation);
         }
 
         static IEnumerable<Permutation> CreatePermutations()
@@ -23,16 +29,15 @@ namespace Categories
                 Platforms = new[] { Platform.x86, },
                 GarbageCollectors = new[] { GarbageCollector.Client, },
                 Transports = new[] { Transport.MSMQ },
-                Persisters = new[] { Persistence.NHibernate, Persistence.RavenDB, },
+                Persisters = new[] { Persistence.InMemory },
                 Serializers = new[] { Serialization.Json, },
-                MessageSizes = new[] { MessageSize.Tiny, MessageSize.Small, MessageSize.Medium, MessageSize.Large, },
-                OutboxModes = new[] { Outbox.Off, Outbox.On, },
-                DTCModes = new[] { DTC.Off, DTC.On, },
+                MessageSizes = new[] { MessageSize.Tiny, },
+                OutboxModes = new[] { Outbox.Off, },
+                DTCModes = new[] { DTC.On, },
                 TransactionMode = new[] { TransactionMode.Default, },
-                AuditModes = new[] { Audit.Off },
+                AuditModes = new[] { Audit.Off, },
                 ConcurrencyLevels = new[] { ConcurrencyLevel.EnvCores }
             });
-
         }
     }
 }

@@ -3,11 +3,9 @@ using NServiceBus;
 
 partial class GatedSendLocalRunner : IProfile
 {
-    public IBus Bus { get; set; }
-
     void SendLocal(Command msg)
     {
-        Bus.SendLocal(msg);
+        NServiceBus5.Program.Instance.SendLocal(msg);
     }
 
     public class Handler : IHandleMessages<Command>
@@ -23,5 +21,4 @@ partial class GatedSendLocalRunner : IProfile
         cfg.PurgeOnStartup(true);
     }
 }
-
 #endif
