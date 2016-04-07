@@ -24,6 +24,8 @@ namespace NServiceBus5
                 var permutation = PermutationParser.FromCommandlineArgs();
                 var options = BusCreationOptions.Parse(args);
 
+                if (Environment.UserInteractive) Console.Title = permutation.ToString();
+
                 var assembly = System.Reflection.Assembly.GetExecutingAssembly();
                 var tasks = permutation.Tests.Select(x => (IStartAndStop) assembly.CreateInstance(x)).ToArray();
 
@@ -60,7 +62,7 @@ namespace NServiceBus5
             configuration.EnableInstallers();
             configuration.DiscardFailedMessagesInsteadOfSendingToErrorQueue();
             configuration.ApplyProfiles(permutation);
-
+            configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
             var startableBus = Bus.Create(configuration);
 
 
