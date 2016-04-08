@@ -15,12 +15,7 @@ namespace Host
             Instance = CreateBus(options, permutation).Result;
             try
             {
-                foreach (var t in tasks) t.Start();
-                System.Threading.Thread.Sleep(Settings.WarmupDuration);
-                Statistics.Instance.Reset();
-                System.Threading.Thread.Sleep(Settings.RunDuration);
-                Statistics.Instance.Dump();
-                foreach (var t in tasks) t.Stop();
+                Run(tasks);
             }
             finally
             {

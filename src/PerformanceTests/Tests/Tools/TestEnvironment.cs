@@ -3,6 +3,7 @@ namespace Tests.Tools
     using System;
     using System.IO;
     using Tests.Permutations;
+    using Variables;
 
     public class TestEnvironment
     {
@@ -28,8 +29,7 @@ namespace Tests.Tools
             var sourceAssemblyFiles = Directory.GetFiles(result.RootProjectDirectory, "*");
             CopyAssembliesToStarupDir(startupDir, sourceAssemblyFiles, result.Files);
 
-
-            var projectAssemblyPath = Path.Combine(startupDir.FullName, result.RootProjectDirectory + ".exe");
+            var projectAssemblyPath = Path.Combine(startupDir.FullName, result.RootProjectDirectory + "." + permutation.Platform + ".exe");
 
             var descriptor = new TestDescriptor
             {
@@ -48,6 +48,7 @@ namespace Tests.Tools
         {
             var args = PermutationParser.ToArgs(value.Permutation);
             var exe = new FileInfo(value.ProjectAssemblyPath);
+
             var batFile = Path.Combine(exe.DirectoryName, "start.bat");
 
             if (!File.Exists(batFile)) File.WriteAllText(batFile, exe.Name + " " + args);
