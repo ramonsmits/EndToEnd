@@ -81,6 +81,7 @@ namespace Tests.Tools
             var path = Path.Combine(
                 "@",
                 permutation.Category,
+                string.Join("_", permutation.Tests),
                 permutation.Id
                 );
 
