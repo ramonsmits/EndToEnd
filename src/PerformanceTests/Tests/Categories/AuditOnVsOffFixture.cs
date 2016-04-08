@@ -5,7 +5,7 @@ namespace Categories
     using Tests.Permutations;
     using Variables;
 
-    [TestFixture(Description = "Audit forwarding On / Off", Category = "Performance"), Explicit]
+    [TestFixture(Description = "Audit forwarding On / Off", Category = "Performance")]
     public class AuditOnVsOffFixture : Base
     {
         [TestCaseSource(nameof(CreatePermutations))]

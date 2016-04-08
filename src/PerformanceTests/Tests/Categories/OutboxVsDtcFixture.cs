@@ -5,7 +5,7 @@ namespace Categories
     using Tests.Permutations;
     using Variables;
 
-    [TestFixture(Description = "Outbox vs DTC", Category = "Performance"), Explicit]
+    [TestFixture(Description = "Outbox vs DTC", Category = "Performance")]
     public class OutboxVsDtcFixture : Base
     {
         [TestCaseSource(nameof(CreatePermutations))]
