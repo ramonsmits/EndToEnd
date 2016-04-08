@@ -26,7 +26,7 @@ namespace Tests.Permutations
 
         public override string ToString()
         {
-            return $"{AuditMode};{DTCMode};{IOPS};{MessageSize};{Version};{OutboxMode};{Persister};{Platform};{Serializer};{Transport};{GarbageCollector};{TransactionMode};{ConcurrencyLevel}";
+            return Id;
         }
     }
 }

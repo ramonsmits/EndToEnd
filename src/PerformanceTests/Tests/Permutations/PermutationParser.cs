@@ -10,7 +10,7 @@ namespace Tests.Permutations
 
         public static string ToArgs(Permutation instance)
         {
-            return "--tests:" + string.Join(Seperator, instance.Tests) + " --variables:" + instance;
+            return "--tests:" + string.Join(Seperator, instance.Tests) + " --variables:" + ToString(instance);
         }
 
         public static Permutation FromCommandlineArgs()
@@ -65,6 +65,11 @@ namespace Tests.Permutations
             {
                 throw new InvalidOperationException($"Value {values[index]} does not match any enum value: {string.Join(",", Enum.GetNames(typeof(T)))}", ex);
             }
+        }
+
+        public static string ToString(Permutation p)
+        {
+            return $"{p.AuditMode};{p.DTCMode};{p.IOPS};{p.MessageSize};{p.Version};{p.OutboxMode};{p.Persister};{p.Platform};{p.Serializer};{p.Transport};{p.GarbageCollector};{p.TransactionMode};{p.ConcurrencyLevel}";
         }
     }
 }
