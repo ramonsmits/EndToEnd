@@ -6,7 +6,7 @@ partial class GatedSendLocalRunner : IProfile
 {
     async Task SendLocal(Command msg)
     {
-        NServiceBus5.Program.Instance.SendLocal(msg);
+        Host.Program.Instance.SendLocal(msg);
     }
 
     public class Handler : IHandleMessages<Command>

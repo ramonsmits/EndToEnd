@@ -7,7 +7,7 @@
     <ProjectGuid>{10D11044-C92C-42AD-830E-57012FF4F039}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NServiceBus6</RootNamespace>
+    <RootNamespace>Host</RootNamespace>
     <AssemblyName>NServiceBus6</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -33,7 +33,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>NServiceBus6.Program</StartupObject>
+    <StartupObject>Host.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
@@ -103,14 +103,13 @@
   <ItemGroup>
     <Compile Include="ConcurrencyProfile.cs" />
     <Compile Include="IProfile.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Program.V6.cs" />
   </ItemGroup>
   <Import Project="..\Common.Data\Common.Data.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" "$(TargetDir)NServiceBus6.x86.exe"
-copy "$(TargetPath).config" "$(TargetDir)NServiceBus6.x86.exe.config"
-"%25programFiles(x86)%25\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6.1 Tools\CorFlags.exe" "$(TargetDir)NServiceBus6.x86.exe" /32bit+</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Label="SlowCheetah">
     <SlowCheetahToolsPath>$([System.IO.Path]::GetFullPath( $(MSBuildProjectDirectory)\..\..\..\packages\SlowCheetah.2.5.15\tools\))</SlowCheetahToolsPath>

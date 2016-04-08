@@ -6,7 +6,7 @@ partial class SendLocalOneOnOneRunner
 {
     async Task SendLocal(Command msg)
     {
-        NServiceBus5.Program.Instance.SendLocal(msg);
+        Host.Program.Instance.SendLocal(msg);
     }
 
     public partial class Handler : IHandleMessages<Command>
