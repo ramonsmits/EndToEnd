@@ -6,6 +6,7 @@ namespace NServiceBus5
     using NServiceBus;
     using Tests.Permutations;
     using Utils;
+    using VisualStudioDebugHelper;
 
     class Program
     {
@@ -13,6 +14,8 @@ namespace NServiceBus5
         static string endpointName = "PerformanceTests_" + AppDomain.CurrentDomain.FriendlyName.Replace(' ', '_');
         static void Main(string[] args)
         {
+            DebugAttacher.AttachDebuggerToVisualStudioProcessFromCommandLineParameter();
+
             try
             {
                 TraceLogger.Initialize();
