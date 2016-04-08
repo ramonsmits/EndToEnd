@@ -43,10 +43,10 @@ namespace Host
         static void Run(IStartAndStop[] tasks)
         {
             foreach (var t in tasks) t.Start();
-            Log.InfoFormat("Warmup");
+            Log.InfoFormat("Warmup: {0}", Settings.WarmupDuration);
             System.Threading.Thread.Sleep(Settings.WarmupDuration);
             Statistics.Instance.Reset();
-            Log.InfoFormat("Run");
+            Log.InfoFormat("Run: {0}", Settings.RunDuration);
             System.Threading.Thread.Sleep(Settings.RunDuration);
             Statistics.Instance.Dump();
             foreach (var t in tasks) t.Stop();
