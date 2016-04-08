@@ -26,6 +26,7 @@ namespace Categories
 
         void Tasks(Permutation permutation, [CallerMemberName] string memberName = "")
         {
+            permutation.Category = GetType().Name;
             permutation.Tests = new[] { memberName };
             var environment = new TestEnvironment();
             environment.CreateTestEnvironments(permutation);

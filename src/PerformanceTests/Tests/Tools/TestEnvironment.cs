@@ -1,8 +1,8 @@
 namespace Tests.Tools
 {
+    using System;
     using System.IO;
     using Tests.Permutations;
-    using Variables;
 
     public class TestEnvironment
     {
@@ -15,15 +15,9 @@ namespace Tests.Tools
 
         public TestDescriptor CreateTestEnvironments(Permutation permutation)
         {
-            return CreateEnvironment(TestsGlobal.BinDirectoryTemplate, permutation);
-        }
-
-        TestDescriptor CreateEnvironment(string startupDirTemplate, Permutation permutation)
-        {
-            startupDirTemplate = Path.Combine("permutations", startupDirTemplate);
-            var id = DeterministicUuid.Create(permutation.ToString());
+            permutation.Id = Convert.ToBase64String(DeterministicUuid.Create(permutation.ToString()).ToByteArray()).Replace("=", "");
             var result = resolver.Resolve(permutation);
-            var startupDir = GetStartupDir(startupDirTemplate, permutation.Version, id.ToString());
+            var startupDir = GetStartupDir(permutation);
 
             if (startupDir.Exists)
             {
@@ -83,10 +77,15 @@ namespace Tests.Tools
             File.SetLastWriteTimeUtc(dst, File.GetLastWriteTimeUtc(src));
         }
 
-        static DirectoryInfo GetStartupDir(string codeBaseDirTemplate, NServiceBusVersion version, string id)
+        static DirectoryInfo GetStartupDir(Permutation permutation)
         {
-            var directoryName = string.Format(codeBaseDirTemplate, version, id);
-            return new DirectoryInfo(directoryName);
+            var path = Path.Combine(
+                "@",
+                permutation.Category,
+                permutation.Id
+                );
+
+            return new DirectoryInfo(path);
         }
     }
 }
