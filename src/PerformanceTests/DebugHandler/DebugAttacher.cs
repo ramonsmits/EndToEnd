@@ -37,7 +37,19 @@
             }
 
             var currentProcess = Process.GetCurrentProcess();
-            return VisualStudioAttacher.GetParentProcessId(currentProcess.Id);
+
+            do
+            {
+                var parentProcessId = VisualStudioAttacher.GetParentProcessId(currentProcess.Id);
+                if (parentProcessId == -1)
+                {
+                    return -1;
+                }
+
+                currentProcess = Process.GetProcessById(parentProcessId);
+            } while (!currentProcess.ProcessName.Contains("devenv"));
+
+            return currentProcess.Id;
         }
     }
 }
