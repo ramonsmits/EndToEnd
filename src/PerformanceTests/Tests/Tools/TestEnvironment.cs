@@ -15,7 +15,6 @@ namespace Tests.Tools
 
         public TestDescriptor CreateTestEnvironments(Permutation permutation)
         {
-            permutation.Id = Convert.ToBase64String(DeterministicUuid.Create(permutation.ToString()).ToByteArray()).Replace("=", "");
             var result = resolver.Resolve(permutation);
             var startupDir = GetStartupDir(permutation);
 
