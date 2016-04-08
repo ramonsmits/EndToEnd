@@ -9,8 +9,6 @@ namespace Categories
     using Tests.Tools;
     using VisualStudioDebugHelper;
     using Variables;
-    using System;
-    using System.Linq;
 
     public class Base
     {
@@ -42,9 +40,19 @@ namespace Categories
             var processId = DebugAttacher.GetCurrentVisualStudioProcessId();
             var processIdArgument = processId >= 0 ? string.Format(" --processId={0}", processId) : string.Empty;
 
-            var exe = new FileInfo(permutation.Exe);
+            var x64 = new FileInfo(permutation.Exe);
+            var x86 = new FileInfo(permutation.Exe.Replace("x64.exe", ".x86.exe"));
 
-            Patch(exe, permutation.Platform);
+            var exe = (permutation.Platform == Platform.x86 ? x86 : x64);
+
+            if (permutation.Platform == Platform.x86)
+            {
+                x64.Delete();
+            }
+            else
+            {
+                x86.Delete();
+            }
 
             var pi = new ProcessStartInfo(exe.FullName, PermutationParser.ToArgs(permutation) + processIdArgument)
             {
@@ -63,26 +71,6 @@ namespace Categories
                 }
                 Assert.AreEqual(0, p.ExitCode, "Execution failed.");
             }
-        }
-
-        static void Patch(FileInfo exe, Platform platform)
-        {
-            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
-
-            var corflagsPath = Directory.EnumerateFiles(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "corflags.exe", SearchOption.AllDirectories).First();
-            var args = exe.Name + " /32bit" + (platform == Platform.x64 ? "-" : "+");
-
-            var pi = new ProcessStartInfo(corflagsPath, args)
-            {
-                UseShellExecute = false,
-                WorkingDirectory = exe.DirectoryName,
-            };
-
-            using (var p = Process.Start(pi))
-            {
-                p.WaitForExit();
-            }
-
         }
     }
 }
