@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -18,9 +19,31 @@ public static class AssemblyScanner
 
         var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
-        foreach (var a in assemblies.OrderBy(a=>a.ToString()))
+        foreach (var a in assemblies.OrderBy(a => a.ToString()))
         {
-            l.InfoFormat("Loaded: {0}", a);
+            string version,name;
+
+            try
+            {
+                name = a.GetName().Name;
+            }
+            catch (Exception)
+            {
+                name = a.FullName;
+            }
+
+            try
+            {
+                version = FileVersionInfo
+                    .GetVersionInfo(a.Location)
+                    .ProductVersion;
+            }
+            catch (Exception ex)
+            {
+                version = ex.Message;
+            }
+
+            l.InfoFormat("Loaded: {0} ({1})", name, version);
         }
 
         return assemblies;
