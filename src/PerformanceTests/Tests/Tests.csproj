@@ -96,6 +96,10 @@
       <Project>{572499ED-E234-4C66-BD6E-D5A845065C5F}</Project>
       <Name>Utils</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DebugHandler\VisualStudioDebugHelper.csproj">
+      <Project>{4ffa67b5-3cd7-4e37-918d-26dbd9947fb3}</Project>
+      <Name>VisualStudioDebugHelper</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
