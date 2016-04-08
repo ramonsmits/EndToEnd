@@ -4,6 +4,7 @@ namespace Tests.Permutations
 
     public class Permutation
     {
+        public string Category { get; set; }
         public string Id { get; set; }
         public string Exe { get; set; }
 
