@@ -1,5 +1,6 @@
 namespace Categories
 {
+    using System.Configuration;
     using System.Diagnostics;
     using System.IO;
     using System.Runtime.CompilerServices;
@@ -11,6 +12,8 @@ namespace Categories
 
     public class Base
     {
+        static readonly bool InvokeEnabled = bool.Parse(ConfigurationManager.AppSettings["InvokeEnabled"]);
+
         public virtual void GatedSendLocalRunner(Permutation permutation)
         {
             Tasks(permutation);
@@ -31,9 +34,11 @@ namespace Categories
 
         static void Invoke(Permutation permutation)
         {
+            if (!InvokeEnabled) Assert.Inconclusive("Invoke disabled, set 'InvokeEnabled' appSetting to True.");
+
             var processId = DebugAttacher.GetCurrentVisualStudioProcessId();
             var processIdArgument = processId >= 0 ? string.Format(" --processId={0}", processId) : string.Empty;
-            
+
             var x64 = new FileInfo(permutation.Exe);
             var x86 = new FileInfo(permutation.Exe.Replace(".exe", ".x86.exe"));
 
