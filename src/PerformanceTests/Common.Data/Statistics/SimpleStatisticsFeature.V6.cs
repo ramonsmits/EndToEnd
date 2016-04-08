@@ -33,7 +33,7 @@ namespace NServiceBus.Performance
 
             context.Container.ConfigureComponent<StatisticsBehavior>(DependencyLifecycle.SingleInstance);
             // Register the new step in the pipeline
-            context.Pipeline.Register<StatisticsBehavior.Step>();
+            context.Pipeline.Register(nameof(StatisticsBehavior), typeof(StatisticsBehavior), "Logs and displays statistics.");
         }
 
         internal class StartupTask : FeatureStartupTask

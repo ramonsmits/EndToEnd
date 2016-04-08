@@ -6,7 +6,7 @@ namespace NServiceBus.Performance
 {
     using System.Threading.Tasks;
 
-    public class StatisticsBehavior : Behavior<IIncomingPhysicalMessageContext>
+    public class StatisticsBehavior : Behavior<ITransportReceiveContext>
     {
         private readonly Implementation provider;
         public StatisticsBehavior(Implementation provider)
@@ -14,7 +14,7 @@ namespace NServiceBus.Performance
             this.provider = provider;
         }
 
-        public override async Task Invoke(IIncomingPhysicalMessageContext context, Func<Task> next)
+        public override async Task Invoke(ITransportReceiveContext context, Func<Task> next)
         {
             var start = provider.Timestamp();
             try
@@ -32,16 +32,6 @@ namespace NServiceBus.Performance
                 provider.DurationInc(start, provider.Timestamp());
                 provider.ConcurrencyDec();
                 provider.Inc();
-            }
-        }
-
-        public static readonly string Name = "StatisticsStep";
-
-        public class Step : RegisterStep
-        {
-            public Step() : base(Name, typeof(StatisticsBehavior), "Logs and displays statistics.")
-            {
-                InsertBefore(WellKnownStep.ExecuteUnitOfWork);
             }
         }
 
