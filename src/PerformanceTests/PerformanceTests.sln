@@ -50,8 +50,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence.V6.InMemory", "Persistence.V6.InMemory\Persistence.V6.InMemory.csproj", "{FAC26029-1E00-43E5-B7DB-13318FC1092A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualStudioDebugHelper", "DebugHandler\VisualStudioDebugHelper.csproj", "{4FFA67B5-3CD7-4E37-918D-26DBD9947FB3}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FE378DAF-B1F4-418B-B521-C472E541CC0F}"
 	ProjectSection(SolutionItems) = preProject
+		.connectionstrings.config = .connectionstrings.config
+		.connectionstrings.config.template = .connectionstrings.config.template
 		readme.md = readme.md
 	EndProjectSection
 EndProject
