@@ -2,6 +2,7 @@ namespace Host
 {
     using System;
     using System.Linq;
+    using System.Net;
     using NServiceBus.Logging;
     using Tests.Permutations;
     using Utils;
@@ -26,6 +27,8 @@ namespace Host
                 var permutation = PermutationParser.FromCommandlineArgs();
                 var options = BusCreationOptions.Parse(args);
 
+                ValidateServicePointManager(permutation);
+
                 if (Environment.UserInteractive) Console.Title = PermutationParser.ToString(permutation);
 
                 var assembly = System.Reflection.Assembly.GetExecutingAssembly();
@@ -37,6 +40,28 @@ namespace Host
             {
                 Log.Fatal("Main", ex);
                 throw;
+            }
+        }
+
+        static void ValidateServicePointManager(Permutation permutation)
+        {
+            var value = ConcurrentyLevelConverter.Convert(permutation.ConcurrencyLevel);
+            if (ServicePointManager.DefaultConnectionLimit < value)
+            {
+                Log.WarnFormat("ServicePointManager.DefaultConnectionLimit value {0} is lower then maximum concurrency limit of {1} this can limit performance.",
+                    ServicePointManager.DefaultConnectionLimit,
+                    value
+                    );
+            }
+
+            if (ServicePointManager.Expect100Continue)
+            {
+                Log.WarnFormat("ServicePointManager.Expect100Continue is set to True, consider setting this value to False to increase PUT operations.");
+            }
+
+            if (ServicePointManager.UseNagleAlgorithm)
+            {
+                Log.WarnFormat("ServicePointManager.UseNagleAlgorithm is set to True, consider setting this value to False to decrease Latency.");
             }
         }
 
