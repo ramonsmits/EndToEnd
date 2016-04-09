@@ -11,7 +11,7 @@ class ConcurrencyProfile : IProfile, INeedPermutation, IProvideConfiguration<Tra
 
     public void Configure(BusConfiguration cfg)
     {
-        MaximumConcurrencyLevel = ConcurrentyLevelConverter.Convert(Permutation.ConcurrencyLevel);
+        MaximumConcurrencyLevel = ConcurrencyLevelConverter.Convert(Permutation.ConcurrencyLevel);
     }
 
     public TransportConfig GetConfiguration()

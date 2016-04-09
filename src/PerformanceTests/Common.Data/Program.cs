@@ -45,7 +45,7 @@ namespace Host
 
         static void ValidateServicePointManager(Permutation permutation)
         {
-            var value = ConcurrentyLevelConverter.Convert(permutation.ConcurrencyLevel);
+            var value = ConcurrencyLevelConverter.Convert(permutation.ConcurrencyLevel);
             if (ServicePointManager.DefaultConnectionLimit < value)
             {
                 Log.WarnFormat("ServicePointManager.DefaultConnectionLimit value {0} is lower then maximum concurrency limit of {1} this can limit performance.",
