@@ -1,4 +1,5 @@
 ﻿using NServiceBus;
+using NServiceBus.Persistence;
 
 class RavenDBProfile : IProfile
 {
