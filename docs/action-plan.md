@@ -1,59 +1,41 @@
 ### Current action items
 
- - [x] Identify what is the generated code is currently testing? @dvdstelt 
-   - [x] What are the shortcomings?
-     - There is no clean up after the tests
-   - [x] Investigate how to separate the seeding from the running of the tests
-       - [x] Is a separate in-process appdomain feasible?
-       - [x] Or should we create a separate exe to perform the seeding?
-       - [x] What about cleanup? Need contextual information e.g. connection string
-   - [ ] Implement something similar to IProfile for endpoind start and stop for seeding and cleaning up etc.
-   - [ ] Can gcServer be configured in code? Confirm in test using NSB
-   - [x] x86 vs 64bit can be configured using corflags
-   - [ ] Look at build target instead of corflags?
-   - [x] Is the capturing of metrics in-process going to affect the validity of the results?
-     - We assume yes. We can extract the performance counter capturing to be out of process, but we will still have to capture the Message Counter metric in process.  All of the tests will be capturing similar metrics so the impact should be the same across all scenarios.
- - [x] Create NUnit fixtures for each category in [the google sheet](https://docs.google.com/spreadsheets/d/1avUW8Y5gpcPqTxIBaq7X5OXXaE4lDU0e0ZA9FDFNygs/edit#gid=771631393) where the fixture generates all permutations for all variable values in that category @ramonsmits 
-    - [x] How would these isolated tests look?
-    - [x] How are we going to generate tests for each isolated operation?
-    - [ ] Generate and configure endpoints from permutations
- - [ ] Spike the output options for metrics @williambza
-     - ~~[x] Investigate Elastic + Kibana - EOD 04/04/2016~~
-     - ~~[x] Investigate Graphite - EOD 05/04/2016~~
-     - ~~[x] Microsoft Power BI - EOD 04/04/2016~~
-     - [ ] Influx DB - EOD 05/04/2016
-     - ~~[ ] Defined file structure for separate CSVs @ramonsmits~~
-     - ~~[ ] Combined CSV + excel~~
-     - [ ] Splunk
-        - [ ] Replace Console.WriteLines with splunk trace output @williambza + @hadi
-        - [x] Determine where we should deploy splunk
- - [ ] Generating bin folders based on configurations and permutations @hmemcpy
  - [ ] Setup environments: @gbiellem (what is the hourly cost for the environment?)
-   - Queues
-    - [ ] SQL2012 (Queues), 
-    - [ ] Rabbit, 
-    - [ ] Azure Storage Queues
-   - Persistence
-     - [ ] SQL2012 (Persistence),
-     - [ ] RavenDB v3, 
-     - [ ] Azure Storage Persistence
-   - Runners:
-     - [ ] Master (MSMQ)
-     - [ ] Worker 3x (MSMQ)
-  - Infrastructure
-     - [ ] DTC
+  - Queues
+   - [ ] SQL2012 (Queues), 
+   - [ ] Rabbit, 
+   - [ ] Azure Storage Queues
+  - Persistence
+   - [ ] SQL2012 (Persistence),
+   - [ ] RavenDB v3, 
+   - [ ] Azure Storage Persistence
+  - Runners:
+   - [ ] Master (MSMQ)
+   - [ ] Worker 3x (MSMQ)
+ - Infrastructure
+   - [ ] DTC
+- [ ] Implement persistence variables - @ramon
+  - [ ] How can we clean the tests up before/after running tests?
+- [ ] Run tests on environment - manually (perhaps with a PS script) - @williambza + @gbiellem
+- [ ] Create splunk dashboards - @igal + @hadi
+- [ ] Implement other test types (send, sendlocal, publish, sagas, distruter) - @dvdstalt
+  - [ ] Receive only
+  - [ ] Send only
+  - [ ] Sagas
+- [ ] Collect results for multiple runs to see stability of tests
+  - Feed results back to various transport/persistence owners
+- [ ] Inform @andreas once we feel we are ready to start Stability tests
  
- ### Future actions
- 
-- [ ] Collate metric results into usable format upon test completion
-- [ ] Collect initial results and provide feedback for V6 Launch TF.
-- [ ] Allow customization of maximum run-time (so we don't ever have unbounded runs)
-- [ ] Setup tests for ASB and ASQ
+### Future actions
+
+- [ ] Automate tests
+- [ ] Notify when tests restuls are off by a percentage (a standard deviation?)
 - [ ] Automate runs based on packages changed
 - [ ] Can TC setup multiple VM's for a task?
  - Database VM
  - Transport VM
  - Runner VM
+- [ ] Scale seeded messages based on pre-run warmup
  
  ### Completed actions
 
@@ -72,3 +54,33 @@
     - V1 - No
     - vNext - Yes (but also include a combined benchmark)
 - [x] Define categories / test permutations
+ - [x] Identify what is the generated code is currently testing? @dvdstelt 
+   - [x] What are the shortcomings?
+     - There is no clean up after the tests
+   - [x] Investigate how to separate the seeding from the running of the tests
+       - [x] Is a separate in-process appdomain feasible?
+       - [x] Or should we create a separate exe to perform the seeding?
+       - [x] What about cleanup? Need contextual information e.g. connection string
+   - [x] Implement something similar to IProfile for endpoind start and stop for seeding and cleaning up etc.
+   - [x] Can gcServer be configured in code? Confirm in test using NSB
+     - Can not be set via code, will need a config transform
+   - [x] x86 vs 64bit can be configured using corflags
+   - [x] Look at build target instead of corflags?
+   - [x] Is the capturing of metrics in-process going to affect the validity of the results?
+     - We assume yes. We can extract the performance counter capturing to be out of process, but we will still have to capture the Message Counter metric in process.  All of the tests will be capturing similar metrics so the impact should be the same across all scenarios.
+ - [x] Create NUnit fixtures for each category in [the google sheet](https://docs.google.com/spreadsheets/d/1avUW8Y5gpcPqTxIBaq7X5OXXaE4lDU0e0ZA9FDFNygs/edit#gid=771631393) where the fixture generates all permutations for all variable values in that category @ramonsmits 
+    - [x] How would these isolated tests look?
+    - [x] How are we going to generate tests for each isolated operation?
+    - [x] Generate and configure endpoints from permutations
+ - [x] Spike the output options for metrics @williambza
+     - ~~[x] Investigate Elastic + Kibana - EOD 04/04/2016~~
+     - ~~[x] Investigate Graphite - EOD 05/04/2016~~
+     - ~~[x] Microsoft Power BI - EOD 04/04/2016~~
+     - ~~[ ] Influx DB - EOD 05/04/2016~~
+     - ~~[ ] Defined file structure for separate CSVs @ramonsmits~~
+     - ~~[ ] Combined CSV + excel~~
+     - [x] Splunk
+        - [x] Replace Console.WriteLines with splunk trace output @williambza + @hadi
+        - [x] Determine where we should deploy splunk
+ - [x] Generating bin folders based on configurations and permutations @hmemcpy
+ - [x] Setup tests for ASB and ASQ
