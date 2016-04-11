@@ -20,6 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)PerformanceCounters.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Program.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\BaseRunner.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\ICreateSeedData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\ReceiveRunner.V5.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\ReceiveRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\ReceiveRunner.V6.cs" />

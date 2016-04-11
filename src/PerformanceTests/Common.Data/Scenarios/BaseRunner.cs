@@ -1,5 +1,6 @@
 ﻿
 using System.Threading.Tasks;
+using Common.Scenarios;
 #if Version6
     using Configuration = NServiceBus.EndpointConfiguration;
 #else
@@ -29,6 +30,11 @@ public abstract class BaseRunner
 
     public virtual void Execute(Permutation permutation, string endpointName)
     {
+        if (this is ICreateSeedData) CreateSeedData(permutation, endpointName);
+    }
+
+    private void CreateSeedData(Permutation permutation, string endpointName)
+    {
         var configuration = CreateConfiguration(permutation, endpointName);
         CreateQueues(configuration);
 
@@ -40,19 +46,12 @@ public abstract class BaseRunner
             if (i % 5000 == 0)
                 log.Info($"Seeded {i} messages.");
 
-            CreateMessage(endpoint, endpointName);
+            ((ICreateSeedData) this).SendMessage(endpoint, endpointName);
         }));
         log.Info($"Seeded total of {seedSize} messages.");
     }
 
 #if Version5
-
-    /// <summary>
-    /// Sends or publishes a single message
-    /// </summary>
-    /// <param name="sendOnlyBus"></param>
-    protected abstract void CreateMessage(ISendOnlyBus sendOnlyBus, string endpointName);
-
     void CreateQueues(Configuration configuration)
     {
         var createQueuesBus = Bus.Create(configuration).Start();
@@ -76,13 +75,6 @@ public abstract class BaseRunner
         return configuration;
     }
 #else
-    /// <summary>
-    /// Sends or publishes a single message
-    /// </summary>
-    /// <param name="endpointInstance"></param>
-    /// <param name="endpointName"></param>
-    protected abstract void CreateMessage(IEndpointInstance endpointInstance, string endpointName);
-
     void CreateQueues(Configuration configuration)
     {
         Endpoint.Create(configuration).GetAwaiter().GetResult();
