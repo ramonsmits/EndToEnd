@@ -4,6 +4,8 @@
 
     interface ICreateSeedData
     {
+        int SeedSize { get; set; }
+
 #if Version5
         /// <summary>
         /// Sends or publishes a single message

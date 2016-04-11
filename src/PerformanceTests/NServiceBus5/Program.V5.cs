@@ -7,29 +7,29 @@ namespace Host
 
     partial class Program
     {
-        public static IBus Instance;
+        //public static IBus Instance;
 
-        static void Run(BusCreationOptions options, Permutation permutation, IStartAndStop[] tasks)
-        {
-            using (Instance = CreateBus(options, permutation))
-            {
-                Run(tasks);
-            }
-        }
+        //static void Run(BusCreationOptions options, Permutation permutation, IStartAndStop[] tasks)
+        //{
+        //    using (Instance = CreateBus(options, permutation))
+        //    {
+        //        Run(tasks);
+        //    }
+        //}
 
-        static IBus CreateBus(BusCreationOptions options, Permutation permutation)
-        {
-            var configuration = new BusConfiguration();
-            configuration.EndpointName(endpointName);
-            configuration.EnableInstallers();
-            configuration.DiscardFailedMessagesInsteadOfSendingToErrorQueue();
-            configuration.ApplyProfiles(permutation);
-            configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
-            configuration.PurgeOnStartup(false);
-            var startableBus = Bus.Create(configuration);
+        //static IBus CreateBus(BusCreationOptions options, Permutation permutation)
+        //{
+        //    var configuration = new BusConfiguration();
+        //    configuration.EndpointName(endpointName);
+        //    configuration.EnableInstallers();
+        //    configuration.DiscardFailedMessagesInsteadOfSendingToErrorQueue();
+        //    configuration.ApplyProfiles(permutation);
+        //    configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
+        //    configuration.PurgeOnStartup(false);
+        //    var startableBus = Bus.Create(configuration);
 
 
-            return startableBus.Start();
-        }
+        //    return startableBus.Start();
+        //}
     }
 }

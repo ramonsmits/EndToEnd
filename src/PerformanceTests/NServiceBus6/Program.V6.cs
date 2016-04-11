@@ -8,32 +8,32 @@ namespace Host
 
     partial class Program
     {
-        public static IEndpointInstance Instance;
+        //public static IEndpointInstance Instance;
 
-        static void Run(BusCreationOptions options, Permutation permutation, IStartAndStop[] tasks)
-        {
-            Instance = CreateBus(options, permutation).Result;
-            try
-            {
-                Run(tasks);
-            }
-            finally
-            {
-                Instance.Stop();
-            }
-        }
+        //static void Run(BusCreationOptions options, Permutation permutation, IStartAndStop[] tasks)
+        //{
+        //    Instance = CreateBus(options, permutation).Result;
+        //    try
+        //    {
+        //        Run(tasks);
+        //    }
+        //    finally
+        //    {
+        //        Instance.Stop();
+        //    }
+        //}
 
-        static async Task<IEndpointInstance> CreateBus(BusCreationOptions options, Permutation permutation)
-        {
-            var configuration = new EndpointConfiguration(endpointName);
-            configuration.EnableInstallers();
-            configuration.LimitMessageProcessingConcurrencyTo(options.NumberOfThreads);
-            configuration.ApplyProfiles(permutation);
-            configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
-            configuration.PurgeOnStartup(false);
+        //static async Task<IEndpointInstance> CreateBus(BusCreationOptions options, Permutation permutation)
+        //{
+        //    var configuration = new EndpointConfiguration(endpointName);
+        //    configuration.EnableInstallers();
+        //    configuration.LimitMessageProcessingConcurrencyTo(options.NumberOfThreads);
+        //    configuration.ApplyProfiles(permutation);
+        //    configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
+        //    configuration.PurgeOnStartup(false);
 
-            var endpoint = await Endpoint.Create(configuration);
-            return await endpoint.Start();
-        }
+        //    var endpoint = await Endpoint.Create(configuration);
+        //    return await endpoint.Start();
+        //}
     }
 }

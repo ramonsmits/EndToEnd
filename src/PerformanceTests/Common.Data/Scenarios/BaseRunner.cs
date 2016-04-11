@@ -10,28 +10,40 @@ using Configuration = NServiceBus.BusConfiguration;
 using NServiceBus;
 using NServiceBus.Logging;
 using Tests.Permutations;
+using Utils;
 
 public abstract class BaseRunner
 {
-    readonly ILog log = LogManager.GetLogger("BaseRunner");
+    readonly ILog Log = LogManager.GetLogger("BaseRunner");
 
     readonly int seedSize;
 
 #if Version5
-    ISendOnlyBus endpoint = null;
+    protected IBus EndpointInstance { get; set; }
 #else
-    IEndpointInstance endpoint = null;
+    protected IEndpointInstance EndpointInstance { get; set; }
 #endif
 
-    public BaseRunner(int seedSize)
-    {
-        this.seedSize = seedSize;
-    }
-
-    public virtual void Execute(Permutation permutation, string endpointName)
+    public virtual void Execute(Permutation permutation, BusCreationOptions options, string endpointName)
     {
         if (this is ICreateSeedData) CreateSeedData(permutation, endpointName);
+
+        EndpointInstance = CreateEndpoint(permutation, options, endpointName);
+
+        Start();
+        Log.InfoFormat("Warmup: {0}", Settings.WarmupDuration);
+        System.Threading.Thread.Sleep(Settings.WarmupDuration);
+        Statistics.Instance.Reset();
+        Log.InfoFormat("Run: {0}", Settings.RunDuration);
+        System.Threading.Thread.Sleep(Settings.RunDuration);
+        Statistics.Instance.Dump();
+        Stop();
     }
+
+
+
+    protected abstract void Start();
+    protected abstract void Stop();
 
     private void CreateSeedData(Permutation permutation, string endpointName)
     {
@@ -39,16 +51,16 @@ public abstract class BaseRunner
         CreateQueues(configuration);
 
         configuration = CreateConfiguration(permutation, endpointName);
-        CreateSendOnlyEndpoint(configuration);
+        var endpoint = CreateSendOnlyEndpoint(configuration);
 
         Parallel.For(0, seedSize, ((i, state) =>
         {
             if (i % 5000 == 0)
-                log.Info($"Seeded {i} messages.");
+                Log.Info($"Seeded {i} messages.");
 
-            ((ICreateSeedData) this).SendMessage(endpoint, endpointName);
+            ((ICreateSeedData)this).SendMessage(endpoint, endpointName);
         }));
-        log.Info($"Seeded total of {seedSize} messages.");
+        Log.Info($"Seeded total of {seedSize} messages.");
     }
 
 #if Version5
@@ -58,9 +70,15 @@ public abstract class BaseRunner
         createQueuesBus.Dispose();
     }
 
-    void CreateSendOnlyEndpoint(Configuration configuration)
+    ISendOnlyBus CreateSendOnlyEndpoint(Configuration configuration)
     {
-        endpoint = Bus.CreateSendOnly(configuration);
+        return Bus.CreateSendOnly(configuration);
+    }
+
+    IBus CreateEndpoint(Permutation permutation, BusCreationOptions options, string endpointName)
+    {
+        var configuration = CreateConfiguration(permutation, endpointName);
+        return Bus.Create(configuration);
     }
 
     BusConfiguration CreateConfiguration(Permutation permutation, string endpointName)
@@ -77,20 +95,30 @@ public abstract class BaseRunner
 #else
     void CreateQueues(Configuration configuration)
     {
+        configuration.PurgeOnStartup(true);
         Endpoint.Create(configuration).GetAwaiter().GetResult();
     }
 
-    void CreateSendOnlyEndpoint(Configuration configuration)
+    IEndpointInstance CreateSendOnlyEndpoint(Configuration configuration)
     {
         configuration.SendOnly();
-        endpoint = Endpoint.Start(configuration).GetAwaiter().GetResult();
+        return Endpoint.Start(configuration).GetAwaiter().GetResult();
+    }
+
+    IEndpointInstance CreateEndpoint(Permutation permutation, BusCreationOptions options, string endpointName)
+    {
+        var configuration = CreateConfiguration(permutation, endpointName);
+        configuration.LimitMessageProcessingConcurrencyTo(options.NumberOfThreads);
+        configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
+        configuration.PurgeOnStartup(false);
+
+        return Endpoint.Start(configuration).GetAwaiter().GetResult();
     }
 
     EndpointConfiguration CreateConfiguration(Permutation permutation, string endpointName)
     {
         var configuration = new EndpointConfiguration(endpointName);
         configuration.EnableInstallers();
-        configuration.PurgeOnStartup(true);
         configuration.ApplyProfiles(permutation);
 
         return configuration;
