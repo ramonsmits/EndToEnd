@@ -1,19 +1,19 @@
 ### Current action items
 
- - [ ] Setup environments: @gbiellem (what is the hourly cost for the environment?)
+ - [x] Setup environments: @gbiellem (what is the hourly cost for the environment?)
   - Queues
-   - [ ] SQL2012 (Queues), 
-   - [ ] Rabbit, 
-   - [ ] Azure Storage Queues
+   - [x] SQL2012 (Queues), 
+   - [x] Rabbit, 
+   - [x] Azure Storage Queues
   - Persistence
-   - [ ] SQL2012 (Persistence),
-   - [ ] RavenDB v3, 
-   - [ ] Azure Storage Persistence
+   - [x] SQL2012 (Persistence),
+   - [x] RavenDB v3, 
+   - [x] Azure Storage Persistence
   - Runners:
-   - [ ] Master (MSMQ)
-   - [ ] Worker 3x (MSMQ)
+   - [x] Master (MSMQ)
+   - [x] Worker 3x (MSMQ)
  - Infrastructure
-   - [ ] DTC
+   - [x] DTC
 - [ ] Implement persistence variables - @ramon
   - [ ] How can we clean the tests up before/after running tests?
 - [ ] Run tests on environment - manually (perhaps with a PS script) - @williambza + @gbiellem
