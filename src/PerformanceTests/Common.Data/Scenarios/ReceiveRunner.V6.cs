@@ -1,11 +1,12 @@
 ﻿#if Version6
 using NServiceBus;
 using System.Threading.Tasks;
+using Common.Scenarios;
 
 /// <summary>
 /// Does a continuous test where a pre-seeded amount of messages will be handled
 /// </summary>    
-partial class ReceiveRunner
+partial class ReceiveRunner : ICreateSeedData
 {
     public partial class Handler : IHandleMessages<Command>
     {
@@ -15,7 +16,7 @@ partial class ReceiveRunner
         }
     }
 
-    protected override void CreateMessage(IEndpointInstance endpointInstance, string endpointName)
+    public void SendMessage(IEndpointInstance endpointInstance, string endpointName)
     {
         endpointInstance.SendLocal(new Command());
     }
