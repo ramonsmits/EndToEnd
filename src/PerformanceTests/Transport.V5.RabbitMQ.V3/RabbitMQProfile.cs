@@ -1,4 +1,5 @@
 ﻿using NServiceBus;
+using Common;
 
 class RabbitMQProfile : IProfile
 {
@@ -7,6 +8,6 @@ class RabbitMQProfile : IProfile
         busConfiguration
             .UseTransport<RabbitMQTransport>()
             //.DisableCallbackReceiver()
-            .ConnectionStringName("RabbitMQ");
+            .ConnectionString(this.GetConnectionString("RabbitMQ"));
     }
 }

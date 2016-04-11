@@ -7,7 +7,7 @@ class AzureStorageQueuesProfile : IProfile
     {
         endpointConfiguration
             .UseTransport<AzureStorageQueueTransport>()
-            .ConnectionStringName("AzureStorageQueue");
+            .ConnectionString(this.GetConnectionString("AzureStorageQueue"));
     }
 
     //public void CreateTestData(EndpointConfiguration configuration)

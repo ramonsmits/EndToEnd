@@ -1,4 +1,5 @@
 ﻿using NServiceBus;
+using Common;
 
 class AzureStorageQueueProfile : IProfile
 {
@@ -6,6 +7,6 @@ class AzureStorageQueueProfile : IProfile
     {
         busConfiguration
             .UseTransport<AzureStorageQueueTransport>()
-            .ConnectionStringName("AzureStorageQueue");
+            .ConnectionString(this.GetConnectionString("AzureStorageQueue"));
     }
 }

@@ -1,4 +1,5 @@
 ﻿using NServiceBus;
+using Common;
 
 class AzureServiceBusProfile : IProfile
 {
@@ -6,6 +7,6 @@ class AzureServiceBusProfile : IProfile
     {
         busConfiguration
             .UseTransport<AzureServiceBusTransport>()
-            .ConnectionStringName("AzureServiceBus");
+            .ConnectionString(this.GetConnectionString("AzureServiceBus"));
     }
 }
