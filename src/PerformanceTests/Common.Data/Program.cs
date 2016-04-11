@@ -32,16 +32,8 @@ namespace Host
                 if (Environment.UserInteractive) Console.Title = PermutationParser.ToString(permutation);
 
                 var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-                var tasks = permutation.Tests.Select(x => (IStartAndStop)assembly.CreateInstance(x)).ToArray();
-
-                foreach (var task in tasks)
-                {
-                    if (task is BaseRunner)
-                        ((BaseRunner)task).Execute(permutation, endpointName);
-
-                }
-
-                Run(options, permutation, tasks);
+                var runnableTests = permutation.Tests.Select(x => (BaseRunner) assembly.CreateInstance(x)).ToList();
+                runnableTests.ForEach(s => s.Execute(permutation, options, endpointName));
             }
             catch (Exception ex)
             {
@@ -70,18 +62,6 @@ namespace Host
             {
                 Log.WarnFormat("ServicePointManager.UseNagleAlgorithm is set to True, consider setting this value to False to decrease Latency.");
             }
-        }
-
-        static void Run(IStartAndStop[] tasks)
-        {
-            foreach (var t in tasks) t.Start();
-            Log.InfoFormat("Warmup: {0}", Settings.WarmupDuration);
-            System.Threading.Thread.Sleep(Settings.WarmupDuration);
-            Statistics.Instance.Reset();
-            Log.InfoFormat("Run: {0}", Settings.RunDuration);
-            System.Threading.Thread.Sleep(Settings.RunDuration);
-            Statistics.Instance.Dump();
-            foreach (var t in tasks) t.Stop();
         }
     }
 }

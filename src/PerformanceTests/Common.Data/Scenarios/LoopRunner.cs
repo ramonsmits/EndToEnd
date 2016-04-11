@@ -1,19 +1,19 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-abstract class LoopRunner : IStartAndStop
+abstract class LoopRunner : BaseRunner
 {
     Task loopTask;
     protected CancellationTokenSource stopLoop { get; private set; }
     protected bool Shutdown { get; private set; }
 
-    public void Start()
+    protected override void Start()
     {
         stopLoop = new CancellationTokenSource();
         loopTask = Task.Factory.StartNew(Loop, TaskCreationOptions.LongRunning);
     }
 
-    public void Stop()
+    protected override void Stop()
     {
         Shutdown = true;
         using (stopLoop)

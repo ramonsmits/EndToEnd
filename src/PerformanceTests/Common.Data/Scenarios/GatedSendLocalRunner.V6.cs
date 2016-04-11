@@ -6,7 +6,7 @@ partial class GatedSendLocalRunner: IProfile
 {
     async Task SendLocal(Command msg)
     {
-        await Host.Program.Instance.SendLocal(msg);
+        await this.EndpointInstance.SendLocal(msg);
     }
 
     public class Handler : IHandleMessages<Command>

@@ -8,19 +8,15 @@ using NServiceBus;
 /// <summary>
 /// Does a continuous test where a pre-seeded amount of messages will be handled
 /// </summary>    
-partial class ReceiveRunner : BaseRunner, IStartAndStop
+partial class ReceiveRunner : BaseRunner
 {
-    const int seedSize = 30000;
+    public int SeedSize { get; set; } = 30000;
 
-    public ReceiveRunner() : base(seedSize)
+    protected override void Start()
     {
     }
 
-    public void Start()
-    {
-    }
-
-    public void Stop()
+    protected override void Stop()
     {
         Handler.Shutdown = true;       
     }
