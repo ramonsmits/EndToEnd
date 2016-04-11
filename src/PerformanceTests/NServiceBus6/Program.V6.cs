@@ -25,11 +25,6 @@ namespace Host
 
         static async Task<IEndpointInstance> CreateBus(BusCreationOptions options, Permutation permutation)
         {
-            if (options.Cleanup)
-            {
-                QueueUtils.DeleteQueuesForEndpoint(endpointName);
-            }
-
             var configuration = new EndpointConfiguration(endpointName);
             configuration.EnableInstallers();
             configuration.LimitMessageProcessingConcurrencyTo(options.NumberOfThreads);
