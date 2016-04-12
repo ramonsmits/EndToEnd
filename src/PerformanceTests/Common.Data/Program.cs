@@ -8,11 +8,11 @@ namespace Host
     using Utils;
     using VisualStudioDebugHelper;
 
-    partial class Program
+    class Program
     {
         static readonly ILog Log = LogManager.GetLogger(typeof(Program));
         static string endpointName = "PerformanceTests_" + AppDomain.CurrentDomain.FriendlyName.Replace(' ', '_');
-        static void Main(string[] args)
+        static void Main(string[] args) // GatedSendLocalRunner, 
         {
             DebugAttacher.AttachDebuggerToVisualStudioProcessFromCommandLineParameter();
 
@@ -32,8 +32,8 @@ namespace Host
                 if (Environment.UserInteractive) Console.Title = PermutationParser.ToString(permutation);
 
                 var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-                var runnableTests = permutation.Tests.Select(x => (BaseRunner) assembly.CreateInstance(x)).ToList();
-                runnableTests.ForEach(s => s.Execute(permutation, options, endpointName));
+                var runnableTest = permutation.Tests.Select(x => (BaseRunner) assembly.CreateInstance(x)).Single();
+                runnableTest.Execute(permutation, options, endpointName);
             }
             catch (Exception ex)
             {
