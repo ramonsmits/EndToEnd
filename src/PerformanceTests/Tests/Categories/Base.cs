@@ -14,6 +14,11 @@ namespace Categories
     {
         static readonly bool InvokeEnabled = bool.Parse(ConfigurationManager.AppSettings["InvokeEnabled"]);
 
+        public virtual void ReceiveRunner(Permutation permutation)
+        {
+            Tasks(permutation);
+        }
+
         public virtual void GatedSendLocalRunner(Permutation permutation)
         {
             Tasks(permutation);
@@ -57,7 +62,7 @@ namespace Categories
 
             using (var p = Process.Start(pi))
             {
-                if (!p.WaitForExit(70000))
+                if (!p.WaitForExit(120 * 1000))
                 {
                     p.Kill();
                     Assert.Fail("Killed!");
