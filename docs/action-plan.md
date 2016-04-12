@@ -18,6 +18,10 @@
   - [ ] How can we clean the tests up before/after running tests?
 - [ ] Run tests on environment - manually (perhaps with a PS script) - @williambza + @gbiellem
 - [ ] Create splunk dashboards - @igal + @hadi
+ - [ ] Add session and permutation ID to statistics info
+ - [ ] Collect required performance counters manually and report using the `Statistics` object
+  - RAM (Private bytes)
+  - Throughput
 - [ ] Implement other test types (send, sendlocal, publish, sagas, distruter) - @dvdstalt
   - [ ] Receive only
   - [ ] Send only
