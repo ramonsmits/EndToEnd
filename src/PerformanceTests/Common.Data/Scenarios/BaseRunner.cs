@@ -1,13 +1,11 @@
-﻿
-using System;
-using System.Threading.Tasks;
-using Common.Scenarios;
-#if Version6
-    using Configuration = NServiceBus.EndpointConfiguration;
+﻿#if Version6
+using Configuration = NServiceBus.EndpointConfiguration;
 #else
 using Configuration = NServiceBus.BusConfiguration;
 #endif
-
+using System;
+using System.Threading.Tasks;
+using Common.Scenarios;
 using NServiceBus;
 using NServiceBus.Logging;
 using Tests.Permutations;
@@ -23,11 +21,19 @@ public abstract class BaseRunner
     protected IEndpointInstance EndpointInstance { get; set; }
 #endif
 
+    Permutation permutation;
+    BusCreationOptions options;
+    string endpointName;
+
     public virtual void Execute(Permutation permutation, BusCreationOptions options, string endpointName)
     {
-        if (this is ICreateSeedData) CreateSeedData(permutation, endpointName);
+        this.permutation = permutation;
+        this.options = options;
+        this.endpointName = endpointName;
 
-        EndpointInstance = CreateEndpoint(permutation, options, endpointName);
+        if (this is ICreateSeedData) CreateSeedData();
+
+        EndpointInstance = CreateEndpoint();
 
         Start();
         Log.InfoFormat("Warmup: {0}", Settings.WarmupDuration);
@@ -41,15 +47,15 @@ public abstract class BaseRunner
     protected abstract void Start();
     protected abstract void Stop();
 
-    private void CreateSeedData(Permutation permutation, string endpointName)
+    private void CreateSeedData()
     {
         var seedCreator = ((ICreateSeedData) this);
         if (seedCreator.SeedSize == 0) throw new InvalidOperationException("SeedSize was not set.");
 
-        var configuration = CreateConfiguration(permutation, endpointName);
+        var configuration = CreateConfiguration();
         CreateQueues(configuration);
 
-        configuration = CreateConfiguration(permutation, endpointName);
+        configuration = CreateConfiguration();
         var endpoint = CreateSendOnlyEndpoint(configuration);
 
         Parallel.For(0, seedCreator.SeedSize, ((i, state) =>
@@ -75,14 +81,15 @@ public abstract class BaseRunner
         return Bus.CreateSendOnly(configuration);
     }
 
-    IBus CreateEndpoint(Permutation permutation, BusCreationOptions options, string endpointName)
+    IBus CreateEndpoint()
     {
-        var configuration = CreateConfiguration(permutation, endpointName);
+        var configuration = CreateConfiguration();
         configuration.PurgeOnStartup(false);
+        configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
         return Bus.Create(configuration).Start();
     }
 
-    BusConfiguration CreateConfiguration(Permutation permutation, string endpointName)
+    BusConfiguration CreateConfiguration()
     {
         var configuration = new BusConfiguration();
         configuration.EndpointName(endpointName);
@@ -105,9 +112,9 @@ public abstract class BaseRunner
         return Endpoint.Start(configuration).GetAwaiter().GetResult();
     }
 
-    IEndpointInstance CreateEndpoint(Permutation permutation, BusCreationOptions options, string endpointName)
+    IEndpointInstance CreateEndpoint()
     {
-        var configuration = CreateConfiguration(permutation, endpointName);
+        var configuration = CreateConfiguration();
         configuration.LimitMessageProcessingConcurrencyTo(options.NumberOfThreads);
         configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
         configuration.PurgeOnStartup(false);
@@ -115,7 +122,7 @@ public abstract class BaseRunner
         return Endpoint.Start(configuration).GetAwaiter().GetResult();
     }
 
-    EndpointConfiguration CreateConfiguration(Permutation permutation, string endpointName)
+    EndpointConfiguration CreateConfiguration()
     {
         var configuration = new EndpointConfiguration(endpointName);
         configuration.EnableInstallers();
