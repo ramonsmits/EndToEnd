@@ -1,14 +1,13 @@
 ﻿#if Version5
 using Common.Scenarios;
 using NServiceBus;
-using Tests.Permutations;
 
 /// <summary>
 /// Does a continuous test where a pre-seeded amount of messages will be handled
 /// </summary>    
 partial class ReceiveRunner : ICreateSeedData
 {
-    public int SeedSize { get; set; } = 30000;
+    public int SeedSize { get; set; } = 50000;
     
     public partial class Handler : IHandleMessages<Command>
     {

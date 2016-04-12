@@ -38,9 +38,6 @@ public abstract class BaseRunner
         Statistics.Instance.Dump();
         Stop();
     }
-
-
-
     protected abstract void Start();
     protected abstract void Stop();
 
@@ -68,6 +65,7 @@ public abstract class BaseRunner
 #if Version5
     void CreateQueues(Configuration configuration)
     {
+        configuration.PurgeOnStartup(false);
         var createQueuesBus = Bus.Create(configuration).Start();
         createQueuesBus.Dispose();
     }
@@ -80,7 +78,8 @@ public abstract class BaseRunner
     IBus CreateEndpoint(Permutation permutation, BusCreationOptions options, string endpointName)
     {
         var configuration = CreateConfiguration(permutation, endpointName);
-        return Bus.Create(configuration);
+        configuration.PurgeOnStartup(false);
+        return Bus.Create(configuration).Start();
     }
 
     BusConfiguration CreateConfiguration(Permutation permutation, string endpointName)
@@ -89,7 +88,6 @@ public abstract class BaseRunner
         configuration.EndpointName(endpointName);
         configuration.EnableInstallers();
         configuration.DiscardFailedMessagesInsteadOfSendingToErrorQueue();
-        configuration.PurgeOnStartup(true); // Should this be on so we don't polute with weird messages we can't handle?
         configuration.ApplyProfiles(permutation);
 
         return configuration;
