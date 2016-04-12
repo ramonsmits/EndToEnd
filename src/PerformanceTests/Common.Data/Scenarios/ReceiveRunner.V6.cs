@@ -8,6 +8,8 @@ using Common.Scenarios;
 /// </summary>    
 partial class ReceiveRunner : ICreateSeedData
 {
+    public int SeedSize { get; set; } = 30000;
+
     public partial class Handler : IHandleMessages<Command>
     {
         public async Task Handle(Command message, IMessageHandlerContext ctx)

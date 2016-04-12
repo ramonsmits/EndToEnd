@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Threading.Tasks;
 using Common.Scenarios;
 #if Version6
@@ -15,8 +16,6 @@ using Utils;
 public abstract class BaseRunner
 {
     readonly ILog Log = LogManager.GetLogger("BaseRunner");
-
-    readonly int seedSize;
 
 #if Version5
     protected IBus EndpointInstance { get; set; }
@@ -47,20 +46,23 @@ public abstract class BaseRunner
 
     private void CreateSeedData(Permutation permutation, string endpointName)
     {
+        var seedCreator = ((ICreateSeedData) this);
+        if (seedCreator.SeedSize == 0) throw new InvalidOperationException("SeedSize was not set.");
+
         var configuration = CreateConfiguration(permutation, endpointName);
         CreateQueues(configuration);
 
         configuration = CreateConfiguration(permutation, endpointName);
         var endpoint = CreateSendOnlyEndpoint(configuration);
 
-        Parallel.For(0, seedSize, ((i, state) =>
+        Parallel.For(0, seedCreator.SeedSize, ((i, state) =>
         {
             if (i % 5000 == 0)
                 Log.Info($"Seeded {i} messages.");
 
             ((ICreateSeedData)this).SendMessage(endpoint, endpointName);
         }));
-        Log.Info($"Seeded total of {seedSize} messages.");
+        Log.Info($"Seeded total of {seedCreator.SeedSize} messages.");
     }
 
 #if Version5
