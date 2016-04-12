@@ -95,7 +95,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConcurrencyProfile.cs" />
-    <Compile Include="Program.V5.cs" />
     <Compile Include="TransactionProfile.cs" />
   </ItemGroup>
   <Import Project="..\Common.Data\Common.Data.projitems" Label="Shared" />
