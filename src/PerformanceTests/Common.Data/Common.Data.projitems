@@ -47,9 +47,6 @@
     <Folder Include="$(MSBuildThisFileDirectory)Saga\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory).connectionstrings.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="$(MSBuildThisFileDirectory).connectionstrings.config.template" />
   </ItemGroup>
 </Project>
