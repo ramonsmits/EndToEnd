@@ -8,6 +8,8 @@ using Tests.Permutations;
 /// </summary>    
 partial class ReceiveRunner : ICreateSeedData
 {
+    public int SeedSize { get; set; } = 30000;
+    
     public partial class Handler : IHandleMessages<Command>
     {
         public IBus Bus { get; set; }

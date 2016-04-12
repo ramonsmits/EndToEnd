@@ -10,8 +10,6 @@ using NServiceBus;
 /// </summary>    
 partial class ReceiveRunner : BaseRunner
 {
-    public int SeedSize { get; set; } = 30000;
-
     protected override void Start()
     {
     }
