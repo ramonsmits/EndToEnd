@@ -9,7 +9,6 @@ using Common.Scenarios;
 using NServiceBus;
 using NServiceBus.Logging;
 using Tests.Permutations;
-using Utils;
 
 public abstract class BaseRunner
 {
@@ -22,13 +21,11 @@ public abstract class BaseRunner
 #endif
 
     Permutation permutation;
-    BusCreationOptions options;
     string endpointName;
 
-    public virtual void Execute(Permutation permutation, BusCreationOptions options, string endpointName)
+    public virtual void Execute(Permutation permutation, string endpointName)
     {
         this.permutation = permutation;
-        this.options = options;
         this.endpointName = endpointName;
 
         if (this is ICreateSeedData) CreateSeedData();

@@ -25,7 +25,6 @@ namespace Host
                 EnvironmentStats.Write();
 
                 var permutation = PermutationParser.FromCommandlineArgs();
-                var options = BusCreationOptions.Parse(args);
 
                 ValidateServicePointManager(permutation);
 
@@ -33,7 +32,7 @@ namespace Host
 
                 var assembly = System.Reflection.Assembly.GetExecutingAssembly();
                 var runnableTest = permutation.Tests.Select(x => (BaseRunner) assembly.CreateInstance(x)).Single();
-                runnableTest.Execute(permutation, options, endpointName);
+                runnableTest.Execute(permutation, endpointName);
             }
             catch (Exception ex)
             {
