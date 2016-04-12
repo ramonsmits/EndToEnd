@@ -28,7 +28,7 @@ public abstract class BaseRunner
         this.permutation = permutation;
         this.endpointName = endpointName;
 
-        if (this is ICreateSeedData) CreateSeedData();
+        CreateSeedData();
 
         EndpointInstance = CreateEndpoint();
 
@@ -46,7 +46,10 @@ public abstract class BaseRunner
 
     private void CreateSeedData()
     {
-        var seedCreator = ((ICreateSeedData) this);
+        var seedCreator = this as ICreateSeedData;
+
+        if (seedCreator == null) return;
+
         if (seedCreator.SeedSize == 0) throw new InvalidOperationException("SeedSize was not set.");
 
         var configuration = CreateConfiguration();
