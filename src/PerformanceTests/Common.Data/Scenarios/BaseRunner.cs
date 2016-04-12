@@ -115,7 +115,6 @@ public abstract class BaseRunner
     IEndpointInstance CreateEndpoint()
     {
         var configuration = CreateConfiguration();
-        configuration.LimitMessageProcessingConcurrencyTo(options.NumberOfThreads);
         configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
         configuration.PurgeOnStartup(false);
 
