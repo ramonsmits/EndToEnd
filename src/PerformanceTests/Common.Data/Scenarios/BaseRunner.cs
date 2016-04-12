@@ -15,9 +15,9 @@ public abstract class BaseRunner
     readonly ILog Log = LogManager.GetLogger("BaseRunner");
 
 #if Version5
-    protected IBus EndpointInstance { get; set; }
+    protected IBus EndpointInstance { get; private set; }
 #else
-    protected IEndpointInstance EndpointInstance { get; set; }
+    protected IEndpointInstance EndpointInstance { get; private set; }
 #endif
 
     Permutation permutation;
@@ -32,15 +32,27 @@ public abstract class BaseRunner
 
         EndpointInstance = CreateEndpoint();
 
-        Start();
-        Log.InfoFormat("Warmup: {0}", Settings.WarmupDuration);
-        System.Threading.Thread.Sleep(Settings.WarmupDuration);
-        Statistics.Instance.Reset();
-        Log.InfoFormat("Run: {0}", Settings.RunDuration);
-        System.Threading.Thread.Sleep(Settings.RunDuration);
-        Statistics.Instance.Dump();
-        Stop();
+        try
+        {
+            Start();
+            Log.InfoFormat("Warmup: {0}", Settings.WarmupDuration);
+            System.Threading.Thread.Sleep(Settings.WarmupDuration);
+            Statistics.Instance.Reset();
+            Log.InfoFormat("Run: {0}", Settings.RunDuration);
+            System.Threading.Thread.Sleep(Settings.RunDuration);
+            Statistics.Instance.Dump();
+            Stop();
+        }
+        finally
+        {
+#if Version5
+            using(EndpointInstance){}
+#else
+            EndpointInstance.Stop().GetAwaiter().GetResult();
+#endif
+        }
     }
+
     protected abstract void Start();
     protected abstract void Stop();
 
@@ -52,32 +64,43 @@ public abstract class BaseRunner
 
         if (seedCreator.SeedSize == 0) throw new InvalidOperationException("SeedSize was not set.");
 
-        var configuration = CreateConfiguration();
-        CreateQueues(configuration);
+        CreateQueues();
 
-        configuration = CreateConfiguration();
-        var endpoint = CreateSendOnlyEndpoint(configuration);
+        var sendonlyInstance = CreateSendOnlyEndpoint();
 
-        Parallel.For(0, seedCreator.SeedSize, ((i, state) =>
+        try
         {
-            if (i % 5000 == 0)
-                Log.Info($"Seeded {i} messages.");
+            Parallel.For(0, seedCreator.SeedSize, (i, state) =>
+            {
+                if (i % 5000 == 0)
+                    Log.Info($"Seeded {i} messages.");
 
-            ((ICreateSeedData)this).SendMessage(endpoint, endpointName);
-        }));
-        Log.Info($"Seeded total of {seedCreator.SeedSize} messages.");
+                ((ICreateSeedData)this).SendMessage(sendonlyInstance, endpointName);
+            });
+            Log.Info($"Seeded total of {seedCreator.SeedSize} messages.");
+        }
+        finally
+        {
+#if Version5
+            using(sendonlyInstance){}
+#else
+            sendonlyInstance.Stop().GetAwaiter().GetResult();
+#endif
+        }
     }
 
 #if Version5
-    void CreateQueues(Configuration configuration)
+    void CreateQueues()
     {
+        var configuration = CreateConfiguration();
         configuration.PurgeOnStartup(false);
         var createQueuesBus = Bus.Create(configuration).Start();
         createQueuesBus.Dispose();
     }
 
-    ISendOnlyBus CreateSendOnlyEndpoint(Configuration configuration)
+    ISendOnlyBus CreateSendOnlyEndpoint()
     {
+        var configuration = CreateConfiguration();
         return Bus.CreateSendOnly(configuration);
     }
 
@@ -100,14 +123,16 @@ public abstract class BaseRunner
         return configuration;
     }
 #else
-    void CreateQueues(Configuration configuration)
+    void CreateQueues()
     {
+        var configuration = CreateConfiguration();
         configuration.PurgeOnStartup(true);
         Endpoint.Create(configuration).GetAwaiter().GetResult();
     }
 
-    IEndpointInstance CreateSendOnlyEndpoint(Configuration configuration)
+    IEndpointInstance CreateSendOnlyEndpoint()
     {
+        var configuration = CreateConfiguration();
         configuration.SendOnly();
         return Endpoint.Start(configuration).GetAwaiter().GetResult();
     }
