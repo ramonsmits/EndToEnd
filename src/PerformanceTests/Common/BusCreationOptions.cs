@@ -39,9 +39,6 @@
         [Option(nameof(Serialization))]
         public SerializationKind Serialization { get; set; }
 
-        [Option(nameof(NumberOfThreads))]
-        public int NumberOfThreads { get; set; } = 10;
-
         [Option(nameof(Persistence))]
         public PersistenceKind Persistence { get; set; }
 
