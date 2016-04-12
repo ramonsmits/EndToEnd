@@ -33,21 +33,3 @@ class JsonSerializerFacade : ISerializerFacade
     JsonMessageSerializer serializer;
     Type[] objectTypes;
 }
-
-/*
-    public static void TestDeserializationIssue()
-    {
-        var serializer = new JsonMessageSerializer(new MessageMapper());
-
-        var fileInfo = new FileInfo(@"C:\git\Particular\ProductionTests\src\SerializerCompatibilityTests\bin\Debug\SerializationCompatibilityFiles\NServiceBus 5.0.6_TestPolimorficCollections_.json");
-
-        using (var fileStream = fileInfo.OpenRead())
-        {
-            var instance = serializer.Deserialize(fileStream, new[]
-            {
-                typeof(PolymorphicCollection)
-            }).First();
-
-        }
-    }
-    */

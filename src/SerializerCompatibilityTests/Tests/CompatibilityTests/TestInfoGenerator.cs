@@ -28,7 +28,7 @@
 
         Package[] DownloadPackages(PackageInfo[] packageInfos)
         {
-            var resolver = new NuGetPackageResolver(PackageStore, NugetFeed);
+            var resolver = new NuGetPackageResolver(PackageStore);
             var packages = new ConcurrentBag<Package>();
 
             foreach (var packageInfo in packageInfos)
@@ -124,8 +124,6 @@
 
         static string PackageStore = "../..";
 
-        static string NugetFeed = "https://www.myget.org/F/particular";
-
         static PackageInfo[] PackageInfos =
         {
             // latest v3 (3.3)
@@ -148,7 +146,7 @@
             "NServiceBus:(5.0,6.0)",
 
             // v6
-            "NServiceBus:(6.0-prerelease,6.1-prerelease)"
+            "NServiceBus:(6.0-beta,6.1-beta)" //due to an issue in Paket, it has to be specified like this
         };
     }
 }
