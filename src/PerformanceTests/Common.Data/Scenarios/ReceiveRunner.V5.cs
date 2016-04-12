@@ -15,7 +15,6 @@ partial class ReceiveRunner : ICreateSeedData
 
         public void Handle(Command message)
         {
-            if (Shutdown) return;
         }
     }
 
