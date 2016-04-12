@@ -11,7 +11,7 @@ public static class SagaInitiator
             await bus.SendLocal(new SagaInitiateRequestingMessage
                 {
                     TargetEndpoint = endpoint
-                });
+                }).ConfigureAwait(false);
         }
     }
 }

@@ -15,7 +15,7 @@ public static class DataBusInitiator
                     EncryptedProperty = "Secret",
                     SentFrom = TestRunner.EndpointName
                 };
-            await bus.Send(endpointName, sendMessage);
+            await bus.Send(endpointName, sendMessage).ConfigureAwait(false);
         }
     }
 }

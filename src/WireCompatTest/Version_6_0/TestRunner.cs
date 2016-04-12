@@ -8,15 +8,15 @@ public static class TestRunner
 
     public static async Task RunTests(IEndpointInstance bus)
     {
-        await Task.Delay(TimeSpan.FromSeconds(25));
-        await bus.InitiateDataBus();
-        await bus.InitiatePubSub();
-        await bus.InitiateSaga();
-        await bus.InitiateSendReply();
+        await Task.Delay(TimeSpan.FromSeconds(25)).ConfigureAwait(false);
+        await bus.InitiateDataBus().ConfigureAwait(false);
+        await bus.InitiatePubSub().ConfigureAwait(false);
+        await bus.InitiateSaga().ConfigureAwait(false);
+        await bus.InitiateSendReply().ConfigureAwait(false);
         bus.InitiateSendReturn();
 
-        await Task.Delay(TimeSpan.FromMinutes(1));
-        await bus.Stop();
+        await Task.Delay(TimeSpan.FromMinutes(1)).ConfigureAwait(false);
+        await bus.Stop().ConfigureAwait(false);
         DataBusVerifier.AssertExpectations();
         PubSubVerifier.AssertExpectations();
         SagaVerifier.AssertExpectations();

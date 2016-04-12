@@ -13,9 +13,9 @@ class Program
 
     static async Task AsyncMain()
     {
-        var bus = await CreateBus();
+        var bus = await CreateBus().ConfigureAwait(false);
         TestRunner.EndpointName = endpointName;
-        await TestRunner.RunTests(bus);
+        await TestRunner.RunTests(bus).ConfigureAwait(false);
     }
 
     static Task<IEndpointInstance> CreateBus()

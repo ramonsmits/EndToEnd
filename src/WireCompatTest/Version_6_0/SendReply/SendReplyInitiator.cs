@@ -12,7 +12,7 @@ public static class SendReplyInitiator
                 {
                     Sender = TestRunner.EndpointName,
                     EncryptedProperty = "Secret"
-                });
+                }).ConfigureAwait(false);
         }
     }
 }
