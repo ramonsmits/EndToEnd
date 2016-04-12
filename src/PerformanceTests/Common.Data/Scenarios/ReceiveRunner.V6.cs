@@ -14,7 +14,6 @@ partial class ReceiveRunner : ICreateSeedData
     {
         public async Task Handle(Command message, IMessageHandlerContext ctx)
         {
-            if (Shutdown) return;
         }
     }
 
