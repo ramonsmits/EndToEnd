@@ -29,8 +29,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\ReceiveRunner.V5.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\ReceiveRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\ReceiveRunner.V6.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SagaInitiateRunnerV6.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SagaInitiateRunnerV5.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SagaRetrievalRunner.V6.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SagaRetrievalRunner.V5.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SagaRetrievalRunner.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SagaInitiateRunner.V6.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SagaInitiateRunner.V5.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SagaInitiateRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SendLocalOneOnOneRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SendLocalOneOnOneRunner.V5.cs" />
