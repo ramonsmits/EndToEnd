@@ -25,7 +25,6 @@ namespace Host
 
             try
             {
-                //TraceLogger.Initialize(); // Splunk is currently FUBAR
                 var permutation = PermutationParser.FromCommandlineArgs();
 
                 Statistics.Initialize(permutation.Id);
