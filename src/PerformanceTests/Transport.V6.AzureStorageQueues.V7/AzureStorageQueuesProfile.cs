@@ -1,7 +1,5 @@
-﻿using System;
-using Common;
+﻿using Common;
 using NServiceBus;
-using Common;
 
 class AzureStorageQueuesProfile : IProfile
 {
