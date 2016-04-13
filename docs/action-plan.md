@@ -1,6 +1,6 @@
 ### Current action items
 
- - [x] Setup environments: @gbiellem (what is the hourly cost for the environment?)
+ - [x] Setup environments: @gbiellem (1700USD per month if run 24 hours)
   - Queues
    - [x] SQL2012 (Queues), 
    - [x] Rabbit, 
@@ -11,17 +11,21 @@
    - [x] Azure Storage Persistence
   - Runners:
    - [x] Master (MSMQ)
-   - [x] Worker 3x (MSMQ)
+   - [ ] Worker 3x (MSMQ)
  - Infrastructure
-   - [x] DTC
+   - [ ] DTC
 - [ ] Implement persistence variables - @ramon
-  - [ ] How can we clean the tests up before/after running tests?
-- [ ] Run tests on environment - manually (perhaps with a PS script) - @williambza + @gbiellem
+  - [x] Seed endpoints
+  - [ ] How can we clean the tests up after running tests?
+- [x] Run tests on environment - manually (perhaps with a PS script) - @williambza + @gbiellem
+ - [ ] Make sure session ID is shared between all test run instances
+ - [ ] Switch to PS script to run tests
 - [ ] Create splunk dashboards - @igal + @hadi
- - [ ] Add session and permutation ID to statistics info
- - [ ] Collect required performance counters manually and report using the `Statistics` object
+ - [x] Add session and permutation ID to statistics info
+ - [x] Collect required performance counters manually and report using the `Statistics` object
   - RAM (Private bytes)
   - Throughput
+ - [ ] Tweak dashboard to show the results similar to Danny's graph
 - [ ] Implement other test types (send, sendlocal, publish, sagas, distruter) - @dvdstalt
   - [ ] Receive only
   - [ ] Send only
@@ -29,7 +33,7 @@
 - [ ] Collect results for multiple runs to see stability of tests
   - Feed results back to various transport/persistence owners
 - [ ] Inform @andreas once we feel we are ready to start Stability tests
- 
+
 ### Future actions
 
 - [ ] Automate tests
@@ -40,6 +44,8 @@
  - Transport VM
  - Runner VM
 - [ ] Scale seeded messages based on pre-run warmup
+- [ ] SQL Azure
+- [ ] Multi-endpoints per process
  
  ### Completed actions
 
