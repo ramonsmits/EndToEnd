@@ -1,6 +1,5 @@
 namespace Tests.Tools
 {
-    using System;
     using System.IO;
     using Tests.Permutations;
 
