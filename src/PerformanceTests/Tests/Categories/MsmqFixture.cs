@@ -15,6 +15,12 @@ namespace Categories
         }
 
         [TestCaseSource(nameof(CreatePermutations))]
+        public override void SagaInitiateRunner(Permutation permutation)
+        {
+            base.SagaInitiateRunner(permutation);
+        }
+
+        [TestCaseSource(nameof(CreatePermutations))]
         public override void GatedSendLocalRunner(Permutation permutation)
         {
             base.GatedSendLocalRunner(permutation);

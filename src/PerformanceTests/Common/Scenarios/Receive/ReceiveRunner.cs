@@ -16,7 +16,6 @@ partial class ReceiveRunner : BaseRunner
 
     protected override void Stop()
     {
-        Handler.Shutdown = true;       
     }
 
     public class Command : ICommand
@@ -25,7 +24,6 @@ partial class ReceiveRunner : BaseRunner
 
     partial class Handler
     {
-        public static bool Shutdown;
     }
 }
 
