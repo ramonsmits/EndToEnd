@@ -1,17 +1,7 @@
-﻿using System;
+﻿using NServiceBus;
 
-using NServiceBus;
-using Tests.Permutations;
-using Variables;
-
-partial class SagaInitiateRunner : BaseRunner, IThrowIfPermutationIsNotAllowed
+partial class SagaInitiateRunner : BaseRunner
 {
-    public void ThrowIfPermutationIsNotAllowed(Permutation permutation)
-    {
-        if (permutation.Persister == Persistence.InMemory)
-            throw new InvalidOperationException("This test has no use running with InMemory persistence.");
-    }
-
     protected override void Start()
     {
     }
