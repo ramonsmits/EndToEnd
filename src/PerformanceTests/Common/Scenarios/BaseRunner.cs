@@ -30,6 +30,8 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         Permutation = permutation;
         EndpointName = endpointName;
 
+        ThrowIfPermutationNotAllowed();
+
         CreateSeedData();
 
         EndpointInstance = CreateEndpoint();
@@ -55,13 +57,20 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         }
     }
 
+    void ThrowIfPermutationNotAllowed()
+    {
+        var thrower = this as IThrowIfPermutationIsNotAllowed;
+        if (thrower == null) return;
+
+        thrower.ThrowIfPermutationIsNotAllowed(permutation);
+    }
+
     protected abstract void Start();
     protected abstract void Stop();
 
     private void CreateSeedData()
     {
         var seedCreator = this as ICreateSeedData;
-
         if (seedCreator == null) return;
 
         if (seedCreator.SeedSize == 0) throw new InvalidOperationException("SeedSize was not set.");
