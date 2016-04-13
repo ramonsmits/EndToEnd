@@ -3,22 +3,29 @@ namespace Host
     using System;
     using System.Linq;
     using System.Net;
+    using NServiceBus;
     using NServiceBus.Logging;
     using Tests.Permutations;
-    using Utils;
     using VisualStudioDebugHelper;
 
     class Program
     {
-        static readonly ILog Log = LogManager.GetLogger(typeof(Program));
+        static ILog Log;
         static string endpointName = "PerformanceTests_" + AppDomain.CurrentDomain.FriendlyName.Replace(' ', '_');
-        static void Main(string[] args) // GatedSendLocalRunner, 
+        static void Main()
         {
+            LogManager.Use<NLogFactory>();
+
+            Log = LogManager.GetLogger(typeof(Program));
+
             DebugAttacher.AttachDebuggerToVisualStudioProcessFromCommandLineParameter();
+
+            AppDomain.CurrentDomain.FirstChanceException += (o, ea) => { Log.Debug("FirstChanceException", ea.Exception); };
+            AppDomain.CurrentDomain.UnhandledException += (o, ea) => { Log.Error("UnhandledException", ea.ExceptionObject as Exception); };
 
             try
             {
-                TraceLogger.Initialize();
+                //TraceLogger.Initialize(); // Splunk is currently FUBAR
 
                 Statistics.Initialize();
 
@@ -37,6 +44,7 @@ namespace Host
             catch (Exception ex)
             {
                 Log.Fatal("Main", ex);
+                NLog.LogManager.Shutdown();
                 throw;
             }
         }
