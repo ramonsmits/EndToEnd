@@ -31,7 +31,7 @@ namespace Categories
                 TransactionMode = new[] { TransactionMode.Default, },
                 AuditModes = new[] { Audit.Off, },
                 ConcurrencyLevels = new[] { ConcurrencyLevel.EnvCores4x },
-                ScaleOuts = new[] { ScaleOut.Distributor, }
+                ScaleOuts = new[] { ScaleOut.MsmqDistributor, }
             });
         }
     }

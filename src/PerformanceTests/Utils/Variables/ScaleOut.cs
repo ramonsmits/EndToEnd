@@ -3,7 +3,7 @@ namespace Variables
     public enum ScaleOut
     {
         NoScaleOut,
-        Distributor,
+        MsmqDistributor,
         SenderSide
     }
 }
