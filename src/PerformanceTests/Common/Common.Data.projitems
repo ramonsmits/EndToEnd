@@ -17,8 +17,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)IContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)INeedContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IProfile.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IProfileExtensionMethods.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PerformanceCounters.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ProfileExtensionMethods.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Program.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\BaseRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocal\GatedSendLocalRunner.cs" />
