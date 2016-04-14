@@ -28,19 +28,19 @@ namespace Tests.Permutations
 
         string GenerateId()
         {
-            return string.Join(";", Version, 
-                                    IOPS,
-                                    Platform,
-                                    GarbageCollector,
-                                    Transport,
-                                    Persister,
-                                    Serializer,
-                                    MessageSize,
-                                    OutboxMode,
-                                    DTCMode,
-                                    TransactionMode,
-                                    AuditMode,
-                                    ConcurrencyLevel);
+            return string.Join(";", Version.GetEnumDescription(), 
+                                    IOPS.GetEnumDescription(),
+                                    Platform.GetEnumDescription(),
+                                    GarbageCollector.GetEnumDescription(),
+                                    Transport.GetEnumDescription(),
+                                    Persister.GetEnumDescription(),
+                                    Serializer.GetEnumDescription(),
+                                    MessageSize.GetEnumDescription(),
+                                    OutboxMode.GetEnumDescription(),
+                                    DTCMode.GetEnumDescription(),
+                                    TransactionMode.GetEnumDescription(),
+                                    AuditMode.GetEnumDescription(),
+                                    ConcurrencyLevel.GetEnumDescription());
         }
 
         public override string ToString()
