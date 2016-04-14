@@ -9,7 +9,6 @@ namespace Tests.Tools
 
     public class PermutationDirectoryResolver
     {
-        static string[] assembliesToSkip = { "NServiceBus.Core.dll" };
         readonly string rootDirectory;
 
         public PermutationDirectoryResolver(string rootDirectory)
@@ -20,14 +19,13 @@ namespace Tests.Tools
         public PermutationResult Resolve(Permutation permutation)
         {
             var components = GetPermutationComponents(permutation);
-        
-            var files = components
-                .SelectMany(s => Directory.GetDirectories(rootDirectory, s + "*").Select(path => new DirectoryInfo(path)))
-                .Where(di => di.Exists)
-                .SelectMany(di =>
-                {
-                    return di.GetFiles("*.dll").Where(info => !Array.Exists(assembliesToSkip, f => f == info.Name)).ToArray();
-                });
+
+            var root = new DirectoryInfo(rootDirectory);
+
+            var dirs = root.GetDirectories()
+                .Where(d => components.Any(c => d.Name.StartsWith(c)));
+
+            var files = dirs.SelectMany(d => d.GetFiles("*.dll"));
 
             return new PermutationResult
             {
@@ -53,6 +51,7 @@ namespace Tests.Tools
         {
             yield return $"Persistence.{permutation.Version}.{permutation.Persister}";
             yield return $"Transport.{permutation.Version}.{permutation.Transport}";
+            yield return $"Distribution.{permutation.Version}.{permutation.ScaleOut}";
         }
 
         public class PermutationResult

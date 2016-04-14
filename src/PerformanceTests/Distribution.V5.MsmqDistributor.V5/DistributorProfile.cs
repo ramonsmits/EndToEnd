@@ -13,7 +13,7 @@ class DistributorProfile : IProfile, INeedPermutation, IProvideConfiguration<Mas
 
         public void Configure(BusConfiguration cfg)
         {
-            if (Permutation.ScaleOut != ScaleOut.Distributor) return;
+            if (Permutation.ScaleOut != ScaleOut.MsmqDistributor) return;
 
         var value = this.FetchSetting(DistributorKey);
 

@@ -38,6 +38,7 @@ namespace Tests.Permutations
                     TransactionMode = TransactionMode,
                     AuditMode = AuditMode,
                     ConcurrencyLevel = ConcurrencyLevel,
+                    ScaleOut = ScaleOut,
 
                     Code = string.Empty
                      + (permutations.Versions.Length > 1 ? Version.ToString() : string.Empty)
