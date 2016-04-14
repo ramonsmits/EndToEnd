@@ -63,7 +63,7 @@
     <Compile Include="RabbitMQ\MessageExchangePatterns.cs" />
     <Compile Include="SqlServer\Callbacks.cs" />
     <Compile Include="SqlServer\MessageExchangePatterns.cs" />
-    <Compile Include="SqlServer\Subscriptions.cs" />
+    <Compile Include="SqlServer\UpgradingV2SubscriberToV3SubscriberWithV3Publisher.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

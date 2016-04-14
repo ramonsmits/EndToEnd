@@ -8,6 +8,7 @@ using TransportCompatibilityTests.Common.Messages;
 namespace SqlServerV3
 {
     using System.Linq;
+    using NServiceBus.Persistence;
     using NServiceBus.Transports.SQLServer;
     using TransportCompatibilityTests.Common.SqlServer;
 
@@ -26,7 +27,8 @@ namespace SqlServerV3
             endpointConfiguration.Conventions().DefiningEventsAs(t => t == typeof(TestEvent));
 
             endpointConfiguration.EnableInstallers();
-            endpointConfiguration.UsePersistence<InMemoryPersistence>();
+            endpointConfiguration.UsePersistence<NHibernatePersistence>()
+                .ConnectionString(SqlServerConnectionStringBuilder.Build());
             endpointConfiguration.UseTransport<SqlServerTransport>()
                 .ConnectionString(SqlServerConnectionStringBuilder.Build());
 
