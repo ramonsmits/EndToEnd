@@ -1,37 +1,25 @@
 ### Current action items
 
- - [x] Setup environments: @gbiellem (1700USD per month if run 24 hours)
-  - Queues
-   - [x] SQL2012 (Queues), 
-   - [x] Rabbit, 
-   - [x] Azure Storage Queues
-  - Persistence
-   - [x] SQL2012 (Persistence),
-   - [x] RavenDB v3, 
-   - [x] Azure Storage Persistence
-  - Runners:
-   - [x] Master (MSMQ)
-   - [ ] Worker 3x (MSMQ)
- - Infrastructure
-   - [ ] DTC
 - [ ] Implement persistence variables - @ramon
   - [x] Seed endpoints
   - [ ] How can we clean the tests up after running tests?
-- [x] Run tests on environment - manually (perhaps with a PS script) - @williambza + @gbiellem
- - [ ] Make sure session ID is shared between all test run instances
- - [ ] Switch to PS script to run tests
+    - Maybe as part of the actual test?
+    - Perhaps a script?
+  - [ ] Azure Storage Persistence V5 connection strings
 - [ ] Create splunk dashboards - @igal + @hadi
  - [x] Add session and permutation ID to statistics info
  - [x] Collect required performance counters manually and report using the `Statistics` object
-  - RAM (Private bytes)
-  - Throughput
- - [ ] Tweak dashboard to show the results similar to Danny's graph
+ - [ ] Is there a way to see a graph per test fixture? @william
 - [ ] Implement other test types (send, sendlocal, publish, sagas, distruter) - @dvdstalt
-  - [ ] Receive only
-  - [ ] Send only
+  - [x] Receive only
+  - [x] Send only
   - [ ] Sagas
+    - [ ] Remove sagas from other tests
+- [ ] Remove hard dependency on splunk @tim
+- [ ] Tweak permutation string display to include label of on/off @william
+- [ ] Invert dependency chain between V5/V6, transports, persistences and tests project (investigate what _should_ actually be in the shared files project?)
 - [ ] Collect results for multiple runs to see stability of tests
-  - Feed results back to various transport/persistence owners
+   - Feed results back to various transport/persistence owners
 - [ ] Inform @andreas once we feel we are ready to start Stability tests
 
 ### Future actions
@@ -49,6 +37,23 @@
  
  ### Completed actions
 
+- [x] Run tests on environment - manually (perhaps with a PS script) - @williambza + @gbiellem
+ - [x] Make sure session ID is shared between all test run instances
+ - ~~[ ] Switch to PS script to run tests~~
+ - [x] Setup environments: @gbiellem (1700USD per month if run 24 hours)
+  - Queues
+   - [x] SQL2012 (Queues), 
+   - [x] Rabbit, 
+   - [x] Azure Storage Queues
+  - Persistence
+   - [x] SQL2012 (Persistence),
+   - [x] RavenDB v3, 
+   - [x] Azure Storage Persistence
+  - Runners:
+   - [x] Master (MSMQ)
+   - ~~[ ] Worker 3x (MSMQ)~~
+ - Infrastructure
+   - ~~[ ] DTC~~
 - [x] Implement test source for test permutations of persistence and transport providers @hmemcpy 
 - [X] Include Metrics.Net to track [required metrics](https://github.com/Particular/EndToEnd/blob/docs/docs/metrics.md) @williambza
 - [x] Migrate performance test code
