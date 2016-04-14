@@ -11,7 +11,7 @@ using NLog.Targets;
 using LogLevel = NLog.LogLevel;
 
 [Serializable]
-public class Statistics
+public class Statistics : IDisposable
 {
     public DateTime? First;
     public DateTime Last;
@@ -23,13 +23,34 @@ public class Statistics
     public TimeSpan SendTimeNoTx = TimeSpan.Zero;
     public TimeSpan SendTimeWithTx = TimeSpan.Zero;
 
-    static Process process = Process.GetCurrentProcess();
-    static PerformanceCounter privateBytesCounter = new PerformanceCounter("Process", "Private Bytes", process.ProcessName);
-    static Timer perfCountersTimer;
+    Process process;
+    PerformanceCounter privateBytesCounter;
+    Timer perfCountersTimer;
 
     static ConcurrentBag<double> perfCounterValues = new ConcurrentBag<double>();
 
     static Logger logger = LogManager.GetLogger("Statistics");
+
+    ~Statistics()
+    {
+        Dispose(true);
+    }
+
+    public void Dispose()
+    {
+        Dispose(false);
+    }
+
+    void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            process?.Dispose();
+            privateBytesCounter?.Dispose();
+            perfCountersTimer?.Dispose();
+            GC.SuppressFinalize(this);
+        }
+    }
 
     static Statistics instance;
     public static Statistics Instance
@@ -37,24 +58,27 @@ public class Statistics
         get
         {
             if (instance == null) throw new InvalidOperationException("Statistics wasn't initialized. Call 'Initialize' first.");
-
             return instance;
         }
     }
 
-    public static void Initialize(string permutationId)
+    public static IDisposable Initialize(string permutationId)
     {
-        instance = new Statistics(permutationId);
-        instance.StartTime = DateTime.UtcNow;
+        if(instance!=null) throw new InvalidOperationException("Instance already active");
+        return instance = new Statistics(permutationId);
+    }
+
+    Statistics(string permutationId)
+    {
+        process = Process.GetCurrentProcess();
+        privateBytesCounter = new PerformanceCounter("Process", "Private Bytes", process.ProcessName);
         perfCountersTimer = new Timer(state =>
             perfCounterValues.Add(privateBytesCounter.NextValue()),
             null,
             TimeSpan.FromSeconds(1),
             TimeSpan.FromSeconds(1));
-    }
 
-    Statistics(string permutationId)
-    {
+        StartTime = DateTime.UtcNow;
         ConfigureSplunk(permutationId);
     }
 
