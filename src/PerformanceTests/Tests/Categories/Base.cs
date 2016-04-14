@@ -61,11 +61,16 @@ namespace Categories
         static void LaunchAndWait(Permutation permutation)
         {
             var processId = DebugAttacher.GetCurrentVisualStudioProcessId();
-            var processIdArgument = processId >= 0 ? string.Format(" --processId={0}", processId) : string.Empty;
-            var sessionIdArgument = string.Format(" --sessionId={0}", SessionId);
+            var processIdArgument = processId >= 0 ? $" --processId={processId}" : string.Empty;
+            var sessionIdArgument = $" --sessionId={SessionId}";
 
             var exe = new FileInfo(permutation.Exe);
-            var arguments = PermutationParser.ToArgs(permutation) + processIdArgument + sessionIdArgument;
+
+            var arguments = string.Format("{0} {1} {2}",
+                PermutationParser.ToArgs(permutation),
+                processIdArgument,
+                sessionIdArgument
+                );
 
             var pi = new ProcessStartInfo(exe.FullName, arguments)
             {
