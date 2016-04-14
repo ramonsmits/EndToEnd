@@ -1,5 +1,4 @@
 ﻿using NServiceBus;
-using Common;
 
 class AzureServiceBusProfile : IProfile
 {
