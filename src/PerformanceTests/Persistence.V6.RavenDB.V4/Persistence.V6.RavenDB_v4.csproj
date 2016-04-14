@@ -73,11 +73,6 @@
       <Name>NServiceBus6</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\Tests\Tests.csproj">
-      <Project>{feaae402-8ed0-47fb-8e54-42b1d7f654cc}</Project>
-      <Name>Tests</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

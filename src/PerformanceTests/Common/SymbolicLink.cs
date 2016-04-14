@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Runtime.InteropServices;
 
-class SymbolicLink
+public class SymbolicLink
 {
     class Win32
     {
