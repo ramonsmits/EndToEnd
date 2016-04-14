@@ -47,14 +47,14 @@
     <Compile Include="MsmqProfile.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Utils.csproj">
+      <Project>{572499ed-e234-4c66-bd6e-d5a845065c5f}</Project>
+      <Name>Utils</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\NServiceBus6\NServiceBus6.csproj">
       <Project>{10d11044-c92c-42ad-830e-57012ff4f039}</Project>
       <Name>NServiceBus6</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Tests\Tests.csproj">
-      <Project>{feaae402-8ed0-47fb-8e54-42b1d7f654cc}</Project>
-      <Name>Tests</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
