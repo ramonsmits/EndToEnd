@@ -44,8 +44,7 @@ namespace TransportCompatibilityTests.SqlServer
             using (var subscriber = EndpointFacadeBuilder.CreateAndConfigure(subscriberDefinition, 2))
             {
                 // ReSharper disable once AccessToDisposedClosure
-                // AssertEx.WaitUntilIsTrue(() => publisher.NumberOfSubscriptions > 0); Currently doesn't work need to investiage
-                Thread.Sleep(5000); // will remove this
+                AssertEx.WaitUntilIsTrue(() => publisher.NumberOfSubscriptions > 0);
 
                 var eventId = Guid.NewGuid();
 
@@ -71,8 +70,7 @@ namespace TransportCompatibilityTests.SqlServer
             using (var subscriber = EndpointFacadeBuilder.CreateAndConfigure(subscriberDefinition, 3))
             {
                 // ReSharper disable once AccessToDisposedClosure
-                // AssertEx.WaitUntilIsTrue(() => publisher.NumberOfSubscriptions > 0); Currently doesn't work need to investiage
-                Thread.Sleep(5000); // will remove this
+                AssertEx.WaitUntilIsTrue(() => publisher.NumberOfSubscriptions > 0);
 
                 var eventId = Guid.NewGuid();
 

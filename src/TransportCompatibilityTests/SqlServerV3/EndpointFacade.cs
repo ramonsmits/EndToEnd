@@ -126,14 +126,13 @@ namespace SqlServerV3
 
             public override async Task Invoke(IIncomingPhysicalMessageContext context, Func<Task> next)
             {
+                await next();
                 string intent;
 
                 if (context.Message.Headers.TryGetValue(Headers.MessageIntent, out intent) && intent == "Subscribe")
                 {
                     SubscriptionStore.Increment();
                 }
-
-                await next();
             }
 
             internal class Registration : RegisterStep

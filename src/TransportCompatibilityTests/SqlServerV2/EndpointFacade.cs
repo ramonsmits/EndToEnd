@@ -137,14 +137,14 @@ namespace SqlServerV2
 
             public void Invoke(IncomingContext context, Action next)
             {
+                next();
+
                 string intent;
 
                 if (context.PhysicalMessage.Headers.TryGetValue(Headers.MessageIntent, out intent) && intent == "Subscribe")
                 {
                     SubscriptionStore.Increment();
                 }
-
-                next();
             }
 
             internal class Registration : RegisterStep
