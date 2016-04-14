@@ -8,7 +8,6 @@ using TransportCompatibilityTests.Common.Messages;
 namespace SqlServerV3
 {
     using System.Linq;
-    using NServiceBus.Features;
     using NServiceBus.Transports.SQLServer;
     using TransportCompatibilityTests.Common.SqlServer;
 
@@ -40,7 +39,7 @@ namespace SqlServerV3
 
             endpointConfiguration.UseTransport<SqlServerTransport>().UseSpecificSchema(qn =>
                 {
-                    var mapping = endpointDefinition.As<SqlServerEndpointDefinition>().Mappings.FirstOrDefault(mm => mm.TransportAddress == qn);
+                    var mapping = endpointDefinition.Mappings.FirstOrDefault(mm => mm.TransportAddress == qn);
 
                     return mapping?.Schema;
                 });
