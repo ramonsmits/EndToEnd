@@ -1,5 +1,4 @@
-﻿using Common;
-using NServiceBus;
+﻿using NServiceBus;
 using NServiceBus.Persistence;
 
 class NHibernateProfile : IProfile

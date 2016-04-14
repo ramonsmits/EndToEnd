@@ -1,5 +1,4 @@
-﻿using Common;
-using NServiceBus;
+﻿using NServiceBus;
 
 class RavenDBProfile : IProfile
 {
