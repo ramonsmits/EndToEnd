@@ -23,7 +23,7 @@ namespace Categories
                 Platforms = new[] { Platform.x64, },
                 GarbageCollectors = new[] { GarbageCollector.Client, },
                 Transports = new[] { Transport.MSMQ },
-                Persisters = new[] { Persistence.InMemory, Persistence.NHibernate, Persistence.RavenDB },
+                Persisters = new[] { Persistence.InMemory, Persistence.NHibernate, Persistence.RavenDB, Persistence.Azure },
                 Serializers = new[] { Serialization.Json, },
                 MessageSizes = new[] { MessageSize.Tiny, },
                 OutboxModes = new[] { Outbox.On, },
