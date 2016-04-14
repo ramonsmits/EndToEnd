@@ -52,14 +52,6 @@
       <HintPath>..\..\..\packages\NServiceBus.NLog.1.2.0-beta0001\lib\net452\NServiceBus.NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Splunk.Logging.Common, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Splunk.Logging.Common.1.5.0\lib\net45\Splunk.Logging.Common.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Splunk.Logging.TraceListener, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Splunk.Logging.TraceListener.1.5.0\lib\net45\Splunk.Logging.TraceListener.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
