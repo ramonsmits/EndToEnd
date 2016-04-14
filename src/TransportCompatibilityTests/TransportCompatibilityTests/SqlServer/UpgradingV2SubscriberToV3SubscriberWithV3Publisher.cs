@@ -76,8 +76,14 @@ namespace TransportCompatibilityTests.SqlServer
 
                 publisher.PublishEvent(eventId);
 
+                // Wait for the fiest message
                 // ReSharper disable once AccessToDisposedClosure
-                AssertEx.WaitUntilIsTrue(() => subscriber.ReceivedEventIds.Length > 1);
+                AssertEx.WaitUntilIsTrue(() => subscriber.ReceivedEventIds.Length > 0);
+
+                // Wait 5s for another one (should not come)
+                // ReSharper disable once AccessToDisposedClosure
+                Assert.False(AssertEx.TryWaitUntilIsTrue(() => subscriber.ReceivedEventIds.Length > 1, TimeSpan.FromSeconds(5)));
+
                 Assert.IsFalse(subscriber.ReceivedEventIds.Length == 2 && subscriber.ReceivedEventIds.All(k => k == eventId), "Received duplicated message!");
             }
         }
