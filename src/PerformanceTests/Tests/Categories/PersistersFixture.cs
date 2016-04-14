@@ -26,7 +26,7 @@ namespace Categories
                 Persisters = new[] { Persistence.InMemory, Persistence.NHibernate, Persistence.RavenDB, Persistence.Azure },
                 Serializers = new[] { Serialization.Json, },
                 MessageSizes = new[] { MessageSize.Tiny, },
-                OutboxModes = new[] { Outbox.On, },
+                OutboxModes = new[] { Outbox.Off, },
                 DTCModes = new[] { DTC.On, },
                 TransactionMode = new[] { TransactionMode.Default, },
                 AuditModes = new[] { Audit.Off },
