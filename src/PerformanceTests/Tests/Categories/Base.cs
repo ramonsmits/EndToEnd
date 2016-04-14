@@ -67,13 +67,11 @@ namespace Categories
             var exe = new FileInfo(permutation.Exe);
             var arguments = PermutationParser.ToArgs(permutation) + processIdArgument + sessionIdArgument;
 
-            var pi = new ProcessStartInfo(exe.FullName)
+            var pi = new ProcessStartInfo(exe.FullName, arguments)
             {
-                Arguments = arguments,
                 UseShellExecute = false,
                 WorkingDirectory = exe.DirectoryName,
             };
-
 
             using (var p = Process.Start(pi))
             {
@@ -102,7 +100,7 @@ namespace Categories
             }
         }
     }
-    
+
     [SetUpFixture]
     public class TestSessionInitializer
     {
