@@ -84,9 +84,12 @@ namespace Categories
                 {
                     p.Kill();
                     Assert.Fail("Killed!");
-
                 }
-                Assert.AreEqual(0, p.ExitCode, "Execution failed.");
+                if (p.ExitCode == (int) ReturnCodes.NotSupported)
+                {
+                    Assert.Inconclusive("Not supported");
+                }
+                Assert.AreEqual((int)ReturnCodes.OK, p.ExitCode, "Execution failed.");
             }
         }
 

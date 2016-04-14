@@ -12,7 +12,7 @@ namespace Host
     {
         static ILog Log;
         static string endpointName = "PerformanceTests_" + AppDomain.CurrentDomain.FriendlyName.Replace(' ', '_');
-        static void Main()
+        static int Main()
         {
             LogManager.Use<NLogFactory>();
 
@@ -36,9 +36,14 @@ namespace Host
                     if (Environment.UserInteractive) Console.Title = PermutationParser.ToFriendlyString(permutation);
 
                     var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-                    var runnableTest = permutation.Tests.Select(x => (BaseRunner) assembly.CreateInstance(x)).Single();
+                    var runnableTest = permutation.Tests.Select(x => (BaseRunner)assembly.CreateInstance(x)).Single();
                     runnableTest.Execute(permutation, endpointName);
                 }
+            }
+            catch (NotSupportedException nsex)
+            {
+                Log.Warn("Not supported", nsex);
+                return (int)ReturnCodes.NotSupported;
             }
             catch (Exception ex)
             {
@@ -46,6 +51,7 @@ namespace Host
                 NLog.LogManager.Shutdown();
                 throw;
             }
+            return (int)ReturnCodes.OK;
         }
 
         static void ValidateServicePointManager(Permutation permutation)
