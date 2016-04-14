@@ -78,5 +78,10 @@ namespace Tests.Permutations
         {
             return $"{p.AuditMode};{p.DTCMode};{p.IOPS};{p.MessageSize};{p.Version};{p.OutboxMode};{p.Persister};{p.Platform};{p.Serializer};{p.Transport};{p.GarbageCollector};{p.TransactionMode};{p.ConcurrencyLevel}";
         }
+
+        public static string ToFriendlyString(Permutation p)
+        {
+            return $"{p.AuditMode.GetEnumDescription()};{p.DTCMode.GetEnumDescription()};{p.IOPS.GetEnumDescription()};{p.MessageSize.GetEnumDescription()};{p.Version.GetEnumDescription()};{p.OutboxMode.GetEnumDescription()};{p.Persister.GetEnumDescription()};{p.Platform.GetEnumDescription()};{p.Serializer.GetEnumDescription()};{p.Transport.GetEnumDescription()};{p.GarbageCollector.GetEnumDescription()};{p.TransactionMode.GetEnumDescription()};{p.ConcurrencyLevel.GetEnumDescription()}";
+        }
     }
 }
