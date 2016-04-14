@@ -21,6 +21,7 @@
 - [ ] Collect results for multiple runs to see stability of tests
    - Feed results back to various transport/persistence owners
 - [ ] Inform @andreas once we feel we are ready to start Stability tests
+- [ ] Delete previous performance test code in ProductionTests repo
 
 ### Future actions
 
