@@ -1,5 +1,5 @@
 ﻿public enum ReturnCodes
 {
     OK = 0,
-    NotSupported = 1000
+    NotSupported = 1337
 }
