@@ -6,8 +6,9 @@ namespace Tests.Permutations
     {
         public string Category { get; set; }
         public string Description { get; set; }
-        public string Id => ToString();
+        public string Id => GenerateId();
         public string Exe { get; set; }
+        public string Code {get; set;}
 
         public string[] Tests;
 
@@ -25,7 +26,7 @@ namespace Tests.Permutations
         public TransactionMode TransactionMode;//11
         public ConcurrencyLevel ConcurrencyLevel;//12
 
-        public override string ToString()
+        string GenerateId()
         {
             return string.Join(";", Version, 
                                     IOPS,
@@ -40,6 +41,11 @@ namespace Tests.Permutations
                                     TransactionMode,
                                     AuditMode,
                                     ConcurrencyLevel);
+        }
+
+        public override string ToString()
+        {
+            return Code;
         }
     }
 }
