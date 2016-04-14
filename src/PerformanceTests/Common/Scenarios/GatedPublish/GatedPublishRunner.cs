@@ -22,8 +22,6 @@ partial class GatedPublishRunner : LoopRunner, IConfigureUnicastBus
     {
         try
         {
-            Log.Warn("Sleeping for the bus to purge the queue. Loop requires the queue to be empty.");
-            Thread.Sleep(5000);
             Log.Info("Starting");
 
             X = new CountdownEvent(batchSize);
