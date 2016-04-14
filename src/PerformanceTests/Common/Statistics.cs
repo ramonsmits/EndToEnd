@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using NLog;
-using NLog.Config;
-using NLog.Layouts;
-using NLog.Targets;
-using LogLevel = NLog.LogLevel;
 
 [Serializable]
 public class Statistics : IDisposable
@@ -124,24 +119,9 @@ public class Statistics : IDisposable
 
     void ConfigureSplunk(string permutationId)
     {
-        var url = ConfigurationManager.AppSettings["SplunkURL"];
-        var port = int.Parse(ConfigurationManager.AppSettings["SplunkPort"]);
         var sessionId = GetSessionId();
-
-        var config = new LoggingConfiguration();
-        var target = new NetworkTarget
-        {
-            Address = $"tcp://{url}:{port}",
-            Layout = Layout.FromString("${level}~${gdc:item=sessionid}~${gdc:item=permutationId}~${message}~${newline}"),
-        };
-
-        config.LoggingRules.Add(new LoggingRule("*", LogLevel.Debug, target));
-        LogManager.Configuration = config;
-
         GlobalDiagnosticsContext.Set("sessionid", sessionId);
         GlobalDiagnosticsContext.Set("permutationId", permutationId);
-
-        logger.Debug($"Splunk Tracelogger configured at {url}:{port}");
     }
 
     static string GetSessionId()
