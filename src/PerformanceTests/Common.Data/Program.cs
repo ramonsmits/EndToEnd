@@ -33,7 +33,7 @@ namespace Host
 
                     ValidateServicePointManager(permutation);
 
-                    if (Environment.UserInteractive) Console.Title = PermutationParser.ToString(permutation);
+                    if (Environment.UserInteractive) Console.Title = PermutationParser.ToFriendlyString(permutation);
 
                     var assembly = System.Reflection.Assembly.GetExecutingAssembly();
                     var runnableTest = permutation.Tests.Select(x => (BaseRunner) assembly.CreateInstance(x)).Single();
