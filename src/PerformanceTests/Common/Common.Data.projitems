@@ -9,43 +9,36 @@
     <Import_RootNamespace>Common</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)AssemblyScanner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AuditProfile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CheckPlatform.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IConfigureUnicastBus.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ConcurrencyLevelConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IPermutation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EnvironmentStats.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IProfile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IProfileExtensionMethods.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PerformanceCounters.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Program.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\BaseRunner.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocal\GatedSendLocalRunner.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocal\GatedSendLocalRunner.V5.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocal\GatedSendLocalRunner.V6.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\ICreateSeedData.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\ReceiveRunner.V5.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\ReceiveRunner.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\ReceiveRunner.V6.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SendLocalOneOnOneRunner.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SendLocalOneOnOneRunner.V5.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SendLocalOneOnOneRunner.V6.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocalRunner.V6.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocalRunner.V5.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocalRunner.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\Receive\ReceiveRunner.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\Receive\ReceiveRunner.V5.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\Receive\ReceiveRunner.V6.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedPublish\GatedPublishRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedPublish\GatedPublishRunner.V5.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedPublish\GatedPublishRunner.V6.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ProfilesExtension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)QueueUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\LoopRunner.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SendLocalOneOnOne\SendLocalOneOnOneRunner.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SendLocalOneOnOne\SendLocalOneOnOneRunner.V5.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SendLocalOneOnOne\SendLocalOneOnOneRunner.V6.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializerProfile.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Settings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StatisticsUoW.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Statistics\SimpleStatisticsFeature.V5.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Statistics\SimpleStatisticsFeature.V6.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Statistics\StatisticsBehavior.V5.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Statistics\StatisticsBehavior.V6.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TransportConfigOverride.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TwoPhaseCommitEnlistment.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Saga\" />

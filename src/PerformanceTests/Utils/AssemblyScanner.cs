@@ -4,13 +4,13 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using NServiceBus.Logging;
+using NLog;
 
 public static class AssemblyScanner
 {
     public static IEnumerable<Assembly> GetAssemblies()
     {
-        var l = LogManager.GetLogger(typeof(AssemblyScanner));
+        var l = LogManager.GetLogger(nameof(AssemblyScanner));
 
         foreach (var path in Directory.EnumerateFiles(Environment.CurrentDirectory, "*.dll"))
         {
@@ -43,7 +43,7 @@ public static class AssemblyScanner
                 version = ex.Message;
             }
 
-            l.InfoFormat("Loaded: {0} ({1})", name, version);
+            l.Info("Loaded: {0} ({1})", name, version);
         }
 
         return assemblies;
