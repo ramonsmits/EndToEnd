@@ -15,5 +15,6 @@ namespace Tests.Permutations
         public Variables.GarbageCollector[] GarbageCollectors;
         public Variables.TransactionMode[] TransactionMode;
         public Variables.ConcurrencyLevel[] ConcurrencyLevels;
+        public Variables.ScaleOut[] ScaleOuts;
     }
 }

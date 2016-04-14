@@ -21,6 +21,7 @@ namespace Tests.Permutations
                 from TransactionMode in permutations.TransactionMode
                 from AuditMode in permutations.AuditModes
                 from ConcurrencyLevel in permutations.ConcurrencyLevels
+                from ScaleOut in permutations.ScaleOuts
 
                 select new Permutation
                 {
@@ -38,7 +39,7 @@ namespace Tests.Permutations
                     AuditMode = AuditMode,
                     ConcurrencyLevel = ConcurrencyLevel,
 
-                    Code = ""
+                    Code = string.Empty
                      + (permutations.Versions.Length > 1 ? Version.ToString() : string.Empty)
                      + (permutations.IOPS.Length > 1 ? IOPS.ToString() : string.Empty)
                      + (permutations.Platforms.Length > 1 ? Platform.ToString() : string.Empty)
@@ -52,6 +53,7 @@ namespace Tests.Permutations
                      + (permutations.TransactionMode.Length > 1 ? TransactionMode.ToString() : string.Empty)
                      + (permutations.AuditModes.Length > 1 ? AuditMode.ToString() : string.Empty)
                      + (permutations.ConcurrencyLevels.Length > 1 ? ConcurrencyLevel.ToString() : string.Empty)
+                     + (permutations.ScaleOuts.Length > 1 ? ScaleOut.ToString() : string.Empty)
                 };
             return items;
         }
