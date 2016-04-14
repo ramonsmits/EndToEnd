@@ -78,7 +78,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Utils.csproj">
+    <ProjectReference Include="..\Utils\Utils.csproj">
       <Project>{572499ed-e234-4c66-bd6e-d5a845065c5f}</Project>
       <Name>Utils</Name>
     </ProjectReference>
