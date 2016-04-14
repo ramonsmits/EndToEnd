@@ -21,7 +21,14 @@ namespace Tests.Tools
 
             if (startupDir.Exists)
             {
-                startupDir.Delete(true);
+                try
+                {
+                    startupDir.Delete(true);
+                }
+                catch
+                {
+                    foreach (var f in startupDir.GetFiles()) f.Delete();
+                }
             }
 
             startupDir.Create();
