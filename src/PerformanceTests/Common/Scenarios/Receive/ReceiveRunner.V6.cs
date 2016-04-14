@@ -1,6 +1,6 @@
-﻿#if Version5
-using Common.Scenarios;
+﻿#if Version6
 using NServiceBus;
+using System.Threading.Tasks;
 
 /// <summary>
 /// Does a continuous test where a pre-seeded amount of messages will be handled
@@ -8,20 +8,17 @@ using NServiceBus;
 partial class ReceiveRunner : ICreateSeedData
 {
     public int SeedSize { get; set; } = 50000;
-    
+
     public partial class Handler : IHandleMessages<Command>
     {
-        public IBus Bus { get; set; }
-
-        public void Handle(Command message)
+        public async Task Handle(Command message, IMessageHandlerContext ctx)
         {
         }
     }
 
-    public void SendMessage(ISendOnlyBus sendOnlyBus, string endpointName)
+    public void SendMessage(IEndpointInstance endpointInstance, string endpointName)
     {
-        var address = new Address(endpointName, "localhost");
-        sendOnlyBus.Send(address, new Command());
+        endpointInstance.SendLocal(new Command());
     }
 }
 #endif

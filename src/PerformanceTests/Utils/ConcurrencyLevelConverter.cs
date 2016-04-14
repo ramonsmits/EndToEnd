@@ -1,7 +1,7 @@
 using System;
 using Variables;
 
-static class ConcurrencyLevelConverter
+public static class ConcurrencyLevelConverter
 {
     public static int Convert(ConcurrencyLevel value)
     {
