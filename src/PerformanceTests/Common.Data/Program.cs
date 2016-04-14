@@ -27,17 +27,18 @@ namespace Host
             {
                 var permutation = PermutationParser.FromCommandlineArgs();
 
-                Statistics.Initialize(permutation.Id);
+                using (Statistics.Initialize(permutation.Id))
+                {
+                    EnvironmentStats.Write();
 
-                EnvironmentStats.Write();
+                    ValidateServicePointManager(permutation);
 
-                ValidateServicePointManager(permutation);
+                    if (Environment.UserInteractive) Console.Title = PermutationParser.ToString(permutation);
 
-                if (Environment.UserInteractive) Console.Title = PermutationParser.ToString(permutation);
-
-                var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-                var runnableTest = permutation.Tests.Select(x => (BaseRunner) assembly.CreateInstance(x)).Single();
-                runnableTest.Execute(permutation, endpointName);
+                    var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+                    var runnableTest = permutation.Tests.Select(x => (BaseRunner) assembly.CreateInstance(x)).Single();
+                    runnableTest.Execute(permutation, endpointName);
+                }
             }
             catch (Exception ex)
             {
