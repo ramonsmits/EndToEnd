@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using NLog;
+using Tests.Permutations;
 
 [Serializable]
 public class Statistics : IDisposable
@@ -21,6 +22,7 @@ public class Statistics : IDisposable
     Process process;
     PerformanceCounter privateBytesCounter;
     Timer perfCountersTimer;
+    Permutation permutation;
 
     static ConcurrentBag<double> perfCounterValues = new ConcurrentBag<double>();
 
@@ -53,18 +55,20 @@ public class Statistics : IDisposable
         get
         {
             if (instance == null) throw new InvalidOperationException("Statistics wasn't initialized. Call 'Initialize' first.");
+
             return instance;
         }
     }
 
-    public static IDisposable Initialize(string permutationId)
+    public static IDisposable Initialize(Permutation permutation)
     {
         if(instance!=null) throw new InvalidOperationException("Instance already active");
-        return instance = new Statistics(permutationId);
+        return instance = new Statistics(permutation);
     }
 
-    Statistics(string permutationId)
+    Statistics(Permutation permutation)
     {
+        this.permutation = permutation;
         process = Process.GetCurrentProcess();
         privateBytesCounter = new PerformanceCounter("Process", "Private Bytes", process.ProcessName);
         perfCountersTimer = new Timer(state =>
@@ -74,7 +78,7 @@ public class Statistics : IDisposable
             TimeSpan.FromSeconds(1));
 
         StartTime = DateTime.UtcNow;
-        ConfigureSplunk(permutationId);
+        ConfigureSplunk();
     }
 
     public void Reset()
@@ -117,11 +121,13 @@ public class Statistics : IDisposable
         logger.Debug($"{key}: {value:0.0} ({unit})");
     }
 
-    void ConfigureSplunk(string permutationId)
+    void ConfigureSplunk()
     {
         var sessionId = GetSessionId();
         GlobalDiagnosticsContext.Set("sessionid", sessionId);
-        GlobalDiagnosticsContext.Set("permutationId", permutationId);
+        GlobalDiagnosticsContext.Set("permutationId", permutation.Id);
+        GlobalDiagnosticsContext.Set("testcategory", permutation.Category);
+        GlobalDiagnosticsContext.Set("testdescription", permutation.Description);
     }
 
     static string GetSessionId()
