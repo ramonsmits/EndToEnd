@@ -72,13 +72,13 @@ partial class GatedPublishRunner : LoopRunner, IConfigureUnicastBus
 
         var messageType = typeof(Event);
 
-        Log.InfoFormat("Mapping {0} to {1}", messageType, endpointName);
+        Log.InfoFormat("Mapping {0} to {1}", messageType, EndpointName);
 
         mappings.Add(new MessageEndpointMapping
         {
             AssemblyName = messageType.Assembly.FullName,
             TypeFullName = messageType.FullName,
-            Endpoint = endpointName
+            Endpoint = EndpointName
         });
 
         return mappings;

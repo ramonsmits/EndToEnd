@@ -7,19 +7,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Tests.Permutations;
 
 static class ProfilesExtension
 {
-    public static void ApplyProfiles(this Configuration configuration, Permutation permutation)
+    public static void ApplyProfiles(this Configuration configuration, IContext ctx)
     {
         foreach (var profile in GetProfiles())
         {
             var injectPermutation = profile as INeedPermutation;
-            if (injectPermutation != null)
-            {
-                injectPermutation.Permutation = permutation;
-            }
+            if (injectPermutation != null) injectPermutation.Permutation = ctx.Permutation;
+
+            var injectContext = profile as INeedContext;
+            if (injectContext != null) injectContext.Context = ctx;
+
             profile.Configure(configuration);
         }
     }
@@ -48,5 +48,4 @@ static class ProfilesExtension
             return ex.Types;
         }
     }
-
 }
