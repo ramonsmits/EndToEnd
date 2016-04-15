@@ -9,6 +9,7 @@ namespace Tests.Permutations
         public string Id => GenerateId();
         public string Exe { get; set; }
         public string Code {get; set;}
+        public string Fixture { get; set; }
 
         public string[] Tests;
 

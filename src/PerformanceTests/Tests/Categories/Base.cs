@@ -39,7 +39,10 @@ namespace Categories
 
         void Tasks(Permutation permutation, [CallerMemberName] string memberName = "")
         {
-            var fixture = GetType().GetCustomAttribute<TestFixtureAttribute>();
+            var fixtureType = GetType();
+            var fixture = fixtureType.GetCustomAttribute<TestFixtureAttribute>();
+            permutation.Fixture = fixtureType.Name;
+
             permutation.Category = fixture.Category;
             permutation.Description = fixture.Description;
             permutation.Tests = new[] { memberName };
