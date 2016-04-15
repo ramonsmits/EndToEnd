@@ -180,9 +180,23 @@ public abstract class BaseRunner : IConfigurationSource, IContext
     {
         var configuration = new Configuration(EndpointName);
         configuration.EnableInstallers();
-        configuration.ApplyProfiles(this);
+
+        var excludeTypes = GetTypesToExclude();
+        configuration.ExcludeTypes(excludeTypes);
+
+        configuration.ApplyProfiles(permutation);
 
         return configuration;
+    }
+
+    Type[] GetTypesToExclude()
+    {
+        var includeTypes = this.GetType().GetNestedTypes(BindingFlags.Public).ToList();
+        includeTypes.Add(this.GetType());
+
+        var type = typeof(BaseRunner);
+        var allTypes = Assembly.GetAssembly(type).GetTypes().Where(p => type.IsAssignableFrom(type));
+        return allTypes.Except(includeTypes).ToArray();
     }
 #endif
 
