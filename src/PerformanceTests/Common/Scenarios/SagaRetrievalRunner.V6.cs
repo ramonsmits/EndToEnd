@@ -1,5 +1,4 @@
 ﻿#if Version6
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Common.Scenarios;
@@ -30,7 +29,7 @@ partial class SagaRetrievalRunner : ICreateSeedData
 
     public class SagaData : ContainSagaData
     {
-        public int UniqueIdentifier { get; set; }
+        public virtual int UniqueIdentifier { get; set; }
     }
 }
 #endif

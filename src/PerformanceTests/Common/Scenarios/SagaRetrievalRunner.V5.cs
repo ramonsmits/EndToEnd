@@ -33,12 +33,12 @@ partial class SagaRetrievalRunner : ICreateSeedData
 
     public class SagaData : IContainSagaData
     {
-        Guid IContainSagaData.Id { get; set; }
-        public string Originator { get; set; }
-        public string OriginalMessageId { get; set; }
+        public virtual Guid Id { get; set; }
+        public virtual  string Originator { get; set; }
+        public virtual  string OriginalMessageId { get; set; }
 
         [Unique]
-        public int UniqueIdentifier { get; set; }
+        public virtual  int UniqueIdentifier { get; set; }
     }
 }
 #endif
