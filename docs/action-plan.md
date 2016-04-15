@@ -1,5 +1,7 @@
 ### Current action items
 
+- [ ] Restrict splunk to only accept from TC
+- [ ] Document how to update and view results
 - [ ] Implement persistence variables - @ramon
   - [x] Seed endpoints
   - [ ] How can we clean the tests up after running tests?
@@ -23,9 +25,7 @@
   - [x] Send only
   - [ ] Sagas
     - [ ] Remove sagas from other tests
-- [x] Remove hard dependency on splunk @tim
-- [ ] Tweak permutation string display to include label of on/off @william
-- [x] Invert dependency chain between V5/V6, transports, persistences and tests project (investigate what _should_ actually be in the shared files project?)
+shared files project?)
 - [ ] Collect results for multiple runs to see stability of tests
    - Feed results back to various transport/persistence owners
 - [ ] Inform @andreas once we feel we are ready to start Stability tests
@@ -46,6 +46,9 @@
  
  ### Completed actions
 
+- [x] Remove hard dependency on splunk @tim
+- [x] Tweak permutation string display to include label of on/off @william
+- [x] Invert dependency chain between V5/V6, transports, persistences and tests project (investigate what _should_ actually be in the 
 - [x] Run tests on environment - manually (perhaps with a PS script) - @williambza + @gbiellem
  - [x] Make sure session ID is shared between all test run instances
  - ~~[ ] Switch to PS script to run tests~~
