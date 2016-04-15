@@ -26,6 +26,7 @@ namespace NServiceBus.Performance
             catch
             {
                 provider.ErrorInc();
+                throw;
             }
             finally
             {
