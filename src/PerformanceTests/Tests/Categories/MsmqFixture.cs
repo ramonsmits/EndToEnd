@@ -1,13 +1,12 @@
 namespace Categories
 {
-    using System;
     using System.Collections.Generic;
     using NUnit.Framework;
     using Tests.Permutations;
     using Variables;
 
-    [TestFixture(Description = "Audit forwarding On / Off", Category = "Performance")]
-    public class MsmqV5vsV6Fixture : Base
+    [TestFixture(Description = "MSMQ", Category = "Performance")]
+    public class MsmqFixture : Base
     {
         [TestCaseSource(nameof(CreatePermutations))]
         public override void ReceiveRunner(Permutation permutation)

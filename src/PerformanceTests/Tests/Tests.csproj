@@ -56,12 +56,12 @@
   <ItemGroup>
     <Compile Include="Categories\DistributorFixture.cs" />
     <Compile Include="Categories\PlatformFixture.cs" />
-    <Compile Include="Categories\MsmqV5vsV6Fixture.cs" />
+    <Compile Include="Categories\MsmqFixture.cs" />
     <Compile Include="Categories\AuditOnVsOffFixture.cs" />
     <Compile Include="Categories\Base.cs" />
     <Compile Include="Categories\OutboxVsDtcFixture.cs" />
     <Compile Include="Categories\PersistersFixture.cs" />
-    <Compile Include="Categories\PublishVsSendFixture.cs" />
+    <Compile Include="Categories\TransportsFixture.cs" />
     <Compile Include="Categories\ResourceUtilizationFixture.cs" />
     <Compile Include="Categories\SenderSideFixture.cs" />
     <Compile Include="Integration\MutatorsTests.cs" />

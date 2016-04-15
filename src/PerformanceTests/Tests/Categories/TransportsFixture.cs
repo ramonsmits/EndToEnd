@@ -6,8 +6,8 @@ namespace Categories
     using Tests.Permutations;
     using Variables;
 
-    [TestFixture(Description = "Publish vs Send", Category = "Performance")]
-    public class PublishVsSendFixture : Base
+    [TestFixture(Description = "Transports", Category = "Performance")]
+    public class TransportsFixture : Base
     {
         [TestCaseSource(nameof(CreatePermutations))]
         public override void GatedSendLocalRunner(Permutation permutation)
