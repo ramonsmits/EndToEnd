@@ -1,5 +1,6 @@
 ﻿#if Version5
 using System;
+using System.Threading;
 using Common.Scenarios;
 using NServiceBus;
 using NServiceBus.Saga;
@@ -17,11 +18,7 @@ partial class SagaInitiateRunner : ICreateSeedData
         if (address == null)
             address = new Address(endpointName, "localhost");
 
-        lock (lockable)
-        {
-            messageId++;
-            endpointInstance.Send(address, new Command(messageId));
-        }
+        endpointInstance.Send(address, new Command(Interlocked.Increment(ref messageId)));
     }
 
     public class TheSaga : Saga<SagaData>,

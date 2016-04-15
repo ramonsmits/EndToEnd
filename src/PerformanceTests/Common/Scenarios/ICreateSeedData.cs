@@ -1,8 +1,10 @@
-﻿using NServiceBus;
-
-interface ICreateSeedData
+﻿namespace Common.Scenarios
 {
-    int SeedSize { get; set; }
+    using NServiceBus;
+
+    interface ICreateSeedData
+    {
+        int SeedSize { get; set; }
 
 #if Version5
     /// <summary>
