@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-public abstract class LoopRunner : BaseRunner
+abstract class LoopRunner : BaseRunner
 {
     Task loopTask;
     protected CancellationTokenSource stopLoop { get; private set; }

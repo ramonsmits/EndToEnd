@@ -6,7 +6,6 @@ using Configuration = NServiceBus.BusConfiguration;
 using System;
 using System.Configuration;
 using System.Threading.Tasks;
-using Common.Scenarios;
 using NServiceBus;
 using NServiceBus.Config;
 using NServiceBus.Config.ConfigurationSource;

@@ -86,7 +86,7 @@ namespace Tests.Tools
                 "@",
                 permutation.Category,
                 string.Join("_", permutation.Tests),
-                permutation.Id
+                permutation.Code.Replace(" ","-")
                 );
 
             return new DirectoryInfo(path);
