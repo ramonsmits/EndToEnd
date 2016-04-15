@@ -4,8 +4,16 @@
   - [x] Seed endpoints
   - [ ] How can we clean the tests up after running tests?
     - Maybe as part of the actual test?
+     - [ ] MSMQ
+     - [ ] RabbitMQ
+     - [ ] SQL Transport
+     - [ ] ASB
+     - [ ] ASQ
+     - [ ] RavenDB
+     - [ ] SQL Server (NHibernate)
+     - [ ] Azure
     - Perhaps a script?
-  - [ ] Azure Storage Persistence V5 connection strings
+  - [x] Azure Storage Persistence V5 connection strings
 - [ ] Create splunk dashboards - @igal + @hadi
  - [x] Add session and permutation ID to statistics info
  - [x] Collect required performance counters manually and report using the `Statistics` object
@@ -15,9 +23,9 @@
   - [x] Send only
   - [ ] Sagas
     - [ ] Remove sagas from other tests
-- [ ] Remove hard dependency on splunk @tim
+- [x] Remove hard dependency on splunk @tim
 - [ ] Tweak permutation string display to include label of on/off @william
-- [ ] Invert dependency chain between V5/V6, transports, persistences and tests project (investigate what _should_ actually be in the shared files project?)
+- [x] Invert dependency chain between V5/V6, transports, persistences and tests project (investigate what _should_ actually be in the shared files project?)
 - [ ] Collect results for multiple runs to see stability of tests
    - Feed results back to various transport/persistence owners
 - [ ] Inform @andreas once we feel we are ready to start Stability tests
