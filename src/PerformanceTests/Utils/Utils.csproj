@@ -92,6 +92,7 @@
     <Compile Include="Variables\Outbox.cs" />
     <Compile Include="Variables\Persistence.cs" />
     <Compile Include="Variables\Platform.cs" />
+    <Compile Include="Variables\ScaleOut.cs" />
     <Compile Include="Variables\Serialization.cs" />
     <Compile Include="Variables\TransactionMode.cs" />
     <Compile Include="Variables\Transport.cs" />

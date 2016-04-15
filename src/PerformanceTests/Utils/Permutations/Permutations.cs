@@ -1,19 +1,22 @@
 namespace Tests.Permutations
 {
+    using Variables;
+
     public class Permutations
     {
-        public Variables.Audit[] AuditModes;
-        public Variables.DTC[] DTCModes;
-        public Variables.IOPS[] IOPS;
-        public Variables.MessageSize[] MessageSizes;
-        public Variables.NServiceBusVersion[] Versions;
-        public Variables.Outbox[] OutboxModes;
-        public Variables.Persistence[] Persisters;
-        public Variables.Platform[] Platforms;
-        public Variables.Serialization[] Serializers;
-        public Variables.Transport[] Transports;
-        public Variables.GarbageCollector[] GarbageCollectors;
-        public Variables.TransactionMode[] TransactionMode;
-        public Variables.ConcurrencyLevel[] ConcurrencyLevels;
+        public Audit[] AuditModes;
+        public DTC[] DTCModes;
+        public IOPS[] IOPS;
+        public MessageSize[] MessageSizes;
+        public NServiceBusVersion[] Versions;
+        public Outbox[] OutboxModes;
+        public Persistence[] Persisters;
+        public Platform[] Platforms;
+        public Serialization[] Serializers;
+        public Transport[] Transports;
+        public GarbageCollector[] GarbageCollectors;
+        public TransactionMode[] TransactionMode;
+        public ConcurrencyLevel[] ConcurrencyLevels;
+        public ScaleOut[] ScaleOuts = { ScaleOut.NoScaleOut };
     }
 }

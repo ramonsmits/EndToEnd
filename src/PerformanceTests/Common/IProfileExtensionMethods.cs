@@ -22,6 +22,29 @@ public static class ProfileExtensionMethods
             return applicationConfigConnectionString;
         }
 
-        throw new ConfigurationErrorsException(string.Format("Could not find an environment variable or connection string named {0}", connectionStringName));
+        throw new ConfigurationErrorsException($"Could not resolve connection string with key {connectionStringName}");
+    }
+
+    public static string FetchSetting(this IProfile instance, string key)
+    {
+        string value;
+
+        value = Environment.GetEnvironmentVariable(key);
+
+        if (!string.IsNullOrWhiteSpace(value))
+        {
+            Log.InfoFormat("Setting: {0} = {1} ({2})", key, value, "Environment");
+            return value;
+        }
+
+        value = ConfigurationManager.AppSettings[key];
+
+        if (!string.IsNullOrWhiteSpace(value))
+        {
+            Log.InfoFormat("Setting: {0} = {1} ({2})", key, value, "AppSetting");
+            return value;
+        }
+
+        return null;
     }
 }
