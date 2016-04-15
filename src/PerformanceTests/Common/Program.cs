@@ -37,6 +37,8 @@ namespace Host
 
                     var assembly = System.Reflection.Assembly.GetExecutingAssembly();
                     var runnableTest = permutation.Tests.Select(x => (BaseRunner)assembly.CreateInstance(x)).Single();
+
+                    Log.InfoFormat("Executing scenario: {0}", runnableTest);
                     runnableTest.Execute(permutation, endpointName);
                 }
             }
