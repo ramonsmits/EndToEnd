@@ -1,5 +1,6 @@
 namespace Categories
 {
+    using System;
     using System.Collections.Generic;
     using NUnit.Framework;
     using Tests.Permutations;
@@ -24,19 +25,9 @@ namespace Categories
         {
             return PermutationGenerator.Generate(new Permutations
             {
-                Versions = new[] { NServiceBusVersion.V5, NServiceBusVersion.V6, },
-                IOPS = new[] { IOPS.Default },
-                Platforms = new[] { Platform.x86, },
-                GarbageCollectors = new[] { GarbageCollector.Client, },
-                Transports = new[] { Transport.MSMQ, Transport.AzureServiceBus, Transport.AzureStorageQueues, Transport.RabbitMQ, Transport.SQLServer, },
-                Persisters = new[] { Persistence.InMemory },
+                Transports = (Transport[])Enum.GetValues(typeof(Transport)),
                 Serializers = new[] { Serialization.Json, },
-                MessageSizes = new[] { MessageSize.Tiny, },
                 OutboxModes = new[] { Outbox.Off, },
-                DTCModes = new[] { DTC.On, },
-                TransactionMode = new[] { TransactionMode.Default, },
-                AuditModes = new[] { Audit.Off },
-                ConcurrencyLevels = new[] { ConcurrencyLevel.EnvCores4x }
             });
         }
     }
