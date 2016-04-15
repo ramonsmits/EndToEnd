@@ -13,17 +13,14 @@ class SenderSideProfile : IProfile, INeedContext
         if (Context.Permutation.ScaleOut != ScaleOut.SenderSide) return;
         if (Context.Permutation.Transport != Transport.MSMQ) throw new NotSupportedException("SenderSide should only be used with MSMQ");
 
-        var senderSideArgs = this.FetchSetting("SenderSide").Split(';');
+        var senderSideArgs = this.FetchSetting("SenderSide");
 
-        cfg.SendFailedMessagesTo("error@" + senderSideArgs[0]);
+        if(string.IsNullOrWhiteSpace(senderSideArgs)) throw new InvalidOperationException("Setting `SenderSide` not resolved.");
 
-        var machines = senderSideArgs[1].Split('|');
-
+        var machines = senderSideArgs.Split('|');
         var routing = cfg.UnicastRouting();
-
         var endpoint = new EndpointName(Context.EndpointName);
-
-        var instances = machines.Select(x => new EndpointInstance(endpoint, x)).ToArray();
+        var instances = machines.Select(x => new EndpointInstance(endpoint).AtMachine(x)).ToArray();
         routing.Mapping.Physical.Add(endpoint, instances);
     }
 }
