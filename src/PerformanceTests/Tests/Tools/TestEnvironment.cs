@@ -114,6 +114,7 @@ namespace Tests.Tools
             var path = Path.Combine(
                 "@",
                 permutation.Category,
+                permutation.Fixture,
                 string.Join("_", permutation.Tests),
                 permutation.Code.Replace(" ", "-")
                 );
