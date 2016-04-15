@@ -120,7 +120,6 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         var configuration = new Configuration();
         configuration.EndpointName(EndpointName);
         configuration.EnableInstallers();
-        configuration.DiscardFailedMessagesInsteadOfSendingToErrorQueue();
         configuration.ApplyProfiles(this);
 
         return configuration;
