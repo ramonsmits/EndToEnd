@@ -4,11 +4,6 @@ using NServiceBus;
 
 partial class GatedPublishRunner
 {
-    async Task SendLocal(object msg)
-    {
-        EndpointInstance.SendLocal(msg);
-    }
-
     async Task Publish(object msg)
     {
         EndpointInstance.Publish(msg);
