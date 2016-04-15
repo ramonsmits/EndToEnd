@@ -8,7 +8,7 @@ using TransportCompatibilityTests.Common.Messages;
 namespace SqlServerV3
 {
     using System.Linq;
-    using NServiceBus.Features;
+    using NServiceBus.Persistence;
     using NServiceBus.Transports.SQLServer;
     using TransportCompatibilityTests.Common.SqlServer;
 
@@ -27,7 +27,8 @@ namespace SqlServerV3
             endpointConfiguration.Conventions().DefiningEventsAs(t => t == typeof(TestEvent));
 
             endpointConfiguration.EnableInstallers();
-            endpointConfiguration.UsePersistence<InMemoryPersistence>();
+            endpointConfiguration.UsePersistence<NHibernatePersistence>()
+                .ConnectionString(SqlServerConnectionStringBuilder.Build());
             endpointConfiguration.UseTransport<SqlServerTransport>()
                 .ConnectionString(SqlServerConnectionStringBuilder.Build());
 
@@ -40,7 +41,7 @@ namespace SqlServerV3
 
             endpointConfiguration.UseTransport<SqlServerTransport>().UseSpecificSchema(qn =>
                 {
-                    var mapping = endpointDefinition.As<SqlServerEndpointDefinition>().Mappings.FirstOrDefault(mm => mm.TransportAddress == qn);
+                    var mapping = endpointDefinition.Mappings.FirstOrDefault(mm => mm.TransportAddress == qn);
 
                     return mapping?.Schema;
                 });
@@ -125,14 +126,13 @@ namespace SqlServerV3
 
             public override async Task Invoke(IIncomingPhysicalMessageContext context, Func<Task> next)
             {
+                await next();
                 string intent;
 
                 if (context.Message.Headers.TryGetValue(Headers.MessageIntent, out intent) && intent == "Subscribe")
                 {
                     SubscriptionStore.Increment();
                 }
-
-                await next();
             }
 
             internal class Registration : RegisterStep

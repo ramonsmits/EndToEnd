@@ -10,6 +10,7 @@ namespace SqlServerV2
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using NServiceBus.Persistence;
     using NServiceBus.Transports.SQLServer;
     using TransportCompatibilityTests.Common.SqlServer;
 
@@ -30,7 +31,7 @@ namespace SqlServerV2
             busConfiguration.Conventions().DefiningEventsAs(t => t == typeof(TestEvent));
 
             busConfiguration.EndpointName(endpointDefinition.Name);
-            busConfiguration.UsePersistence<InMemoryPersistence>();
+            busConfiguration.UsePersistence<NHibernatePersistence>().ConnectionString(SqlServerConnectionStringBuilder.Build());
             busConfiguration.EnableInstallers();
             busConfiguration.UseTransport<SqlServerTransport>().ConnectionString(SqlServerConnectionStringBuilder.Build());
 
@@ -136,14 +137,14 @@ namespace SqlServerV2
 
             public void Invoke(IncomingContext context, Action next)
             {
+                next();
+
                 string intent;
 
                 if (context.PhysicalMessage.Headers.TryGetValue(Headers.MessageIntent, out intent) && intent == "Subscribe")
                 {
                     SubscriptionStore.Increment();
                 }
-
-                next();
             }
 
             internal class Registration : RegisterStep

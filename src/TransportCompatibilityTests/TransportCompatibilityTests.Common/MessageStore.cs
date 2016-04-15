@@ -6,23 +6,21 @@ namespace TransportCompatibilityTests.Common
 {
     public class MessageStore
     {
-        private readonly ConcurrentDictionary<Guid, Type> messageIds = new ConcurrentDictionary<Guid, Type>();
+        private readonly ConcurrentBag<Tuple<Guid, Type>> messageIds = new ConcurrentBag<Tuple<Guid, Type>>();
 
         public void Add<T>(Guid id)
         {
-            messageIds.AddOrUpdate(id, typeof(T), (i, v) => typeof(T));
+            messageIds.Add(Tuple.Create(id, typeof(T)));
         }
 
         public Guid[] Get<T>()
         {
-            return messageIds.ToArray()
-                              .Where(kv => kv.Value == typeof (T)).Select(kv => kv.Key).ToArray();
+            return messageIds.Where(kv => kv.Item2 == typeof (T)).Select(kv => kv.Item1).ToArray();
         }
 
         public Guid[] GetAll()
         {
-            return messageIds.ToArray()
-                              .Select(kv => kv.Key).ToArray();
+            return messageIds.Select(kv => kv.Item1).ToArray();
         }
     }
 }
