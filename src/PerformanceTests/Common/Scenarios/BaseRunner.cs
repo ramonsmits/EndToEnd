@@ -5,6 +5,8 @@ using Configuration = NServiceBus.BusConfiguration;
 #endif
 using System;
 using System.Configuration;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Config;
@@ -22,8 +24,8 @@ public abstract class BaseRunner : IConfigurationSource, IContext
     protected IEndpointInstance EndpointInstance { get; private set; }
 #endif
 
-    public Permutation Permutation { get; private set; }
-    public string EndpointName { get; private set; }
+    Permutation permutation;
+    protected string endpointName;
 
     public virtual void Execute(Permutation permutation, string endpointName)
     {
@@ -120,15 +122,33 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         var configuration = CreateConfiguration();
         configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
         configuration.CustomConfigurationSource(this);
+
+        if (QueuesWerePurgedWhenSeedingData())
+            configuration.PurgeOnStartup(false);
+        else
+            configuration.PurgeOnStartup(true);
+
         return Bus.Create(configuration).Start();
     }
 
-    Configuration CreateConfiguration()
+    private bool QueuesWerePurgedWhenSeedingData()
+    {
+        if (this is ICreateSeedData) return true;
+        return false;
+    }
+
+    BusConfiguration CreateConfiguration()
     {
         var configuration = new Configuration();
         configuration.EndpointName(EndpointName);
         configuration.EnableInstallers();
-        configuration.ApplyProfiles(this);
+        configuration.DiscardFailedMessagesInsteadOfSendingToErrorQueue();
+
+        var scanableTypes = this.GetType().GetNestedTypes(BindingFlags.Public).ToList();
+        scanableTypes.Add(this.GetType());
+        configuration.TypesToScan(scanableTypes);
+
+        configuration.ApplyProfiles(permutation);
 
         return configuration;
     }
