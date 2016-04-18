@@ -11,9 +11,13 @@ partial class SagaRetrievalRunner : ICreateSeedData
     public int SeedSize { get; set; } = 10000;
     int messageId = 1;
 
-    public void SendMessage(ISendOnlyBus endpointInstance, string endpointName)
+    public void SendMessage(ISendOnlyBus endpointInstance)
     {
-        var address = new Address(endpointName, "localhost");
+        var unicastBus = (NServiceBus.Unicast.UnicastBus)endpointInstance;
+        var machine = unicastBus.Configure.LocalAddress.Machine;
+        var queue = unicastBus.Configure.LocalAddress.Queue;
+
+        var address = new Address(queue, machine);
         endpointInstance.Send(address, new Command(messageId));
         Interlocked.Increment(ref messageId);
     }
@@ -34,11 +38,11 @@ partial class SagaRetrievalRunner : ICreateSeedData
     public class SagaData : IContainSagaData
     {
         public virtual Guid Id { get; set; }
-        public virtual  string Originator { get; set; }
-        public virtual  string OriginalMessageId { get; set; }
+        public virtual string Originator { get; set; }
+        public virtual string OriginalMessageId { get; set; }
 
         [Unique]
-        public virtual  int UniqueIdentifier { get; set; }
+        public virtual int UniqueIdentifier { get; set; }
     }
 }
 #endif

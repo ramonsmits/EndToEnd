@@ -15,11 +15,11 @@ public static class ProfileExtensionMethods
             return environmentVariableConnectionString;
         }
 
-        var applicationConfigConnectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
-        if (!string.IsNullOrWhiteSpace(applicationConfigConnectionString))
+        var applicationConfigConnectionString = ConfigurationManager.ConnectionStrings[connectionStringName];
+        if (applicationConfigConnectionString != null)
         {
             Log.InfoFormat("App.config connection string variable found {0}", environmentVariableConnectionString);
-            return applicationConfigConnectionString;
+            return applicationConfigConnectionString.ConnectionString;
         }
 
         throw new ConfigurationErrorsException($"Could not resolve connection string with key {connectionStringName}");

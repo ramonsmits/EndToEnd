@@ -1,10 +1,7 @@
-﻿using System;
-using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using NLog.Fluent;
 using NServiceBus;
 using NServiceBus.Config;
-using NServiceBus.Logging;
 
 /// <summary>
 /// Performs a continious test where a batch of messages is send via the bus without
@@ -14,55 +11,13 @@ using NServiceBus.Logging;
 /// </summary>
 partial class GatedPublishRunner : LoopRunner, IConfigureUnicastBus
 {
-    int batchSize = 16;
-    ILog Log = LogManager.GetLogger(typeof(GatedPublishRunner));
-    static CountdownEvent X;
-
-    protected override async Task Loop(object o)
+    protected override int BatchSize { get; set; } = 16;
+    protected override Task SendMessage()
     {
-        try
-        {
-            Log.Info("Starting");
-
-            X = new CountdownEvent(batchSize);
-
-            while (!Shutdown)
-            {
-                try
-                {
-                    Console.Write("1");
-                    X.Reset(batchSize);
-
-                    var d = Stopwatch.StartNew();
-
-                    var sends = new Task[X.InitialCount];
-                    for (var i = 0; i < X.InitialCount; i++) sends[i] = Publish(new Event());
-                    await Task.WhenAll(sends);
-
-                    if (d.Elapsed < TimeSpan.FromSeconds(2.5))
-                    {
-                        batchSize *= 2;
-                        Log.InfoFormat("Batch size increased to {0}", batchSize);
-                    }
-
-                    Console.Write("2");
-
-                    X.Wait(stopLoop.Token);
-                }
-                catch (OperationCanceledException)
-                {
-                    break;
-                }
-            }
-            Log.Info("Stopped");
-        }
-        catch (Exception ex)
-        {
-            Log.Error("Loop", ex);
-        }
+        return Publish(new Event());
     }
 
-    public class Event : IEvent
+   public class Event : IEvent
     {
     }
 
@@ -72,7 +27,7 @@ partial class GatedPublishRunner : LoopRunner, IConfigureUnicastBus
 
         var messageType = typeof(Event);
 
-        Log.InfoFormat("Mapping {0} to {1}", messageType, EndpointName);
+        Log.Info($"Mapping {messageType} to {EndpointName}");
 
         mappings.Add(new MessageEndpointMapping
         {

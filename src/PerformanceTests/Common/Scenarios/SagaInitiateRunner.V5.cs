@@ -13,10 +13,16 @@ partial class SagaInitiateRunner : ICreateSeedData
 
     public int SeedSize { get; set; } = 10000;
 
-    public void SendMessage(ISendOnlyBus endpointInstance, string endpointName)
+    public void SendMessage(ISendOnlyBus endpointInstance)
     {
         if (address == null)
-            address = new Address(endpointName, "localhost");
+        {
+            var unicastBus = (NServiceBus.Unicast.UnicastBus)endpointInstance;
+            var machine = unicastBus.Configure.LocalAddress.Machine;
+            var queue = unicastBus.Configure.LocalAddress.Queue;
+
+            address = new Address(queue, machine);
+        }
 
         endpointInstance.Send(address, new Command(Interlocked.Increment(ref messageId)));
     }

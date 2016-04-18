@@ -12,22 +12,19 @@ using NServiceBus;
 /// </summary>    
 class SendRunner : LoopRunner
 {
+    protected override int BatchSize { get; set; } = 16;
+
+    protected override Task SendMessage()
+    {
+        throw new System.NotImplementedException();
+    }
+
     protected override void Start()
     {
     }
 
     protected override void Stop()
     {
-    }
-
-    protected override Task Loop(object o)
-    {
-        while (!Shutdown)
-        {
-            try
-            {
-
-            }
     }
 
     public class Command : ICommand
