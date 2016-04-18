@@ -6,15 +6,7 @@ partial class GatedSendLocalRunner
 {
     async Task SendLocal(Command msg)
     {
-        this.EndpointInstance.SendLocal(msg);
-    }
-
-    public class Handler : IHandleMessages<Command>
-    {
-        public void Handle(Command message)
-        {
-            X.Signal();
-        }
+        EndpointInstance.SendLocal(msg);
     }
 }
 #endif

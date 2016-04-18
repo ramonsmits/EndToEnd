@@ -13,6 +13,10 @@ using NServiceBus.Config;
 using NServiceBus.Config.ConfigurationSource;
 using NServiceBus.Logging;
 using Tests.Permutations;
+using System.Collections.Generic;
+using System.IO;
+using Common.Scenarios;
+using NServiceBus.Performance;
 
 public abstract class BaseRunner : IConfigurationSource, IContext
 {
@@ -24,8 +28,8 @@ public abstract class BaseRunner : IConfigurationSource, IContext
     protected IEndpointInstance EndpointInstance { get; private set; }
 #endif
 
-    Permutation permutation;
-    protected string endpointName;
+    public Permutation Permutation { get; private set; }
+    public string EndpointName { get; private set; }
 
     public virtual void Execute(Permutation permutation, string endpointName)
     {
@@ -52,7 +56,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         finally
         {
 #if Version5
-            using(EndpointInstance){}
+            using (EndpointInstance) { }
 #else
             EndpointInstance.Stop().GetAwaiter().GetResult();
 #endif
@@ -64,7 +68,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         var thrower = this as IThrowIfPermutationIsNotAllowed;
         if (thrower == null) return;
 
-        thrower.ThrowIfPermutationIsNotAllowed(permutation);
+        thrower.ThrowIfPermutationIsNotAllowed(Permutation);
     }
 
     protected abstract void Start();
@@ -88,14 +92,14 @@ public abstract class BaseRunner : IConfigurationSource, IContext
                 if (i % 5000 == 0)
                     Log.Info($"Seeded {i} messages.");
 
-                ((ICreateSeedData)this).SendMessage(sendonlyInstance, EndpointName);
+                ((ICreateSeedData)this).SendMessage(sendonlyInstance);
             });
             Log.Info($"Seeded total of {seedCreator.SeedSize} messages.");
         }
         finally
         {
 #if Version5
-            using(sendonlyInstance){}
+            using (sendonlyInstance) { }
 #else
             sendonlyInstance.Stop().GetAwaiter().GetResult();
 #endif
@@ -144,11 +148,10 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         configuration.EnableInstallers();
         configuration.DiscardFailedMessagesInsteadOfSendingToErrorQueue();
 
-        var scanableTypes = this.GetType().GetNestedTypes(BindingFlags.Public).ToList();
-        scanableTypes.Add(this.GetType());
+        var scanableTypes = GetTypesToInclude();
         configuration.TypesToScan(scanableTypes);
 
-        configuration.ApplyProfiles(permutation);
+        configuration.ApplyProfiles(this);
 
         return configuration;
     }
@@ -171,6 +174,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
     {
         var configuration = CreateConfiguration();
         configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
+        configuration.PurgeOnStartup(false);
         configuration.CustomConfigurationSource(this);
 
         return Endpoint.Start(configuration).GetAwaiter().GetResult();
@@ -181,24 +185,48 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         var configuration = new Configuration(EndpointName);
         configuration.EnableInstallers();
 
-        var excludeTypes = GetTypesToExclude();
-        configuration.ExcludeTypes(excludeTypes);
+        configuration.ExcludeTypes(GetTypesToExclude().ToArray());
 
-        configuration.ApplyProfiles(permutation);
+        configuration.ApplyProfiles(this);
 
         return configuration;
     }
-
-    Type[] GetTypesToExclude()
-    {
-        var includeTypes = this.GetType().GetNestedTypes(BindingFlags.Public).ToList();
-        includeTypes.Add(this.GetType());
-
-        var type = typeof(BaseRunner);
-        var allTypes = Assembly.GetAssembly(type).GetTypes().Where(p => type.IsAssignableFrom(type));
-        return allTypes.Except(includeTypes).ToArray();
-    }
 #endif
+
+    List<Type> GetTypesToInclude()
+    {
+        var location = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        var asm = new NServiceBus.Hosting.Helpers.AssemblyScanner(location).GetScannableAssemblies();
+        //var asm = AssemblyScanner.GetAssemblies().Distinct();
+
+        var allTypes = (from a in asm.Assemblies
+                        from b in a.GetLoadableTypes()
+                        select b).Distinct().ToList();
+
+        IEnumerable<Type> allTypesToExclude = GetTypesToExclude(allTypes);
+        var finalInternalListToScan = allTypes.Except(allTypesToExclude);
+
+        return finalInternalListToScan.ToList();
+    }
+
+    IEnumerable<Type> GetTypesToExclude()
+    {
+        return GetTypesToExclude(Assembly.GetAssembly(this.GetType()).GetTypes());
+    } 
+
+    private IEnumerable<Type> GetTypesToExclude(IEnumerable<Type> allTypes)
+    {
+        var allTypesToExclude = (from t in allTypes
+            where (t.IsSubclassOf(typeof(BaseRunner)) || t.IsSubclassOf(typeof(LoopRunner)) || t == typeof(LoopRunner.Handler)) && t != this.GetType()
+            select t).ToList();
+
+        Log.Info($"This is test {this.GetType().Name}, excluding :");
+        foreach (var theType in allTypesToExclude)
+        {
+            Log.Info($"- {theType.Name}");
+        }
+        return allTypesToExclude;
+    }
 
     public T GetConfiguration<T>() where T : class, new()
     {
@@ -208,7 +236,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         {
             //read from existing config 
             var config = (UnicastBusConfig)ConfigurationManager.GetSection(typeof(UnicastBusConfig).Name);
-            if (config != null) throw new InvalidOperationException("UnicastBUs Configuration should be in code.");
+            if (config != null) throw new InvalidOperationException("UnicastBUs Configuration should be in code using IConfigureUnicastBus interface.");
 
             return new UnicastBusConfig
             {
@@ -218,5 +246,19 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 
         return ConfigurationManager.GetSection(typeof(T).Name) as T;
     }
+}
 
+public static class Whatever
+{
+    public static IEnumerable<Type> GetLoadableTypes(this Assembly assembly)
+    {
+        try
+        {
+            return assembly.GetTypes().Where(s => !s.IsAbstract && !s.IsInterface);
+        }
+        catch (ReflectionTypeLoadException e)
+        {
+            return e.Types.Where(t => t != null);
+        }
+    }
 }

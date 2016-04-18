@@ -4,17 +4,9 @@ using NServiceBus;
 
 partial class GatedPublishRunner
 {
-    async Task Publish(object msg)
+    async Task Publish(object message)
     {
-        EndpointInstance.Publish(msg);
-    }
-
-    public class Handler : IHandleMessages<Event>
-    {
-        public void Handle(Event message)
-        {
-            X.Signal();
-        }
+        await Task.Run(() => EndpointInstance.Publish(message));
     }
 }
 #endif

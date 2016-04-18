@@ -1,4 +1,5 @@
-﻿using NServiceBus;
+﻿using System.Net;
+using NServiceBus;
 
 class AzureStorageQueueProfile : IProfile
 {
@@ -7,5 +8,7 @@ class AzureStorageQueueProfile : IProfile
         busConfiguration
             .UseTransport<AzureStorageQueueTransport>()
             .ConnectionString(this.GetConnectionString("AzureStorageQueue"));
+
+        //ServicePointManager.UseNagleAlgorithm = false;
     }
 }

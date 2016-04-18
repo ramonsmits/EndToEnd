@@ -10,9 +10,9 @@ partial class SagaInitiateRunner : ICreateSeedData
 
     public int SeedSize { get; set; } = 10000;
 
-    public void SendMessage(IEndpointInstance endpointInstance, string endpointName)
+    public async Task SendMessage(IEndpointInstance endpointInstance)
     {
-        endpointInstance.SendLocal(new Command(Interlocked.Increment(ref messageId)));
+        await endpointInstance.SendLocal(new Command(Interlocked.Increment(ref messageId)));
     }
 
     public class TheSaga : Saga<SagaData>,
