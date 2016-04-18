@@ -11,9 +11,9 @@ class DistributorProfile : IProfile, INeedPermutation, IProvideConfiguration<Mas
     string node;
     public Permutation Permutation { private get; set; }
 
-        public void Configure(BusConfiguration cfg)
-        {
-            if (Permutation.ScaleOut != ScaleOut.MsmqDistributor) return;
+    public void Configure(BusConfiguration cfg)
+    {
+        if (Permutation.ScaleOut != ScaleOut.MsmqDistributor) return;
 
         var value = this.FetchSetting(DistributorKey);
 
