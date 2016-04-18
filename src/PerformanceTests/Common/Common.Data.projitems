@@ -30,10 +30,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\Receive\ReceiveRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\Receive\ReceiveRunner.V5.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\Receive\ReceiveRunner.V6.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SagaInitiateRunner\SagaInitiateRunner.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SagaInitiateRunner\SagaInitiateRunner.V5.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SagaInitiateRunner\SagaInitiateRunner.V6.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SendRunner.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SagaInitiateRunner.V6.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SagaInitiateRunner.V5.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SagaInitiateRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedPublish\GatedPublishRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedPublish\GatedPublishRunner.V5.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedPublish\GatedPublishRunner.V6.cs" />
