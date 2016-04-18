@@ -4,12 +4,6 @@ using NServiceBus;
 
 partial class GatedSendLocalRunner
 {
-    Task SendLocal(Command msg)
-    {
-        EndpointInstance.SendLocal(msg);
-        return Task.FromResult(0);
-    }
-
     class Handler : IHandleMessages<Command>
     {
         public void Handle(Command message)

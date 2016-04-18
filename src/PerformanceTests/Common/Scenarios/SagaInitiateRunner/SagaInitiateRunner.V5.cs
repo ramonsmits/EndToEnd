@@ -10,7 +10,7 @@ partial class SagaInitiateRunner : ICreateSeedData
     Address address;
     int messageId;
 
-    public int SeedSize { get; set; } = 10000;
+    public int SeedSize { get; } = 10000;
 
     public void SendMessage(ISendOnlyBus endpointInstance)
     {

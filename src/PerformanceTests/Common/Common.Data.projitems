@@ -42,6 +42,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SendLocalOneOnOne\SendLocalOneOnOneRunner.V5.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SendLocalOneOnOne\SendLocalOneOnOneRunner.V6.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SendRunner\SendRunner.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SendRunner\SendRunner.V5.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SendRunner\SendRunner.V6.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializerProfile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StatisticsUoW.cs" />
@@ -53,8 +54,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Saga\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SendRunner\SendRunner.V5.cs" />
   </ItemGroup>
 </Project>

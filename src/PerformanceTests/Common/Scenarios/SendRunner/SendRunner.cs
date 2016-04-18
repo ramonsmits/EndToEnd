@@ -13,7 +13,7 @@ partial class SendRunner : LoopRunner
 {
     protected override Task SendMessage()
     {
-        return SendLocal(new Command { Data = Data });
+        return Session.SendLocal(new Command { Data = Data });
     }
 
     public class Command : ICommand

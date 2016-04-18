@@ -12,7 +12,7 @@ partial class GatedPublishRunner : LoopRunner, IConfigureUnicastBus
 {
     protected override Task SendMessage()
     {
-        return Publish(new Event
+        return Session.Publish(new Event
         {
             Data = Data
         });

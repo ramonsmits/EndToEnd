@@ -11,7 +11,7 @@ partial class GatedSendLocalRunner : LoopRunner
 {
     protected override Task SendMessage()
     {
-        return SendLocal(new Command
+        return Session.SendLocal(new Command
         {
             Data = Data
         });

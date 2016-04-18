@@ -4,11 +4,6 @@ using System.Threading.Tasks;
 
 partial class GatedSendLocalRunner
 {
-    Task SendLocal(Command msg)
-    {
-        return EndpointInstance.SendLocal(msg);
-    }
-
     class Handler : IHandleMessages<Command>
     {
         public Task Handle(Command message, IMessageHandlerContext context)

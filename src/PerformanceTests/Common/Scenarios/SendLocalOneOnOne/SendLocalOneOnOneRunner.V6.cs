@@ -4,11 +4,6 @@ using System.Threading.Tasks;
 
 partial class SendLocalOneOnOneRunner
 {
-    Task SendLocal(Command msg)
-    {
-        return EndpointInstance.SendLocal(msg);
-    }
-
     public partial class Handler : IHandleMessages<Command>
     {
         public async Task Handle(Command message, IMessageHandlerContext ctx)
