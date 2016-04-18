@@ -118,7 +118,7 @@ public class Statistics : IDisposable
 
     static void LogStats(string key, double value, string unit)
     {
-        logger.Debug($"{key}: {value:0.0} ({unit})");
+        logger.Info($"{key}: {value:0.0} ({unit})");
     }
 
     void ConfigureSplunk()
