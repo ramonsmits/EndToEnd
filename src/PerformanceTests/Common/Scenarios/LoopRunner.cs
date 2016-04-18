@@ -36,8 +36,7 @@ abstract class LoopRunner : BaseRunner
         }
     }
 
-
-    Task Loop(object o)
+    async Task Loop(object o)
     {
         try
         {
@@ -56,7 +55,7 @@ abstract class LoopRunner : BaseRunner
 
                     var d = Stopwatch.StartNew();
 
-                    Parallel.For(0, BatchSize, i => SendMessage());
+                    await TaskHelper.ParallelFor(BatchSize, SendMessage);
 
                     if (d.Elapsed < TimeSpan.FromSeconds(2.5))
                     {
@@ -79,8 +78,6 @@ abstract class LoopRunner : BaseRunner
         {
             Log.Error("Loop", ex);
         }
-
-        return Task.FromResult(0);
     }
 
     internal static void Signal()
