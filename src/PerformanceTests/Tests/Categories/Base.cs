@@ -59,6 +59,7 @@ namespace Categories
 
             DeleteOtherPlatformHost(permutation);
             LaunchAndWait(permutation);
+            Console.WriteLine(ScanLogs.ToIniString(new FileInfo(permutation.Exe).DirectoryName));
         }
 
         static void LaunchAndWait(Permutation permutation)

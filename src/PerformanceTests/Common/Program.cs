@@ -28,7 +28,7 @@ namespace Host
             try
             {
                 var permutation = PermutationParser.FromCommandlineArgs();
-
+                LogPermutation(permutation);
                 using (Statistics.Initialize(permutation))
                 {
                     EnvironmentStats.Write();
@@ -56,6 +56,16 @@ namespace Host
                 throw;
             }
             return (int)ReturnCodes.OK;
+        }
+
+        static void LogPermutation(Permutation permutation)
+        {
+            var log = LogManager.GetLogger("Permutation");
+            log.InfoFormat("Category: {0}", permutation.Category);
+            log.InfoFormat("Description: {0}", permutation.Description);
+            log.InfoFormat("Fixture: {0}", permutation.Fixture);
+            log.InfoFormat("Code: {0}", permutation.Code);
+            log.InfoFormat("Id: {0}", permutation.Id);
         }
 
         static void ValidateServicePointManager(Permutation permutation)
