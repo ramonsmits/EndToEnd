@@ -90,11 +90,11 @@ public abstract class BaseRunner : IConfigurationSource, IContext
             Parallel.For(0, seedCreator.SeedSize, (i, state) =>
             {
                 if (i % 5000 == 0)
-                    Log.Info($"Seeded {i} messages.");
+                    Log.InfoFormat("Seeded {0} messages.", i);
 
                 ((ICreateSeedData)this).SendMessage(sendonlyInstance);
             });
-            Log.Info($"Seeded total of {seedCreator.SeedSize} messages.");
+            Log.InfoFormat("Seeded total of {0} messages.", seedCreator.SeedSize);
         }
         finally
         {
@@ -196,11 +196,10 @@ public abstract class BaseRunner : IConfigurationSource, IContext
     {
         var location = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         var asm = new NServiceBus.Hosting.Helpers.AssemblyScanner(location).GetScannableAssemblies();
-        //var asm = AssemblyScanner.GetAssemblies().Distinct();
 
         var allTypes = (from a in asm.Assemblies
                         from b in a.GetLoadableTypes()
-                        select b).Distinct().ToList();
+                        select b).ToList();
 
         IEnumerable<Type> allTypesToExclude = GetTypesToExclude(allTypes);
         var finalInternalListToScan = allTypes.Except(allTypesToExclude);
@@ -219,10 +218,10 @@ public abstract class BaseRunner : IConfigurationSource, IContext
             where (t.IsSubclassOf(typeof(BaseRunner)) || t.IsSubclassOf(typeof(LoopRunner)) || t == typeof(LoopRunner.Handler)) && t != this.GetType()
             select t).ToList();
 
-        Log.Info($"This is test {this.GetType().Name}, excluding :");
+        Log.InfoFormat("This is test {0}, excluding :", this.GetType().Name);
         foreach (var theType in allTypesToExclude)
         {
-            Log.Info($"- {theType.Name}");
+            Log.InfoFormat("- {0}", theType.Name);
         }
         return allTypesToExclude;
     }
@@ -244,20 +243,5 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         }
 
         return ConfigurationManager.GetSection(typeof(T).Name) as T;
-    }
-}
-
-public static class Whatever
-{
-    public static IEnumerable<Type> GetLoadableTypes(this Assembly assembly)
-    {
-        try
-        {
-            return assembly.GetTypes().Where(s => !s.IsAbstract && !s.IsInterface);
-        }
-        catch (ReflectionTypeLoadException e)
-        {
-            return e.Types.Where(t => t != null);
-        }
     }
 }

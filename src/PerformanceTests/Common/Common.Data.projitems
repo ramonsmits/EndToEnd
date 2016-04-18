@@ -20,6 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)PerformanceCounters.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ProfileExtensionMethods.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Program.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ReflectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\BaseRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocal\GatedSendLocalRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocal\GatedSendLocalRunner.V5.cs" />

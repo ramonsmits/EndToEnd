@@ -8,7 +8,7 @@ using NServiceBus.Logging;
 
 abstract class LoopRunner : BaseRunner
 {
-    ILog Log = LogManager.GetLogger(typeof(LoopRunner));
+    protected ILog Log = LogManager.GetLogger(typeof(LoopRunner));
 
     Task loopTask;
 
@@ -48,7 +48,6 @@ abstract class LoopRunner : BaseRunner
 #if Version5
         public void Handle(IMessage message)
         {
-            Log.Info($"This is {this.GetType()}");
             LoopRunner.countdownEvent.Signal();
         }
 #else
