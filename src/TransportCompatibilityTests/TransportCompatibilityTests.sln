@@ -1,5 +1,4 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -28,6 +27,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureServiceBusV6", "AzureServiceBusV6\AzureServiceBusV6.csproj", "{C13145D4-A8A8-46DF-A9FF-F3BDBA94C1FA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureServiceBusV7", "AzureServiceBusV7\AzureServiceBusV7.csproj", "{FE282C56-A4C9-4313-8F0B-F1639568B546}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AzureStorageQueues", "AzureStorageQueues", "{2D1C1288-7385-4410-8F6E-AF57D0FAA8BC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureStorageQueuesV6", "AzureStorageQueuesV6\AzureStorageQueuesV6.csproj", "{316A9169-B609-4026-8E06-280D1CA8B488}"
