@@ -146,7 +146,6 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         var configuration = new Configuration();
         configuration.EndpointName(EndpointName);
         configuration.EnableInstallers();
-        configuration.DiscardFailedMessagesInsteadOfSendingToErrorQueue();
 
         var scanableTypes = GetTypesToInclude();
         configuration.TypesToScan(scanableTypes);
