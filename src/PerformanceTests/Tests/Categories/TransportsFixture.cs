@@ -27,6 +27,12 @@ namespace Categories
             base.ReceiveRunner(permutation);
         }
 
+        [TestCaseSource(nameof(CreatePermutations))]
+        public override void SendRunner(Permutation permutation)
+        {
+            base.SendRunner(permutation);
+        }
+
         static IEnumerable<Permutation> CreatePermutations()
         {
             return PermutationGenerator.Generate(new Permutations
