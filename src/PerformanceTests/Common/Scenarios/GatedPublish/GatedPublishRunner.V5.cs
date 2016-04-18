@@ -6,7 +6,7 @@ partial class GatedPublishRunner
 {
     async Task Publish(object message)
     {
-        await Task.Run(() => EndpointInstance.Publish(message));
+        EndpointInstance.Publish(message);
     }
 }
 #endif

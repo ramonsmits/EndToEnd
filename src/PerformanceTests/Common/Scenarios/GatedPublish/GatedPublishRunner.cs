@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using NLog.Fluent;
 using NServiceBus;
 using NServiceBus.Config;
 
@@ -27,7 +26,7 @@ partial class GatedPublishRunner : LoopRunner, IConfigureUnicastBus
 
         var messageType = typeof(Event);
 
-        Log.Info($"Mapping {messageType} to {EndpointName}");
+        Log.InfoFormat("Mapping {0} to {1}", messageType, EndpointName);
 
         mappings.Add(new MessageEndpointMapping
         {
