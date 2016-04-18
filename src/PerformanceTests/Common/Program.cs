@@ -1,6 +1,7 @@
 namespace Host
 {
     using System;
+    using System.Globalization;
     using System.Linq;
     using System.Net;
     using NServiceBus;
@@ -15,6 +16,7 @@ namespace Host
         static int Main()
         {
             LogManager.Use<NLogFactory>();
+            NLog.LogManager.Configuration.DefaultCultureInfo = CultureInfo.InvariantCulture;
 
             Log = LogManager.GetLogger(typeof(Program));
 
