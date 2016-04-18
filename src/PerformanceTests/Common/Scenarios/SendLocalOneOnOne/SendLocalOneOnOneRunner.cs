@@ -17,7 +17,7 @@ partial class SendLocalOneOnOneRunner : BaseRunner
     protected override void Start()
     {
         var sends = new Task[seedSize];
-        for (var i = 0; i < seedSize; i++) sends[i] = SendLocal(new Command { Data = Data });
+        for (var i = 0; i < seedSize; i++) sends[i] = Session.SendLocal(new Command { Data = Data });
         Task.WaitAll(sends);
     }
 

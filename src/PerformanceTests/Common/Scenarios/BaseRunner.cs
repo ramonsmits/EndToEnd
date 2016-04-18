@@ -23,11 +23,12 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 #if Version5
     protected IBus EndpointInstance { get; private set; }
 #else
-    protected IEndpointInstance EndpointInstance { get; private set; }
+    IEndpointInstance EndpointInstance { get; set; }
 #endif
 
     public Permutation Permutation { get; private set; }
     public string EndpointName { get; private set; }
+    protected ISession Session { get; private set; }
 
     protected byte[] Data { private set; get; }
 
@@ -44,6 +45,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         CreateSeedData();
 
         EndpointInstance = CreateEndpoint();
+        Session = new Session(EndpointInstance);
 
         try
         {

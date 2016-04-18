@@ -6,9 +6,9 @@ using NServiceBus;
 
 partial class SagaInitiateRunner : ICreateSeedData
 {
-    int messageId = 0;
+    int messageId;
 
-    public int SeedSize { get; set; } = 10000;
+    public int SeedSize { get; } = 10000;
 
     public Task SendMessage(IEndpointInstance endpointInstance)
     {

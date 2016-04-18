@@ -71,6 +71,7 @@
     <Compile Include="DeterministicUuid.cs" />
     <Compile Include="EnumExtensionMethods.cs" />
     <Compile Include="INeedPermutation.cs" />
+    <Compile Include="ISession.cs" />
     <Compile Include="Permutations\Permutation.cs" />
     <Compile Include="Permutations\PermutationGenerator.cs" />
     <Compile Include="Permutations\PermutationParser.cs" />
