@@ -1,16 +1,18 @@
 ### Current action items
 
-- [ ] Restrict splunk to only accept from TC
-- [ ] Document how to update and view results
-- [ ] Implement persistence variables - @ramon
+- [x] Restrict splunk to only accept from TC
+- [ ] Document how to update and view results - @williambza
+- [ ] Switch to async-first API @ramon
+- [ ] Investigate batch sizing for `Task.WhenAll` @ramon
+- [x] Implement persistence variables - @ramon
   - [x] Seed endpoints
   - [ ] How can we clean the tests up after running tests?
     - Maybe as part of the actual test?
-     - [ ] MSMQ
-     - [ ] RabbitMQ
+     - [x] MSMQ
+     - [x] RabbitMQ
      - [ ] SQL Transport
      - [ ] ASB
-     - [ ] ASQ
+     - [x] ASQ
      - [ ] RavenDB
      - [ ] SQL Server (NHibernate)
      - [ ] Azure
@@ -20,10 +22,11 @@
  - [x] Add session and permutation ID to statistics info
  - [x] Collect required performance counters manually and report using the `Statistics` object
  - [ ] Is there a way to see a graph per test fixture? @william
+ - [ ] Include memory usage graph
 - [ ] Implement other test types (send, sendlocal, publish, sagas, distruter) - @dvdstalt
   - [x] Receive only
   - [x] Send only
-  - [ ] Sagas
+  - [x] Sagas
     - [ ] Remove sagas from other tests
 shared files project?)
 - [ ] Collect results for multiple runs to see stability of tests
