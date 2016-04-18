@@ -14,7 +14,6 @@ using NServiceBus.Logging;
 /// </summary>
 partial class GatedSendLocalRunner : LoopRunner
 {
-    protected override int BatchSize { get; set; } = 16;
     protected override async Task SendMessage()
     {
         await SendLocal(CommandGenerator.Create());

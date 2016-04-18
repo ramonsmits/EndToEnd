@@ -71,8 +71,13 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         thrower.ThrowIfPermutationIsNotAllowed(Permutation);
     }
 
-    protected abstract void Start();
-    protected abstract void Stop();
+    protected virtual void Start()
+    {
+    }
+
+    protected virtual void Stop()
+    {
+    }
 
     private void CreateSeedData()
     {

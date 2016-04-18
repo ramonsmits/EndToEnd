@@ -10,14 +10,6 @@ using NServiceBus;
 /// </summary>    
 partial class ReceiveRunner : BaseRunner
 {
-    protected override void Start()
-    {
-    }
-
-    protected override void Stop()
-    {
-    }
-
     public class Command : ICommand
     {
     }
