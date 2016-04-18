@@ -9,6 +9,7 @@ namespace Tests.Permutations
         public string Id => GenerateId();
         public string Exe { get; set; }
         public string Code {get; set;}
+        public string Fixture { get; set; }
 
         public string[] Tests;
 
@@ -25,22 +26,26 @@ namespace Tests.Permutations
         public GarbageCollector GarbageCollector;//10
         public TransactionMode TransactionMode;//11
         public ConcurrencyLevel ConcurrencyLevel;//12
+        public ScaleOut ScaleOut = ScaleOut.NoScaleOut;
 
         string GenerateId()
         {
-            return string.Join(";", Version.GetEnumDescription(), 
-                                    IOPS.GetEnumDescription(),
-                                    Platform.GetEnumDescription(),
-                                    GarbageCollector.GetEnumDescription(),
-                                    Transport.GetEnumDescription(),
-                                    Persister.GetEnumDescription(),
-                                    Serializer.GetEnumDescription(),
-                                    MessageSize.GetEnumDescription(),
-                                    OutboxMode.GetEnumDescription(),
-                                    DTCMode.GetEnumDescription(),
-                                    TransactionMode.GetEnumDescription(),
-                                    AuditMode.GetEnumDescription(),
-                                    ConcurrencyLevel.GetEnumDescription());
+            return string.Join(";",
+                Version.GetEnumDescription(),
+                IOPS.GetEnumDescription(),
+                Platform.GetEnumDescription(),
+                GarbageCollector.GetEnumDescription(),
+                Transport.GetEnumDescription(),
+                Persister.GetEnumDescription(),
+                Serializer.GetEnumDescription(),
+                MessageSize.GetEnumDescription(),
+                OutboxMode.GetEnumDescription(),
+                DTCMode.GetEnumDescription(),
+                TransactionMode.GetEnumDescription(),
+                AuditMode.GetEnumDescription(),
+                ConcurrencyLevel.GetEnumDescription(),
+                ScaleOut.GetEnumDescription()
+                );
         }
 
         public override string ToString()

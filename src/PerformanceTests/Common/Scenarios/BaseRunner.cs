@@ -12,7 +12,7 @@ using NServiceBus.Config.ConfigurationSource;
 using NServiceBus.Logging;
 using Tests.Permutations;
 
-public abstract class BaseRunner : IConfigurationSource
+public abstract class BaseRunner : IConfigurationSource, IContext
 {
     readonly ILog Log = LogManager.GetLogger("BaseRunner");
 
@@ -22,13 +22,13 @@ public abstract class BaseRunner : IConfigurationSource
     protected IEndpointInstance EndpointInstance { get; private set; }
 #endif
 
-    Permutation permutation;
-    public string endpointName;
+    public Permutation Permutation { get; private set; }
+    public string EndpointName { get; private set; }
 
     public virtual void Execute(Permutation permutation, string endpointName)
     {
-        this.permutation = permutation;
-        this.endpointName = endpointName;
+        Permutation = permutation;
+        EndpointName = endpointName;
 
         CreateSeedData();
 
@@ -77,7 +77,7 @@ public abstract class BaseRunner : IConfigurationSource
                 if (i % 5000 == 0)
                     Log.Info($"Seeded {i} messages.");
 
-                ((ICreateSeedData)this).SendMessage(sendonlyInstance, endpointName);
+                ((ICreateSeedData)this).SendMessage(sendonlyInstance, EndpointName);
             });
             Log.Info($"Seeded total of {seedCreator.SeedSize} messages.");
         }
@@ -115,13 +115,12 @@ public abstract class BaseRunner : IConfigurationSource
         return Bus.Create(configuration).Start();
     }
 
-    BusConfiguration CreateConfiguration()
+    Configuration CreateConfiguration()
     {
-        var configuration = new BusConfiguration();
-        configuration.EndpointName(endpointName);
+        var configuration = new Configuration();
+        configuration.EndpointName(EndpointName);
         configuration.EnableInstallers();
-        configuration.DiscardFailedMessagesInsteadOfSendingToErrorQueue();
-        configuration.ApplyProfiles(permutation);
+        configuration.ApplyProfiles(this);
 
         return configuration;
     }
@@ -150,11 +149,11 @@ public abstract class BaseRunner : IConfigurationSource
         return Endpoint.Start(configuration).GetAwaiter().GetResult();
     }
 
-    EndpointConfiguration CreateConfiguration()
+    Configuration CreateConfiguration()
     {
-        var configuration = new EndpointConfiguration(endpointName);
+        var configuration = new Configuration(EndpointName);
         configuration.EnableInstallers();
-        configuration.ApplyProfiles(permutation);
+        configuration.ApplyProfiles(this);
 
         return configuration;
     }

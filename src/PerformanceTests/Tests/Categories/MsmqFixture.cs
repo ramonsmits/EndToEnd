@@ -5,8 +5,8 @@ namespace Categories
     using Tests.Permutations;
     using Variables;
 
-    [TestFixture(Description = "Audit forwarding On / Off", Category = "Performance")]
-    public class MsmqV5vsV6Fixture : Base
+    [TestFixture(Description = "MSMQ", Category = "Performance")]
+    public class MsmqFixture : Base
     {
         [TestCaseSource(nameof(CreatePermutations))]
         public override void ReceiveRunner(Permutation permutation)
@@ -30,19 +30,9 @@ namespace Categories
         {
             return PermutationGenerator.Generate(new Permutations
             {
-                Versions = new[] { NServiceBusVersion.V5, NServiceBusVersion.V6, },
-                IOPS = new[] { IOPS.Default },
-                Platforms = new[] { Platform.x86, },
-                GarbageCollectors = new[] { GarbageCollector.Client, },
                 Transports = new[] { Transport.MSMQ },
-                Persisters = new[] { Persistence.InMemory },
                 Serializers = new[] { Serialization.Json, },
-                MessageSizes = new[] { MessageSize.Tiny, },
                 OutboxModes = new[] { Outbox.Off, },
-                DTCModes = new[] { DTC.On, },
-                TransactionMode = new[] { TransactionMode.Default, },
-                AuditModes = new[] { Audit.Off, },
-                ConcurrencyLevels = new[] { ConcurrencyLevel.EnvCores }
             });
         }
     }

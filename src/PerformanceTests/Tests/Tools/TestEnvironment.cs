@@ -1,7 +1,10 @@
 namespace Tests.Tools
 {
     using System.IO;
+    using System.Xml.Linq;
+    using System.Xml.XPath;
     using Tests.Permutations;
+    using Variables;
 
     public class TestEnvironment
     {
@@ -21,7 +24,14 @@ namespace Tests.Tools
 
             if (startupDir.Exists)
             {
-                startupDir.Delete(true);
+                try
+                {
+                    startupDir.Delete(true);
+                }
+                catch
+                {
+                    foreach (var f in startupDir.GetFiles()) f.Delete();
+                }
             }
 
             startupDir.Create();
@@ -42,6 +52,7 @@ namespace Tests.Tools
             permutation.Exe = projectAssemblyPath;
 
             GenerateBat(descriptor);
+            UpdateAppConfig(descriptor);
 
             return descriptor;
         }
@@ -51,7 +62,7 @@ namespace Tests.Tools
             var args = PermutationParser.ToArgs(value.Permutation);
             var sessionIdArgument = string.Format(" --sessionId={0}", sessionId);
             var exe = new FileInfo(value.ProjectAssemblyPath);
-            
+
             var batFile = Path.Combine(exe.DirectoryName, "start.bat");
 
             if (!File.Exists(batFile)) File.WriteAllText(batFile, exe.Name + " " + args + " " + sessionIdArgument);
@@ -72,6 +83,24 @@ namespace Tests.Tools
             }
         }
 
+        void UpdateAppConfig(TestDescriptor value)
+        {
+            var x = value.Permutation.GarbageCollector == GarbageCollector.Client ? "false" : "true";
+
+            var config = value.ProjectAssemblyPath + ".config";
+            var doc = XDocument.Load(config);
+            var enabled = doc
+                .XPathSelectElement("/configuration/runtime/gcServer")
+                .Attribute("enabled");
+
+            if (enabled.Value == x) return;
+
+            enabled.Value = x;
+
+            File.Delete(config); // This makes sure that we do not update the symlink source!
+            doc.Save(config, SaveOptions.None);
+        }
+
         static void Clone(string src, string dst)
         {
             src = Path.GetFullPath(src);
@@ -85,8 +114,9 @@ namespace Tests.Tools
             var path = Path.Combine(
                 "@",
                 permutation.Category,
+                permutation.Fixture,
                 string.Join("_", permutation.Tests),
-                permutation.Code.Replace(" ","-")
+                permutation.Code.Replace(" ", "-")
                 );
 
             return new DirectoryInfo(path);

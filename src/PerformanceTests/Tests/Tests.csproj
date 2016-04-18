@@ -35,7 +35,7 @@
   <ItemGroup>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\NLog.4.2.3\lib\net45\NLog.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
@@ -54,14 +54,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Categories\DistributorFixture.cs" />
     <Compile Include="Categories\PlatformFixture.cs" />
-    <Compile Include="Categories\MsmqV5vsV6Fixture.cs" />
+    <Compile Include="Categories\MsmqFixture.cs" />
     <Compile Include="Categories\AuditOnVsOffFixture.cs" />
     <Compile Include="Categories\Base.cs" />
     <Compile Include="Categories\OutboxVsDtcFixture.cs" />
     <Compile Include="Categories\PersistersFixture.cs" />
-    <Compile Include="Categories\PublishVsSendFixture.cs" />
+    <Compile Include="Categories\TransportsFixture.cs" />
     <Compile Include="Categories\ResourceUtilizationFixture.cs" />
+    <Compile Include="Categories\SenderSideFixture.cs" />
     <Compile Include="Integration\MutatorsTests.cs" />
     <Compile Include="Integration\PermutationDirectoryResolverTests.cs" />
     <Compile Include="Integration\SagasTests.cs" />
@@ -78,6 +80,16 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Distribution.V5.MsmqDistributor.V5\Distribution.V5.MsmqDistributor.V5.csproj">
+      <Project>{e1fc8d12-8344-419f-9ae1-b1495b6dea32}</Project>
+      <Name>Distribution.V5.MsmqDistributor.V5</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Distribution.V6.SenderSide\Distribution.V6.SenderSide.csproj">
+      <Project>{a1fef639-4bc1-48d8-bb7d-35e985fd404b}</Project>
+      <Name>Distribution.V6.SenderSide</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\Utils\Utils.csproj">
       <Project>{572499ed-e234-4c66-bd6e-d5a845065c5f}</Project>
       <Name>Utils</Name>
@@ -89,10 +101,12 @@
     <ProjectReference Include="..\NServiceBus5\NServiceBus5.csproj">
       <Project>{be2c7b5e-7a71-4b0c-9020-343ed2010993}</Project>
       <Name>NServiceBus5</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\NServiceBus6\NServiceBus6.csproj">
       <Project>{10d11044-c92c-42ad-830e-57012ff4f039}</Project>
       <Name>NServiceBus6</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Persistence.V5.Azure_v6\Persistence.V5.Azure_v6.csproj">
       <Project>{a87b5d9c-1abe-4f11-a080-6903f7b456fa}</Project>
