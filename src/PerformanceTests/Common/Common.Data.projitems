@@ -42,6 +42,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Statistics\SimpleStatisticsFeature.V6.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Statistics\StatisticsBehavior.V5.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Statistics\StatisticsBehavior.V6.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TimeToBeReceivedProfile.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Saga\" />
