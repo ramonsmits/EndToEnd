@@ -10,7 +10,6 @@ using NServiceBus.Config;
 /// </summary>
 partial class GatedPublishRunner : LoopRunner, IConfigureUnicastBus
 {
-    protected override int BatchSize { get; set; } = 16;
     protected override Task SendMessage()
     {
         return Publish(new Event());

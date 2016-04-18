@@ -16,14 +16,11 @@ abstract class LoopRunner : BaseRunner
 
     CancellationTokenSource stopLoop { get; set; }
     bool Shutdown { get; set; }
-    protected abstract int BatchSize { get; set; }
+    int BatchSize { get; set; } = 16;
     protected abstract Task SendMessage();
 
     protected override void Start()
     {
-        if (BatchSize == default(int))
-            throw new InvalidOperationException("BatchSize property has not been set.");
-
         stopLoop = new CancellationTokenSource();
         loopTask = Task.Factory.StartNew(Loop, TaskCreationOptions.LongRunning);
     }
