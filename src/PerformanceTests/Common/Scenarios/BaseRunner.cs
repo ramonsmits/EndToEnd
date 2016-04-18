@@ -95,7 +95,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
     void CreateQueues()
     {
         var configuration = CreateConfiguration();
-        configuration.PurgeOnStartup(false);
+        configuration.PurgeOnStartup(true);
         var createQueuesBus = Bus.Create(configuration).Start();
         createQueuesBus.Dispose();
     }
@@ -109,7 +109,6 @@ public abstract class BaseRunner : IConfigurationSource, IContext
     IBus CreateEndpoint()
     {
         var configuration = CreateConfiguration();
-        configuration.PurgeOnStartup(false);
         configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
         configuration.CustomConfigurationSource(this);
         return Bus.Create(configuration).Start();
@@ -143,7 +142,6 @@ public abstract class BaseRunner : IConfigurationSource, IContext
     {
         var configuration = CreateConfiguration();
         configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
-        configuration.PurgeOnStartup(false);
         configuration.CustomConfigurationSource(this);
 
         return Endpoint.Start(configuration).GetAwaiter().GetResult();
