@@ -8,7 +8,5 @@ class AzureStorageQueueProfile : IProfile
         busConfiguration
             .UseTransport<AzureStorageQueueTransport>()
             .ConnectionString(this.GetConnectionString("AzureStorageQueue"));
-
-        //ServicePointManager.UseNagleAlgorithm = false;
     }
 }
