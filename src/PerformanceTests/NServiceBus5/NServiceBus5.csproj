@@ -94,6 +94,7 @@
   <ItemGroup>
     <Compile Include="ConcurrencyProfile.cs" />
     <Compile Include="Session.cs" />
+    <Compile Include="EncryptionProfile.cs" />
     <Compile Include="TransactionProfile.cs" />
   </ItemGroup>
   <Import Project="..\Common\Common.Data.projitems" Label="Shared" />

@@ -88,7 +88,6 @@
     <Compile Include="Variables\Audit.cs" />
     <Compile Include="Variables\ConcurrencyLevel.cs" />
     <Compile Include="Variables\DTC.cs" />
-    <Compile Include="Variables\Encryption.cs" />
     <Compile Include="Variables\GarbageCollector.cs" />
     <Compile Include="Variables\IOPS.cs" />
     <Compile Include="Variables\MessageSize.cs" />
