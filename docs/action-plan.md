@@ -10,7 +10,7 @@
     - Maybe as part of the actual test?
      - [x] MSMQ
      - [x] RabbitMQ
-     - [ ] SQL Transport
+     - [x] SQL Transport
      - [ ] ASB
      - [x] ASQ
      - [ ] RavenDB
@@ -23,6 +23,8 @@
  - [x] Collect required performance counters manually and report using the `Statistics` object
  - [ ] Is there a way to see a graph per test fixture? @william
  - [ ] Include memory usage graph
+ - [ ] Include dashboard per transport
+ - [ ] Include dashboard per persistence
 - [ ] Implement other test types (send, sendlocal, publish, sagas, distruter) - @dvdstalt
   - [x] Receive only
   - [x] Send only
