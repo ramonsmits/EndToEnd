@@ -19,6 +19,5 @@ namespace Tests.Permutations
         public TransactionMode[] TransactionMode = { Variables.TransactionMode.Default };
         public ConcurrencyLevel[] ConcurrencyLevels = { ConcurrencyLevel.EnvCores4x, };
         public ScaleOut[] ScaleOuts = { ScaleOut.NoScaleOut };
-        public Encryption[] Encryptions = { Encryption.None };
     }
 }

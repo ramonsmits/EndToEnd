@@ -33,7 +33,6 @@ namespace Categories
                 Transports = new[] { Transport.MSMQ },
                 Serializers = new[] { Serialization.Json, },
                 OutboxModes = new[] { Outbox.Off, },
-                Encryptions = new [] { Encryption.Rijndael }
             });
         }
     }
