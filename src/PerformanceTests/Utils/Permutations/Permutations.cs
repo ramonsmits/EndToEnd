@@ -13,8 +13,8 @@ namespace Tests.Permutations
         public Outbox[] OutboxModes;
         public Persistence[] Persisters = { Persistence.InMemory };
         public Platform[] Platforms = { Platform.x64 };
-        public Serialization[] Serializers;
-        public Transport[] Transports;
+        public Serialization[] Serializers = { Serialization.Json, };
+        public Transport[] Transports = (Transport[])Enum.GetValues(typeof(Transport));
         public GarbageCollector[] GarbageCollectors = { GarbageCollector.Server };
         public TransactionMode[] TransactionMode = { Variables.TransactionMode.Default };
         public ConcurrencyLevel[] ConcurrencyLevels = { ConcurrencyLevel.EnvCores4x, };
