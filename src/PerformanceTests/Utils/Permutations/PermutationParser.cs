@@ -59,7 +59,8 @@ namespace Tests.Permutations
                 GarbageCollector = values.Parse<GarbageCollector>(10),
                 TransactionMode = values.Parse<TransactionMode>(11),
                 ConcurrencyLevel = values.Parse<ConcurrencyLevel>(12),
-                ScaleOut = values.Parse<ScaleOut>(13)
+                ScaleOut = values.Parse<ScaleOut>(13),
+                Encryption = values.Parse<Encryption>(14)
             };
         }
 
@@ -77,12 +78,12 @@ namespace Tests.Permutations
 
         public static string ToString(Permutation p)
         {
-            return $"{p.AuditMode};{p.DTCMode};{p.IOPS};{p.MessageSize};{p.Version};{p.OutboxMode};{p.Persister};{p.Platform};{p.Serializer};{p.Transport};{p.GarbageCollector};{p.TransactionMode};{p.ConcurrencyLevel};{p.ScaleOut}";
+            return $"{p.AuditMode};{p.DTCMode};{p.IOPS};{p.MessageSize};{p.Version};{p.OutboxMode};{p.Persister};{p.Platform};{p.Serializer};{p.Transport};{p.GarbageCollector};{p.TransactionMode};{p.ConcurrencyLevel};{p.ScaleOut};{p.Encryption}";
         }
 
         public static string ToFriendlyString(Permutation p)
         {
-            return $"{p.AuditMode.GetEnumDescription()};{p.DTCMode.GetEnumDescription()};{p.IOPS.GetEnumDescription()};{p.MessageSize.GetEnumDescription()};{p.Version.GetEnumDescription()};{p.OutboxMode.GetEnumDescription()};{p.Persister.GetEnumDescription()};{p.Platform.GetEnumDescription()};{p.Serializer.GetEnumDescription()};{p.Transport.GetEnumDescription()};{p.GarbageCollector.GetEnumDescription()};{p.TransactionMode.GetEnumDescription()};{p.ConcurrencyLevel.GetEnumDescription()};{p.ScaleOut.GetEnumDescription()}";
+            return $"{p.AuditMode.GetEnumDescription()};{p.DTCMode.GetEnumDescription()};{p.IOPS.GetEnumDescription()};{p.MessageSize.GetEnumDescription()};{p.Version.GetEnumDescription()};{p.OutboxMode.GetEnumDescription()};{p.Persister.GetEnumDescription()};{p.Platform.GetEnumDescription()};{p.Serializer.GetEnumDescription()};{p.Transport.GetEnumDescription()};{p.GarbageCollector.GetEnumDescription()};{p.TransactionMode.GetEnumDescription()};{p.ConcurrencyLevel.GetEnumDescription()};{p.ScaleOut.GetEnumDescription()};{p.Encryption.GetEnumDescription()}";
         }
     }
 }
