@@ -67,8 +67,9 @@ public class ScanLogs
     public static string ToCsvString(string path)
     {
         var items = GetData(path);
-        var keys = items.SelectMany(x => x.Keys).Distinct().ToArray();
+        if (items.Count == 0) return string.Empty;
 
+        var keys = items.SelectMany(x => x.Keys).Distinct().ToArray();
 
         var sb = new StringBuilder();
         foreach (var k in keys)
@@ -106,6 +107,7 @@ public class ScanLogs
     public static string ToIniString(string path)
     {
         var items = GetData(path);
+        if (items.Count == 0) return string.Empty;
 
         var sb = new StringBuilder();
 
