@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using NServiceBus;
 
-partial class GatedSendLocalRunner : IProfile
+partial class GatedSendLocalRunner
 {
     async Task SendLocal(Command msg)
     {
@@ -15,11 +15,6 @@ partial class GatedSendLocalRunner : IProfile
         {
             X.Signal();
         }
-    }
-
-    public void Configure(BusConfiguration cfg)
-    {
-        cfg.PurgeOnStartup(true);
     }
 }
 #endif
