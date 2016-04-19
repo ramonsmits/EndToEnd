@@ -9,7 +9,5 @@ class AzureServiceBusProfile : IProfile
             .UseTransport<AzureServiceBusTransport>()
             .UseTopology<ForwardingTopology>()
             .ConnectionString(this.GetConnectionString("AzureServiceBus"));
-
-        endpointConfiguration.PurgeOnStartup(false);
     }
 }
