@@ -5,15 +5,15 @@ using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Logging;
 
-abstract class LoopRunner : BaseRunner
+abstract class BaseLoop : BaseRunner
 {
-    protected ILog Log = LogManager.GetLogger(nameof(LoopRunner));
+    static ILog Log = LogManager.GetLogger(nameof(BaseLoop));
 
     Task loopTask;
-
-    static CountdownEvent countdownEvent { get; set; }
-    static long count;
-    static long latencySum;
+    int count;
+    Stopwatch start;
+    double duration;
+    double avg;
 
     CancellationTokenSource stopLoop { get; set; }
     bool Shutdown { get; set; }
@@ -46,18 +46,18 @@ abstract class LoopRunner : BaseRunner
             Log.Warn("Sleeping 3,000ms for the instance to purge the queue and process subscriptions. Loop requires the queue to be empty.");
             Thread.Sleep(3000);
             Log.Info("Starting");
-            var start = Stopwatch.StartNew();
-            countdownEvent = new CountdownEvent(BatchSize);
+            start = Stopwatch.StartNew();
+
 
             while (!Shutdown)
             {
                 try
                 {
                     Console.Write("1");
-                    countdownEvent.Reset(BatchSize);
+
                     var batchDuration = Stopwatch.StartNew();
 
-                    await TaskHelper.ParallelFor(BatchSize, SendMessage);
+                    await Batch(BatchSize, SendMessage);
 
                     count += BatchSize;
 
@@ -67,7 +67,7 @@ abstract class LoopRunner : BaseRunner
                         Log.InfoFormat("Batch size increased to {0}", BatchSize);
                     }
                     Console.Write("2");
-                    countdownEvent.Wait(stopLoop.Token);
+
                 }
                 catch (OperationCanceledException)
                 {
@@ -76,15 +76,14 @@ abstract class LoopRunner : BaseRunner
             }
             Log.Info("Stopped");
 
-            var duration = start.Elapsed.TotalSeconds;
-            var avg = count / duration;
+            duration = start.Elapsed.TotalSeconds;
+            avg = count / duration;
             var statsLog = LogManager.GetLogger("Statistics");
-            var avgLatency = latencySum / TimeSpan.TicksPerMillisecond / count;
             statsLog.InfoFormat("{0}: {1:0.0} ({2})", "LoopLastBatchSize", BatchSize, "#");
             statsLog.InfoFormat("{0}: {1:0.0} ({2})", "LoopCount", count, "#");
             statsLog.InfoFormat("{0}: {1:0.0} ({2})", "LoopDuration", duration, "s");
             statsLog.InfoFormat("{0}: {1:0.0} ({2})", "LoopThroughputAvg", avg, "msg/s");
-            statsLog.InfoFormat("{0}: {1:0.0} ({2})", "LoopLatency", avgLatency, "ms");
+
         }
         catch (Exception ex)
         {
@@ -92,39 +91,35 @@ abstract class LoopRunner : BaseRunner
         }
     }
 
-    static void Signal()
-    {
-        Interlocked.Increment(ref count);
-        countdownEvent.Signal();
-    }
-
-    static void AddLatency(TimeSpan latency)
-    {
-        Interlocked.Add(ref latencySum, latency.Ticks);
-    }
-
+    protected abstract Task Batch(int count, Func<Task> action);
 
     internal class Handler<K> : IHandleMessages<K>
     {
+        static readonly TimeSpan WarningInterval = TimeSpan.FromSeconds(10);
+        static object l = new object();
+        DateTime last;
 #if Version5
-        public IBus Bus { get; set; }
         public void Handle(K message)
         {
-            var now = DateTime.UtcNow;
-            var at = DateTimeExtensions.ToUtcDateTime(Bus.GetMessageHeader(message, Headers.TimeSent));
-            AddLatency(now - at);
-            Signal();
+            WarnAtReceive();
         }
 #else
         public Task Handle(K message, IMessageHandlerContext context)
         {
-            var now = DateTime.UtcNow;
-            var at = DateTimeExtensions.ToUtcDateTime(context.MessageHeaders[Headers.TimeSent]);
-            AddLatency(now - at);
-            Signal();
+            WarnAtReceive();
             return Task.FromResult(0);
         }
 #endif
-    }
 
+        void WarnAtReceive()
+        {
+            lock (l)
+            {
+                var now = DateTime.UtcNow;
+                if (last >= now) return;
+                last += WarningInterval;
+                Log.Warn("Messages received, this should NOT happen during");
+            }
+        }
+    }
 }

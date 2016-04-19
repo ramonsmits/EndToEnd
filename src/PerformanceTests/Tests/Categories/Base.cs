@@ -42,6 +42,21 @@ namespace Categories
             Tasks(permutation);
         }
 
+        public virtual void ForRunner(Permutation permutation)
+        {
+            Tasks(permutation);
+        }
+
+        public virtual void ParallelForRunner(Permutation permutation)
+        {
+            Tasks(permutation);
+        }
+
+        public virtual void TaskArrayRunner(Permutation permutation)
+        {
+            Tasks(permutation);
+        }
+
         void Tasks(Permutation permutation, [CallerMemberName] string memberName = "")
         {
             var fixtureType = GetType();
