@@ -7,7 +7,6 @@ using System;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Config;
 using NServiceBus.Config.ConfigurationSource;
@@ -85,14 +84,9 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 
         try
         {
-            Parallel.For(0, seedCreator.SeedSize, (i, state) =>
-            {
-                if (i % 5000 == 0)
-                    Log.InfoFormat("Seeded {0} messages.", i);
-
-                ((ICreateSeedData)this).SendMessage(Session);
-            });
-            Log.InfoFormat("Seeded total of {0} messages.", seedCreator.SeedSize);
+            TaskHelper.ParallelFor(seedCreator.SeedSize, () => ((ICreateSeedData)this).SendMessage(Session))
+                .GetAwaiter().GetResult();
+            Log.InfoFormat("Seeded total of {0:N0} messages.", seedCreator.SeedSize);
         }
         finally
         {
