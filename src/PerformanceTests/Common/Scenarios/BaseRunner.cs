@@ -20,12 +20,6 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 {
     readonly ILog Log = LogManager.GetLogger("BaseRunner");
 
-#if Version5
-    protected IBus EndpointInstance { get; private set; }
-#else
-    IEndpointInstance EndpointInstance { get; set; }
-#endif
-
     public Permutation Permutation { get; private set; }
     public string EndpointName { get; private set; }
     protected ISession Session { get; private set; }
@@ -44,8 +38,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 
         CreateSeedData();
 
-        EndpointInstance = CreateEndpoint();
-        Session = new Session(EndpointInstance);
+        CreateEndpoint();
 
         try
         {
@@ -60,11 +53,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         }
         finally
         {
-#if Version5
-            using (EndpointInstance) { }
-#else
-            EndpointInstance.Stop().GetAwaiter().GetResult();
-#endif
+            Session.Close();
         }
     }
 
@@ -84,7 +73,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
     {
     }
 
-    private void CreateSeedData()
+    void CreateSeedData()
     {
         var seedCreator = this as ICreateSeedData;
         if (seedCreator == null) return;
@@ -93,7 +82,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 
         CreateQueues();
 
-        var sendonlyInstance = CreateSendOnlyEndpoint();
+        CreateSendOnlyEndpoint();
 
         try
         {
@@ -102,17 +91,13 @@ public abstract class BaseRunner : IConfigurationSource, IContext
                 if (i % 5000 == 0)
                     Log.InfoFormat("Seeded {0} messages.", i);
 
-                ((ICreateSeedData)this).SendMessage(sendonlyInstance);
+                ((ICreateSeedData)this).SendMessage(Session);
             });
             Log.InfoFormat("Seeded total of {0} messages.", seedCreator.SeedSize);
         }
         finally
         {
-#if Version5
-            using (sendonlyInstance) { }
-#else
-            sendonlyInstance.Stop().GetAwaiter().GetResult();
-#endif
+            Session.Close();
         }
     }
 
@@ -121,17 +106,17 @@ public abstract class BaseRunner : IConfigurationSource, IContext
     {
         var configuration = CreateConfiguration();
         configuration.PurgeOnStartup(true);
-        var createQueuesBus = Bus.Create(configuration).Start();
-        createQueuesBus.Dispose();
+        using (Bus.Create(configuration).Start()){}
     }
 
-    ISendOnlyBus CreateSendOnlyEndpoint()
+    void CreateSendOnlyEndpoint()
     {
         var configuration = CreateConfiguration();
-        return Bus.CreateSendOnly(configuration);
+        var instance = Bus.CreateSendOnly(configuration);
+        Session = new Session(instance);
     }
 
-    IBus CreateEndpoint()
+    void CreateEndpoint()
     {
         var configuration = CreateConfiguration();
         configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
@@ -142,13 +127,12 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         else
             configuration.PurgeOnStartup(true);
 
-        return Bus.Create(configuration).Start();
+        Session = new Session(Bus.Create(configuration).Start());
     }
 
-    private bool QueuesWerePurgedWhenSeedingData()
+    bool QueuesWerePurgedWhenSeedingData()
     {
-        if (this is ICreateSeedData) return true;
-        return false;
+        return this is ICreateSeedData;
     }
 
     BusConfiguration CreateConfiguration()
@@ -185,24 +169,27 @@ public abstract class BaseRunner : IConfigurationSource, IContext
     {
         var configuration = CreateConfiguration();
         configuration.PurgeOnStartup(true);
-        Endpoint.Create(configuration).GetAwaiter().GetResult();
+        var instance = Endpoint.Start(configuration).GetAwaiter().GetResult();
+        instance.Stop().GetAwaiter().GetResult();
     }
 
-    IEndpointInstance CreateSendOnlyEndpoint()
+    void CreateSendOnlyEndpoint()
     {
         var configuration = CreateConfiguration();
         configuration.SendOnly();
-        return Endpoint.Start(configuration).GetAwaiter().GetResult();
+        var instance = Endpoint.Start(configuration).GetAwaiter().GetResult();
+        Session = new Session(instance);
     }
 
-    IEndpointInstance CreateEndpoint()
+    void CreateEndpoint()
     {
         var configuration = CreateConfiguration();
         configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
         configuration.PurgeOnStartup(false);
         configuration.CustomConfigurationSource(this);
 
-        return Endpoint.Start(configuration).GetAwaiter().GetResult();
+        var instance = Endpoint.Start(configuration).GetAwaiter().GetResult();
+        Session = new Session(instance);
     }
 
     Configuration CreateConfiguration()

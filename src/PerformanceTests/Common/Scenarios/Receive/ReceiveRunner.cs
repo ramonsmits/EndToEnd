@@ -1,8 +1,5 @@
-﻿#if Version6
-using Configuration = NServiceBus.EndpointConfiguration;
-#else
-using Configuration = NServiceBus.BusConfiguration;
-#endif
+﻿
+using System.Threading.Tasks;
 using NServiceBus;
 
 /// <summary>
@@ -17,6 +14,11 @@ partial class ReceiveRunner : BaseRunner
 
     partial class Handler
     {
+    }
+
+    public Task SendMessage(ISession session)
+    {
+        return session.SendLocal(new Command { Data = Data });
     }
 }
 

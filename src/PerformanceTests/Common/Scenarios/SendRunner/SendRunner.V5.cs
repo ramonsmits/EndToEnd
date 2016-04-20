@@ -1,5 +1,4 @@
 ﻿#if Version5
-using System.Threading.Tasks;
 using NServiceBus;
 
 partial class SendRunner
