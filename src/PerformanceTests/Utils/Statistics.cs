@@ -104,7 +104,10 @@ public class Statistics : IDisposable
         LogStats("Throughput", throughput, "msg/s");
 
         LogStats("NumberOfRetries", NumberOfRetries, "#");
-        LogStats("TimeToFirstMessage", (First - AplicationStart).Value.TotalSeconds, "s");
+
+        var ttfm = (First - AplicationStart)?.TotalSeconds ?? -1;
+
+        LogStats("TimeToFirstMessage", ttfm, "s");
 
         if (SendTimeNoTx != TimeSpan.Zero)
             LogStats("Sending", Convert.ToDouble(NumberOfMessages / 2) / SendTimeNoTx.TotalSeconds, "msg/s");
