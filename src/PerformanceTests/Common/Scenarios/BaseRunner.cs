@@ -30,10 +30,15 @@ public abstract class BaseRunner : IConfigurationSource, IContext
     public Permutation Permutation { get; private set; }
     public string EndpointName { get; private set; }
 
+    protected byte[] Data { private set; get; }
+
     public virtual void Execute(Permutation permutation, string endpointName)
     {
+
         Permutation = permutation;
         EndpointName = endpointName;
+
+        InitData();
 
         ThrowIfPermutationNotAllowed();
 
@@ -248,5 +253,11 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         }
 
         return ConfigurationManager.GetSection(typeof(T).Name) as T;
+    }
+
+    void InitData()
+    {
+        Data = new byte[(int)Permutation.MessageSize];
+        new Random(0).NextBytes(Data);
     }
 }

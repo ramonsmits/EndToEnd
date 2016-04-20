@@ -13,11 +13,12 @@ partial class SendRunner : LoopRunner
 {
     protected override async Task SendMessage()
     {
-        await this.SendLocal(new Command());
+        await SendLocal(new Command { Data = Data });
     }
 
     public class Command : ICommand
     {
+        public byte[] Data { get; set; }
     }
 }
 

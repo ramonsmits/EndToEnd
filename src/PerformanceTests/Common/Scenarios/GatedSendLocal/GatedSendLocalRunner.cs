@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using NServiceBus;
 
 /// <summary>
@@ -13,25 +11,15 @@ partial class GatedSendLocalRunner : LoopRunner
 {
     protected override async Task SendMessage()
     {
-        await SendLocal(CommandGenerator.Create());
-    }
-
-    static class CommandGenerator
-    {
-        static long orderId;
-
-        public static Command Create()
+        await SendLocal(new Command
         {
-            return new Command
-            {
-                OrderId = Interlocked.Increment(ref orderId).ToString(CultureInfo.InvariantCulture)
-            };
-        }
+            Data = Data
+        });
     }
-
+    
     public class Command : ICommand
     {
         public string OrderId { get; set; }
-        public decimal Value { get; set; }
+        public byte[] Data { get; set; }
     }
 }
