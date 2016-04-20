@@ -17,10 +17,5 @@ partial class ReceiveRunner : ICreateSeedData
             return Task.FromResult(0);
         }
     }
-
-    public Task SendMessage(IEndpointInstance endpointInstance)
-    {
-        return endpointInstance.SendLocal(new Command { Data = Data });
-    }
 }
 #endif

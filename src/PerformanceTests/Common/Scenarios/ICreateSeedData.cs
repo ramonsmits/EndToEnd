@@ -1,21 +1,14 @@
 ﻿namespace Common.Scenarios
 {
-    using NServiceBus;
+    using System.Threading.Tasks;
 
     interface ICreateSeedData
     {
         int SeedSize { get; }
 
-#if Version5
         /// <summary>
         /// Sends or publishes a single message
         /// </summary>
-        void SendMessage(ISendOnlyBus sendOnlyBus);
-#else
-        /// <summary>
-        /// Sends or publishes a single message
-        /// </summary>
-        System.Threading.Tasks.Task SendMessage(IEndpointInstance endpointInstance);
-#endif
+        Task SendMessage(ISession session);
     }
 }

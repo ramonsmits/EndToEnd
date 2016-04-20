@@ -1,20 +1,9 @@
 ﻿#if Version6
-using System.Threading;
 using System.Threading.Tasks;
-using Common.Scenarios;
 using NServiceBus;
 
-partial class SagaInitiateRunner : ICreateSeedData
+partial class SagaInitiateRunner
 {
-    int messageId;
-
-    public int SeedSize { get; } = 10000;
-
-    public Task SendMessage(IEndpointInstance endpointInstance)
-    {
-        return endpointInstance.SendLocal(new Command(Interlocked.Increment(ref messageId)));
-    }
-
     public class TheSaga : Saga<SagaData>,
         IAmStartedByMessages<Command>
     {

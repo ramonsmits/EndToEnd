@@ -17,15 +17,5 @@ partial class ReceiveRunner : ICreateSeedData
         {
         }
     }
-
-    public void SendMessage(ISendOnlyBus sendOnlyBus)
-    {
-        var unicastBus = (NServiceBus.Unicast.UnicastBus)sendOnlyBus;
-        var machine = unicastBus.Configure.LocalAddress.Machine;
-        var queue = unicastBus.Configure.LocalAddress.Queue;
-
-        var address = new Address(queue, machine);
-        sendOnlyBus.Send(address, new Command { Data = Data });
-    }
 }
 #endif

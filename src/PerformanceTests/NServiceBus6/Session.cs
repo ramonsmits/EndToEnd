@@ -24,4 +24,9 @@ class Session : ISession
     {
         return instance.SendLocal(message);
     }
+
+    public Task Close()
+    {
+        return instance.Stop();
+    }
 }
