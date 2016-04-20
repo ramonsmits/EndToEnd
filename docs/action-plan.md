@@ -22,14 +22,12 @@
  - [x] Add session and permutation ID to statistics info
  - [x] Collect required performance counters manually and report using the `Statistics` object
  - [x] Is there a way to see a graph per test fixture? @william
- - [ ] Include memory usage graph
- - [x] Include dashboard per transport
- - [x] Include dashboard per persistence
-- [ ] Implement other test types (send, sendlocal, publish, sagas, distruter) - @dvdstalt
+ - [ ] Include memory usage graph @hmemcpy + @williambza
+- [ ] Implement other test types - @dvdstalt
   - [x] Receive only
   - [x] Send only
   - [x] Sagas
-    - [ ] Remove sagas from other tests
+  - [ ] Task array vs Parallel for
 shared files project?)
 - [ ] Collect results for multiple runs to see stability of tests
    - Feed results back to various transport/persistence owners
