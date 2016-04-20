@@ -29,6 +29,9 @@ namespace Host
             {
                 var permutation = PermutationParser.FromCommandlineArgs();
                 LogPermutation(permutation);
+
+                InvokeSetupImplementations();
+
                 using (Statistics.Initialize(permutation))
                 {
                     EnvironmentStats.Write();
@@ -56,6 +59,15 @@ namespace Host
                 throw;
             }
             return (int)ReturnCodes.OK;
+        }
+
+        static void InvokeSetupImplementations()
+        {
+            foreach (var instance in AssemblyScanner.GetAll<ISetup>())
+            {
+                Log.InfoFormat("Invoke setup: {0}", instance);
+                instance.Setup();
+            }
         }
 
         static void LogPermutation(Permutation permutation)
