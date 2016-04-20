@@ -158,6 +158,22 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 
         return configuration;
     }
+
+    List<Type> GetTypesToInclude()
+    {
+        var location = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        var asm = new NServiceBus.Hosting.Helpers.AssemblyScanner(location).GetScannableAssemblies();
+
+        var allTypes = (from a in asm.Assemblies
+                        from b in a.GetLoadableTypes()
+                        select b).ToList();
+
+        var allTypesToExclude = GetTypesToExclude(allTypes);
+        
+        var finalInternalListToScan = allTypes.Except(allTypesToExclude);
+
+        return finalInternalListToScan.ToList();
+    }
 #else
     void CreateQueues()
     {
@@ -194,33 +210,21 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 
         return configuration;
     }
-#endif
-
-    List<Type> GetTypesToInclude()
-    {
-        var location = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        var asm = new NServiceBus.Hosting.Helpers.AssemblyScanner(location).GetScannableAssemblies();
-
-        var allTypes = (from a in asm.Assemblies
-                        from b in a.GetLoadableTypes()
-                        select b).ToList();
-
-        var allTypesToExclude = GetTypesToExclude(allTypes);
-        var finalInternalListToScan = allTypes.Except(allTypesToExclude);
-
-        return finalInternalListToScan.ToList();
-    }
 
     IEnumerable<Type> GetTypesToExclude()
     {
         return GetTypesToExclude(Assembly.GetAssembly(this.GetType()).GetTypes());
-    } 
+    }
+#endif
 
-    private IEnumerable<Type> GetTypesToExclude(IEnumerable<Type> allTypes)
+    IEnumerable<Type> GetTypesToExclude(IEnumerable<Type> allTypes)
     {
         var allTypesToExclude = (from t in allTypes
-            where (t.IsSubclassOf(typeof(BaseRunner)) || t.IsSubclassOf(typeof(LoopRunner)) || t == typeof(LoopRunner.Handler)) && t != this.GetType()
-            select t).ToList();
+                                 where (t.IsSubclassOf(typeof(BaseRunner)) || t.IsSubclassOf(typeof(LoopRunner))) && t != this.GetType()
+                                 select t).ToList();
+
+        if (!(this is LoopRunner))
+            allTypesToExclude.Add(typeof(LoopRunner.Handler));
 
         Log.InfoFormat("This is test {0}, excluding :", this.GetType().Name);
         foreach (var theType in allTypesToExclude)
