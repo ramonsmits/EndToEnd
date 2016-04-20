@@ -8,6 +8,15 @@ partial class GatedPublishRunner
     {
         await EndpointInstance.Publish(msg);
     }
+
+    class Handler : IHandleMessages<Event>
+    {
+        public Task Handle(Event message, IMessageHandlerContext context)
+        {
+            Signal();
+            return Task.FromResult(0);
+        }
+    }
 }
 
 #endif

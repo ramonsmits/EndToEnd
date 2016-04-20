@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,7 +7,7 @@ using NServiceBus.Logging;
 
 abstract class LoopRunner : BaseRunner
 {
-    protected ILog Log = LogManager.GetLogger(typeof(LoopRunner));
+    protected ILog Log = LogManager.GetLogger(nameof(LoopRunner));
 
     Task loopTask;
 
@@ -38,30 +37,14 @@ abstract class LoopRunner : BaseRunner
         }
     }
 
-    public class Handler : IHandleMessages<IMessage>
-    {
-        ILog Log = LogManager.GetLogger(typeof(Handler));
 
-#if Version5
-        public void Handle(IMessage message)
-        {
-            LoopRunner.countdownEvent.Signal();
-        }
-#else
-        public async Task Handle(IMessage message, IMessageHandlerContext context)
-        {
-            LoopRunner.countdownEvent.Signal();
-        }
-#endif
-    }
-
-    async Task Loop(object o)
+    Task Loop(object o)
     {
         try
         {
             countdownEvent = new CountdownEvent(BatchSize);
 
-            Log.Warn("Sleeping for the bus to purge the queue. Loop requires the queue to be empty.");
+            Log.Warn("Sleeping 5,000ms for the instance to purge the queue and process subscriptions. Loop requires the queue to be empty.");
             Thread.Sleep(5000);
             Log.Info("Starting");
 
@@ -74,15 +57,7 @@ abstract class LoopRunner : BaseRunner
 
                     var d = Stopwatch.StartNew();
 
-                    for (var i = 0; i < Environment.ProcessorCount; i++)
-                    {
-                        var sends = new List<Task>();
-                        for (var j = 0; j < countdownEvent.InitialCount / Environment.ProcessorCount; j++)
-                        {
-                            sends.Add(SendMessage());
-                        }
-                        await Task.WhenAll(sends);
-                    }
+                    Parallel.For(0, BatchSize, i => SendMessage());
 
                     if (d.Elapsed < TimeSpan.FromSeconds(2.5))
                     {
@@ -105,5 +80,13 @@ abstract class LoopRunner : BaseRunner
         {
             Log.Error("Loop", ex);
         }
+
+        return Task.FromResult(0);
     }
+
+    internal static void Signal()
+    {
+        countdownEvent.Signal();
+    }
+
 }

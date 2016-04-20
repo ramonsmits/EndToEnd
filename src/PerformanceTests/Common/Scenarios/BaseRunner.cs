@@ -220,13 +220,10 @@ public abstract class BaseRunner : IConfigurationSource, IContext
     IEnumerable<Type> GetTypesToExclude(IEnumerable<Type> allTypes)
     {
         var allTypesToExclude = (from t in allTypes
-                                 where (t.IsSubclassOf(typeof(BaseRunner)) || t.IsSubclassOf(typeof(LoopRunner))) && t != this.GetType()
+                                 where (t.IsSubclassOf(typeof(BaseRunner)) || t.IsSubclassOf(typeof(LoopRunner))) && t != GetType()
                                  select t).ToList();
 
-        if (!(this is LoopRunner))
-            allTypesToExclude.Add(typeof(LoopRunner.Handler));
-
-        Log.InfoFormat("This is test {0}, excluding :", this.GetType().Name);
+        Log.InfoFormat("This is test {0}, excluding :", GetType().Name);
         foreach (var theType in allTypesToExclude)
         {
             Log.InfoFormat("- {0}", theType.Name);
