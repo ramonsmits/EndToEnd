@@ -56,7 +56,8 @@ namespace Tests.Permutations
                      + (permutations.ConcurrencyLevels.Length > 1 ? ConcurrencyLevel.ToString() : string.Empty)
                      + (permutations.ScaleOuts.Length > 1 ? ScaleOut.ToString() : string.Empty)
                 };
-            return items;
+            return items
+                .OrderBy(x => x.Code);
         }
     }
 }
