@@ -7,9 +7,9 @@
         int SeedSize { get; set; }
 
 #if Version5
-    /// <summary>
-    /// Sends or publishes a single message
-    /// </summary>
+        /// <summary>
+        /// Sends or publishes a single message
+        /// </summary>
         void SendMessage(ISendOnlyBus sendOnlyBus);
 #else
         /// <summary>

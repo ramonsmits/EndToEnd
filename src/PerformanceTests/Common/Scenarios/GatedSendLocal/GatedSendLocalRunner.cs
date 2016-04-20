@@ -9,9 +9,9 @@ using NServiceBus;
 /// </summary>
 partial class GatedSendLocalRunner : LoopRunner
 {
-    protected override async Task SendMessage()
+    protected override Task SendMessage()
     {
-        await SendLocal(new Command
+        return SendLocal(new Command
         {
             Data = Data
         });

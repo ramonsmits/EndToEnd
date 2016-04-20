@@ -8,8 +8,7 @@ using NServiceBus.Saga;
 partial class SagaInitiateRunner : ICreateSeedData
 {
     Address address;
-    int messageId = 0;
-    object lockable = new object();
+    int messageId;
 
     public int SeedSize { get; set; } = 10000;
 

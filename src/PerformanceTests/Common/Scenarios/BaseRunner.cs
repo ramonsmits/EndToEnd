@@ -14,7 +14,6 @@ using NServiceBus.Config.ConfigurationSource;
 using NServiceBus.Logging;
 using Tests.Permutations;
 using System.Collections.Generic;
-using System.IO;
 using Common.Scenarios;
 
 public abstract class BaseRunner : IConfigurationSource, IContext
@@ -166,7 +165,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 
     List<Type> GetTypesToInclude()
     {
-        var location = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        var location = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         var asm = new NServiceBus.Hosting.Helpers.AssemblyScanner(location).GetScannableAssemblies();
 
         var allTypes = (from a in asm.Assemblies
