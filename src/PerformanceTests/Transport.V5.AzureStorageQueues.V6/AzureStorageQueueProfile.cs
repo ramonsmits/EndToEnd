@@ -1,5 +1,4 @@
-﻿using System.Net;
-using NServiceBus;
+﻿using NServiceBus;
 
 class AzureStorageQueueProfile : IProfile
 {

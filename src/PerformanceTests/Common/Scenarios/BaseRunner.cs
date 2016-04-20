@@ -16,7 +16,6 @@ using Tests.Permutations;
 using System.Collections.Generic;
 using System.IO;
 using Common.Scenarios;
-using NServiceBus.Performance;
 
 public abstract class BaseRunner : IConfigurationSource, IContext
 {
@@ -206,7 +205,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
                         from b in a.GetLoadableTypes()
                         select b).ToList();
 
-        IEnumerable<Type> allTypesToExclude = GetTypesToExclude(allTypes);
+        var allTypesToExclude = GetTypesToExclude(allTypes);
         var finalInternalListToScan = allTypes.Except(allTypesToExclude);
 
         return finalInternalListToScan.ToList();
