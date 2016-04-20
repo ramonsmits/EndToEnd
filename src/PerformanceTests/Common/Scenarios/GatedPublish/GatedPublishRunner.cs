@@ -12,11 +12,15 @@ partial class GatedPublishRunner : LoopRunner, IConfigureUnicastBus
 {
     protected override Task SendMessage()
     {
-        return Publish(new Event());
+        return Publish(new Event
+        {
+            Data = Data
+        });
     }
 
     public class Event : IEvent
     {
+        public byte[] Data { get; set; }
     }
 
     public MessageEndpointMappingCollection GenerateMappings()

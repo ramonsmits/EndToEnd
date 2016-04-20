@@ -8,7 +8,7 @@ using NServiceBus;
 partial class ReceiveRunner : ICreateSeedData
 {
     public int SeedSize { get; set; } = 25000;
-    
+
     public partial class Handler : IHandleMessages<Command>
     {
         public IBus Bus { get; set; }
@@ -20,12 +20,12 @@ partial class ReceiveRunner : ICreateSeedData
 
     public void SendMessage(ISendOnlyBus sendOnlyBus)
     {
-        var unicastBus = (NServiceBus.Unicast.UnicastBus) sendOnlyBus;
+        var unicastBus = (NServiceBus.Unicast.UnicastBus)sendOnlyBus;
         var machine = unicastBus.Configure.LocalAddress.Machine;
         var queue = unicastBus.Configure.LocalAddress.Queue;
 
         var address = new Address(queue, machine);
-        sendOnlyBus.Send(address, new Command());
+        sendOnlyBus.Send(address, new Command { Data = Data });
     }
 }
 #endif

@@ -12,6 +12,7 @@ partial class ReceiveRunner : BaseRunner
 {
     public class Command : ICommand
     {
+        public byte[] Data { get; set; }
     }
 
     partial class Handler

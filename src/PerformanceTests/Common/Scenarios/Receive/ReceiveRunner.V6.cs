@@ -19,7 +19,7 @@ partial class ReceiveRunner : ICreateSeedData
 
     public async Task SendMessage(IEndpointInstance endpointInstance)
     {
-        await endpointInstance.SendLocal(new Command());
+        await endpointInstance.SendLocal(new Command { Data = Data });
     }
 }
 #endif
