@@ -15,6 +15,7 @@ using NServiceBus.Logging;
 using Tests.Permutations;
 using System.Collections.Generic;
 using Common.Scenarios;
+using Variables;
 
 public abstract class BaseRunner : IConfigurationSource, IContext
 {
@@ -37,7 +38,6 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         ThrowIfPermutationNotAllowed();
 
         CreateSeedData();
-
         CreateEndpoint();
 
         try
@@ -80,8 +80,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 
         if (seedCreator.SeedSize == 0) throw new InvalidOperationException("SeedSize was not set.");
 
-        CreateQueues();
-
+        CreateOrPurgeQueues();
         CreateSendOnlyEndpoint();
 
         try
@@ -102,11 +101,11 @@ public abstract class BaseRunner : IConfigurationSource, IContext
     }
 
 #if Version5
-    void CreateQueues()
+    void CreateOrPurgeQueues()
     {
         var configuration = CreateConfiguration();
-        configuration.PurgeOnStartup(true);
-        using (Bus.Create(configuration).Start()){}
+        if (IsPurgingSupported) configuration.PurgeOnStartup(true);
+        using (Bus.Create(configuration).Start()) { }
     }
 
     void CreateSendOnlyEndpoint()
@@ -122,17 +121,9 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
         configuration.CustomConfigurationSource(this);
 
-        if (QueuesWerePurgedWhenSeedingData())
-            configuration.PurgeOnStartup(false);
-        else
-            configuration.PurgeOnStartup(true);
+        configuration.PurgeOnStartup(!QueuesWerePurgedWhenSeedingData && IsPurgingSupported);
 
         Session = new Session(Bus.Create(configuration).Start());
-    }
-
-    bool QueuesWerePurgedWhenSeedingData()
-    {
-        return this is ICreateSeedData;
     }
 
     BusConfiguration CreateConfiguration()
@@ -159,16 +150,16 @@ public abstract class BaseRunner : IConfigurationSource, IContext
                         select b).ToList();
 
         var allTypesToExclude = GetTypesToExclude(allTypes);
-        
+
         var finalInternalListToScan = allTypes.Except(allTypesToExclude);
 
         return finalInternalListToScan.ToList();
     }
 #else
-    void CreateQueues()
+    void CreateOrPurgeQueues()
     {
         var configuration = CreateConfiguration();
-        configuration.PurgeOnStartup(true);
+        if (IsPurgingSupported) configuration.PurgeOnStartup(true);
         var instance = Endpoint.Start(configuration).GetAwaiter().GetResult();
         instance.Stop().GetAwaiter().GetResult();
     }
@@ -185,8 +176,9 @@ public abstract class BaseRunner : IConfigurationSource, IContext
     {
         var configuration = CreateConfiguration();
         configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
-        configuration.PurgeOnStartup(false);
         configuration.CustomConfigurationSource(this);
+
+        configuration.PurgeOnStartup(!QueuesWerePurgedWhenSeedingData && IsPurgingSupported);
 
         var instance = Endpoint.Start(configuration).GetAwaiter().GetResult();
         Session = new Session(instance);
@@ -248,4 +240,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         Data = new byte[(int)Permutation.MessageSize];
         new Random(0).NextBytes(Data);
     }
+
+    bool QueuesWerePurgedWhenSeedingData => this is ICreateSeedData;
+    bool IsPurgingSupported => Permutation.Transport != Transport.AzureServiceBus;
 }
