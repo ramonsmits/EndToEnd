@@ -21,7 +21,7 @@ public static class AssemblyScanner
 
         foreach (var a in assemblies.OrderBy(a => a.ToString()))
         {
-            string version,name;
+            string version, name;
 
             try
             {
@@ -47,7 +47,30 @@ public static class AssemblyScanner
         }
 
         return assemblies;
-
-
     }
+
+    public static IEnumerable<T> GetAll<T>()
+    {
+        var assemblies = GetAssemblies();
+
+        var type = typeof(T);
+        var types = assemblies
+            .SelectMany(GetTypes)
+            .Where(p => type.IsAssignableFrom(p) && !p.IsAbstract && !p.IsInterface);
+
+        return types.Select(t => (T)Activator.CreateInstance(t));
+    }
+
+    static Type[] GetTypes(Assembly a)
+    {
+        try
+        {
+            return a.GetTypes();
+        }
+        catch (ReflectionTypeLoadException ex)
+        {
+            return ex.Types;
+        }
+    }
+
 }

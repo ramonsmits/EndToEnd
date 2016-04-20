@@ -3,10 +3,7 @@ using Configuration = NServiceBus.EndpointConfiguration;
 #else
 using Configuration = NServiceBus.BusConfiguration;
 #endif
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 
 static class ProfilesExtension
 {
@@ -29,26 +26,6 @@ static class ProfilesExtension
 
     static IEnumerable<IProfile> GetProfiles()
     {
-        var assemblies = AssemblyScanner.GetAssemblies();
-
-        var type = typeof(IProfile);
-        var types = assemblies
-            .SelectMany(GetTypes)
-            .Where(p => type.IsAssignableFrom(p) && !p.IsAbstract && !p.IsInterface);
-
-
-        return types.Select(t => (IProfile)Activator.CreateInstance(t));
-    }
-
-    static Type[] GetTypes(Assembly a)
-    {
-        try
-        {
-            return a.GetTypes();
-        }
-        catch (ReflectionTypeLoadException ex)
-        {
-            return ex.Types;
-        }
+        return AssemblyScanner.GetAll<IProfile>();
     }
 }
