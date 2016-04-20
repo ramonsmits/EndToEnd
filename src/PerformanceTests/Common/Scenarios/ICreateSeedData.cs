@@ -4,7 +4,7 @@
 
     interface ICreateSeedData
     {
-        int SeedSize { get; set; }
+        int SeedSize { get; }
 
 #if Version5
         /// <summary>

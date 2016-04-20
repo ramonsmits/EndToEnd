@@ -7,7 +7,7 @@ using NServiceBus;
 /// </summary>    
 partial class ReceiveRunner : ICreateSeedData
 {
-    public int SeedSize { get; set; } = 25000;
+    public int SeedSize { get; } = 25000;
 
     public partial class Handler : IHandleMessages<Command>
     {
