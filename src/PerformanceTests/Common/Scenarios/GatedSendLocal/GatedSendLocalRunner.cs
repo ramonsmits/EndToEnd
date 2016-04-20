@@ -1,10 +1,7 @@
-﻿using System;
-using System.Diagnostics;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus;
-using NServiceBus.Logging;
 
 /// <summary>
 /// Performs a continious test where a batch of messages is send via the bus without

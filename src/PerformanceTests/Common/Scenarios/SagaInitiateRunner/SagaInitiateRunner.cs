@@ -1,5 +1,4 @@
-﻿using System;
-using NServiceBus;
+﻿using NServiceBus;
 
 partial class SagaInitiateRunner : BaseRunner
 {
@@ -12,5 +11,4 @@ partial class SagaInitiateRunner : BaseRunner
 
         public int Identifier { get; set; }
     }
-
 }

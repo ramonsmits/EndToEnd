@@ -1,7 +1,5 @@
 ﻿namespace Common.Scenarios
 {
-    using System;
-    using System.Threading.Tasks;
     using NServiceBus;
 
     interface ICreateSeedData
@@ -17,7 +15,7 @@
         /// <summary>
         /// Sends or publishes a single message
         /// </summary>
-        Task SendMessage(IEndpointInstance endpointInstance);
+        System.Threading.Tasks.Task SendMessage(IEndpointInstance endpointInstance);
 #endif
     }
 }
