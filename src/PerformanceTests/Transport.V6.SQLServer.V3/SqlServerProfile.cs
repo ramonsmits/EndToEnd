@@ -1,4 +1,5 @@
 ﻿using NServiceBus;
+using NServiceBus.Transports.SQLServer;
 
 class SqlServerProfile : IProfile
 {
@@ -6,6 +7,7 @@ class SqlServerProfile : IProfile
     {
         endpointConfiguration
             .UseTransport<SqlServerTransport>()
+            .DefaultSchema("V6")
             .ConnectionString(this.GetConnectionString("SqlServer"));
     }
 }

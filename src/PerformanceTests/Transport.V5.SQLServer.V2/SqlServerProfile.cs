@@ -6,6 +6,7 @@ class SqlServerProfile : IProfile
     {
         busConfiguration
             .UseTransport<SqlServerTransport>()
+            .DefaultSchema("V5")
             .ConnectionString(this.GetConnectionString("SqlServer"));
     }
 }
