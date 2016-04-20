@@ -15,7 +15,7 @@ partial class GatedPublishRunner : LoopRunner, IConfigureUnicastBus
         return Publish(new Event());
     }
 
-   public class Event : IEvent
+    public class Event : IEvent
     {
     }
 
