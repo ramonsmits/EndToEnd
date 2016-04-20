@@ -42,8 +42,8 @@ abstract class LoopRunner : BaseRunner
         {
             countdownEvent = new CountdownEvent(BatchSize);
 
-            Log.Warn("Sleeping 5,000ms for the instance to purge the queue and process subscriptions. Loop requires the queue to be empty.");
-            Thread.Sleep(5000);
+            Log.Warn("Sleeping 3,000ms for the instance to purge the queue and process subscriptions. Loop requires the queue to be empty.");
+            Thread.Sleep(3000);
             Log.Info("Starting");
 
             while (!Shutdown)
