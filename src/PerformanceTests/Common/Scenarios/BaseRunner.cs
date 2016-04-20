@@ -34,8 +34,6 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 
         InitData();
 
-        ThrowIfPermutationNotAllowed();
-
         CreateSeedData();
         CreateEndpoint();
 
@@ -54,14 +52,6 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         {
             Session.Close();
         }
-    }
-
-    void ThrowIfPermutationNotAllowed()
-    {
-        var thrower = this as IThrowIfPermutationIsNotAllowed;
-        if (thrower == null) return;
-
-        thrower.ThrowIfPermutationIsNotAllowed(Permutation);
     }
 
     protected virtual void Start()

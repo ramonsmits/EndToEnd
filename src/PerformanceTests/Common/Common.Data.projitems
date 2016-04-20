@@ -25,7 +25,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocal\GatedSendLocalRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocal\GatedSendLocalRunner.V5.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocal\GatedSendLocalRunner.V6.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\IThrowIfPermutationIsNotAllowed.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\ICreateSeedData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\Receive\ReceiveRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\Receive\ReceiveRunner.V5.cs" />
