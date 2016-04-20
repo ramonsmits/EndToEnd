@@ -1,4 +1,5 @@
 ﻿#if Version5
+using Common.Scenarios;
 using NServiceBus;
 
 /// <summary>
@@ -6,7 +7,7 @@ using NServiceBus;
 /// </summary>    
 partial class ReceiveRunner : ICreateSeedData
 {
-    public int SeedSize { get; set; } = 50000;
+    public int SeedSize { get; set; } = 25000;
     
     public partial class Handler : IHandleMessages<Command>
     {
@@ -17,9 +18,13 @@ partial class ReceiveRunner : ICreateSeedData
         }
     }
 
-    public void SendMessage(ISendOnlyBus sendOnlyBus, string endpointName)
+    public void SendMessage(ISendOnlyBus sendOnlyBus)
     {
-        var address = new Address(endpointName, "localhost");
+        var unicastBus = (NServiceBus.Unicast.UnicastBus) sendOnlyBus;
+        var machine = unicastBus.Configure.LocalAddress.Machine;
+        var queue = unicastBus.Configure.LocalAddress.Queue;
+
+        var address = new Address(queue, machine);
         sendOnlyBus.Send(address, new Command());
     }
 }

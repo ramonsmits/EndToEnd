@@ -5,12 +5,17 @@ using Configuration = NServiceBus.BusConfiguration;
 #endif
 using System;
 using System.Configuration;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Config;
 using NServiceBus.Config.ConfigurationSource;
 using NServiceBus.Logging;
 using Tests.Permutations;
+using System.Collections.Generic;
+using System.IO;
+using Common.Scenarios;
 
 public abstract class BaseRunner : IConfigurationSource, IContext
 {
@@ -30,6 +35,8 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         Permutation = permutation;
         EndpointName = endpointName;
 
+        ThrowIfPermutationNotAllowed();
+
         CreateSeedData();
 
         EndpointInstance = CreateEndpoint();
@@ -48,20 +55,32 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         finally
         {
 #if Version5
-            using(EndpointInstance){}
+            using (EndpointInstance) { }
 #else
             EndpointInstance.Stop().GetAwaiter().GetResult();
 #endif
         }
     }
 
-    protected abstract void Start();
-    protected abstract void Stop();
+    void ThrowIfPermutationNotAllowed()
+    {
+        var thrower = this as IThrowIfPermutationIsNotAllowed;
+        if (thrower == null) return;
+
+        thrower.ThrowIfPermutationIsNotAllowed(Permutation);
+    }
+
+    protected virtual void Start()
+    {
+    }
+
+    protected virtual void Stop()
+    {
+    }
 
     private void CreateSeedData()
     {
         var seedCreator = this as ICreateSeedData;
-
         if (seedCreator == null) return;
 
         if (seedCreator.SeedSize == 0) throw new InvalidOperationException("SeedSize was not set.");
@@ -75,16 +94,16 @@ public abstract class BaseRunner : IConfigurationSource, IContext
             Parallel.For(0, seedCreator.SeedSize, (i, state) =>
             {
                 if (i % 5000 == 0)
-                    Log.Info($"Seeded {i} messages.");
+                    Log.InfoFormat("Seeded {0} messages.", i);
 
-                ((ICreateSeedData)this).SendMessage(sendonlyInstance, EndpointName);
+                ((ICreateSeedData)this).SendMessage(sendonlyInstance);
             });
-            Log.Info($"Seeded total of {seedCreator.SeedSize} messages.");
+            Log.InfoFormat("Seeded total of {0} messages.", seedCreator.SeedSize);
         }
         finally
         {
 #if Version5
-            using(sendonlyInstance){}
+            using (sendonlyInstance) { }
 #else
             sendonlyInstance.Stop().GetAwaiter().GetResult();
 #endif
@@ -111,14 +130,30 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         var configuration = CreateConfiguration();
         configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
         configuration.CustomConfigurationSource(this);
+
+        if (QueuesWerePurgedWhenSeedingData())
+            configuration.PurgeOnStartup(false);
+        else
+            configuration.PurgeOnStartup(true);
+
         return Bus.Create(configuration).Start();
     }
 
-    Configuration CreateConfiguration()
+    private bool QueuesWerePurgedWhenSeedingData()
+    {
+        if (this is ICreateSeedData) return true;
+        return false;
+    }
+
+    BusConfiguration CreateConfiguration()
     {
         var configuration = new Configuration();
         configuration.EndpointName(EndpointName);
         configuration.EnableInstallers();
+
+        var scanableTypes = GetTypesToInclude();
+        configuration.TypesToScan(scanableTypes);
+
         configuration.ApplyProfiles(this);
 
         return configuration;
@@ -142,6 +177,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
     {
         var configuration = CreateConfiguration();
         configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
+        configuration.PurgeOnStartup(false);
         configuration.CustomConfigurationSource(this);
 
         return Endpoint.Start(configuration).GetAwaiter().GetResult();
@@ -151,11 +187,48 @@ public abstract class BaseRunner : IConfigurationSource, IContext
     {
         var configuration = new Configuration(EndpointName);
         configuration.EnableInstallers();
+
+        configuration.ExcludeTypes(GetTypesToExclude().ToArray());
+
         configuration.ApplyProfiles(this);
 
         return configuration;
     }
 #endif
+
+    List<Type> GetTypesToInclude()
+    {
+        var location = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        var asm = new NServiceBus.Hosting.Helpers.AssemblyScanner(location).GetScannableAssemblies();
+
+        var allTypes = (from a in asm.Assemblies
+                        from b in a.GetLoadableTypes()
+                        select b).ToList();
+
+        var allTypesToExclude = GetTypesToExclude(allTypes);
+        var finalInternalListToScan = allTypes.Except(allTypesToExclude);
+
+        return finalInternalListToScan.ToList();
+    }
+
+    IEnumerable<Type> GetTypesToExclude()
+    {
+        return GetTypesToExclude(Assembly.GetAssembly(this.GetType()).GetTypes());
+    } 
+
+    private IEnumerable<Type> GetTypesToExclude(IEnumerable<Type> allTypes)
+    {
+        var allTypesToExclude = (from t in allTypes
+            where (t.IsSubclassOf(typeof(BaseRunner)) || t.IsSubclassOf(typeof(LoopRunner)) || t == typeof(LoopRunner.Handler)) && t != this.GetType()
+            select t).ToList();
+
+        Log.InfoFormat("This is test {0}, excluding :", this.GetType().Name);
+        foreach (var theType in allTypesToExclude)
+        {
+            Log.InfoFormat("- {0}", theType.Name);
+        }
+        return allTypesToExclude;
+    }
 
     public T GetConfiguration<T>() where T : class, new()
     {
@@ -165,7 +238,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         {
             //read from existing config 
             var config = (UnicastBusConfig)ConfigurationManager.GetSection(typeof(UnicastBusConfig).Name);
-            if (config != null) throw new InvalidOperationException("UnicastBUs Configuration should be in code.");
+            if (config != null) throw new InvalidOperationException("UnicastBUs Configuration should be in code using IConfigureUnicastBus interface.");
 
             return new UnicastBusConfig
             {
@@ -175,5 +248,4 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 
         return ConfigurationManager.GetSection(typeof(T).Name) as T;
     }
-
 }

@@ -1,19 +1,21 @@
-﻿using NServiceBus;
-
-interface ICreateSeedData
+﻿namespace Common.Scenarios
 {
-    int SeedSize { get; set; }
+    using NServiceBus;
+
+    interface ICreateSeedData
+    {
+        int SeedSize { get; set; }
 
 #if Version5
     /// <summary>
     /// Sends or publishes a single message
     /// </summary>
-    void SendMessage(ISendOnlyBus sendOnlyBus, string endpointName);
+        void SendMessage(ISendOnlyBus sendOnlyBus);
 #else
-    /// <summary>
-    /// Sends or publishes a single message
-    /// </summary>
-    void SendMessage(IEndpointInstance endpointInstance, string endpointName);
+        /// <summary>
+        /// Sends or publishes a single message
+        /// </summary>
+        System.Threading.Tasks.Task SendMessage(IEndpointInstance endpointInstance);
 #endif
-
+    }
 }

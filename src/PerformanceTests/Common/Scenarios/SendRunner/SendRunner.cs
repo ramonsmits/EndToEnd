@@ -1,4 +1,5 @@
-﻿#if Version6
+﻿using System.Threading.Tasks;
+#if Version6
 using Configuration = NServiceBus.EndpointConfiguration;
 #else
 using Configuration = NServiceBus.BusConfiguration;
@@ -8,13 +9,14 @@ using NServiceBus;
 /// <summary>
 /// Does a continuous test where a pre-seeded amount of messages will be handled
 /// </summary>    
-partial class ReceiveRunner : BaseRunner
+partial class SendRunner : LoopRunner
 {
-    public class Command : ICommand
+    protected override async Task SendMessage()
     {
+        await this.SendLocal(new Command());
     }
 
-    partial class Handler
+    public class Command : ICommand
     {
     }
 }

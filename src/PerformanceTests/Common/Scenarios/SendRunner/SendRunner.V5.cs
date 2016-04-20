@@ -1,7 +1,7 @@
 ﻿#if Version5
 using System.Threading.Tasks;
 
-partial class GatedSendLocalRunner
+partial class SendRunner
 {
     async Task SendLocal(Command msg)
     {

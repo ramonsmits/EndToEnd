@@ -1,6 +1,7 @@
 ﻿#if Version6
 using NServiceBus;
 using System.Threading.Tasks;
+using Common.Scenarios;
 
 /// <summary>
 /// Does a continuous test where a pre-seeded amount of messages will be handled
@@ -16,9 +17,9 @@ partial class ReceiveRunner : ICreateSeedData
         }
     }
 
-    public void SendMessage(IEndpointInstance endpointInstance, string endpointName)
+    public async Task SendMessage(IEndpointInstance endpointInstance)
     {
-        endpointInstance.SendLocal(new Command());
+        await endpointInstance.SendLocal(new Command());
     }
 }
 #endif

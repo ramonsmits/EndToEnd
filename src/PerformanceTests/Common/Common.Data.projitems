@@ -17,17 +17,22 @@
     <Compile Include="$(MSBuildThisFileDirectory)IContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)INeedContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IProfile.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IProfileExtensionMethods.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PerformanceCounters.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ProfileExtensionMethods.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Program.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ReflectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\BaseRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocal\GatedSendLocalRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocal\GatedSendLocalRunner.V5.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocal\GatedSendLocalRunner.V6.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\IThrowIfPermutationIsNotAllowed.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\ICreateSeedData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\Receive\ReceiveRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\Receive\ReceiveRunner.V5.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\Receive\ReceiveRunner.V6.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SagaInitiateRunner\SagaInitiateRunner.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SagaInitiateRunner\SagaInitiateRunner.V5.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SagaInitiateRunner\SagaInitiateRunner.V6.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedPublish\GatedPublishRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedPublish\GatedPublishRunner.V5.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedPublish\GatedPublishRunner.V6.cs" />
@@ -36,6 +41,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SendLocalOneOnOne\SendLocalOneOnOneRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SendLocalOneOnOne\SendLocalOneOnOneRunner.V5.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SendLocalOneOnOne\SendLocalOneOnOneRunner.V6.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SendRunner\SendRunner.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SendRunner\SendRunner.V6.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializerProfile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StatisticsUoW.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Statistics\SimpleStatisticsFeature.V5.cs" />
@@ -46,5 +53,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Saga\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\SendRunner\SendRunner.V5.cs" />
   </ItemGroup>
 </Project>
