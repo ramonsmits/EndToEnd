@@ -14,7 +14,7 @@ class MsmqProfile : IProfile, INeedPermutation
     public void Configure(EndpointConfiguration endpointConfiguration)
     {
         var transport = endpointConfiguration.UseTransport<MsmqTransport>();
-        transport.ConnectionString(this.GetConnectionString("MSMQ"));
+        transport.ConnectionString(ConfigurationHelper.GetConnectionString("MSMQ"));
 
         if (Permutation.DTCMode == DTC.Off)
             transport.Transactions(TransportTransactionMode.ReceiveOnly | TransportTransactionMode.SendsAtomicWithReceive);

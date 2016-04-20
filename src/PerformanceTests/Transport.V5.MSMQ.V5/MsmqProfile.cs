@@ -5,6 +5,6 @@ class MsmqProfile : IProfile
     public void Configure(BusConfiguration busConfiguration)
     {
         busConfiguration.UseTransport<MsmqTransport>()
-            .ConnectionString(this.GetConnectionString("MSMQ"));
+            .ConnectionString(ConfigurationHelper.GetConnectionString("MSMQ"));
     }
 }

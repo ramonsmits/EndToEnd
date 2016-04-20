@@ -6,6 +6,6 @@ class RabbitMQProfile : IProfile
     {
         endpointConfiguration
             .UseTransport<RabbitMQTransport>()
-            .ConnectionString(this.GetConnectionString("RabbitMQ"));
+            .ConnectionString(ConfigurationHelper.GetConnectionString("RabbitMQ"));
     }
 }
