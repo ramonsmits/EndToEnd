@@ -81,7 +81,7 @@ public class Statistics : IDisposable
         ConfigureSplunk();
     }
 
-    public void Reset()
+    public void Reset(string testName)
     {
         Warmup = DateTime.UtcNow;
         Interlocked.Exchange(ref NumberOfMessages, 0);
@@ -89,6 +89,8 @@ public class Statistics : IDisposable
         SendTimeNoTx = TimeSpan.Zero;
         SendTimeWithTx = TimeSpan.Zero;
         perfCountersTimer.Dispose();
+
+        GlobalDiagnosticsContext.Set("testname", testName);
     }
 
     public void Dump()
