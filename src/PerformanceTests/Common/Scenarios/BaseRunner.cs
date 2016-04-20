@@ -46,7 +46,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
             Start();
             Log.InfoFormat("Warmup: {0}", Settings.WarmupDuration);
             System.Threading.Thread.Sleep(Settings.WarmupDuration);
-            Statistics.Instance.Reset();
+            Statistics.Instance.Reset(GetType().Name);
             Log.InfoFormat("Run: {0}", Settings.RunDuration);
             System.Threading.Thread.Sleep(Settings.RunDuration);
             Statistics.Instance.Dump();

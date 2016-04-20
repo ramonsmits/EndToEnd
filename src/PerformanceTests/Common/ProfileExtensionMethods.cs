@@ -22,7 +22,7 @@ public static class ProfileExtensionMethods
             return applicationConfigConnectionString.ConnectionString;
         }
 
-        throw new ConfigurationErrorsException($"Could not resolve connection string with key {connectionStringName}");
+        return string.Empty;
     }
 
     public static string FetchSetting(this IProfile instance, string key)
