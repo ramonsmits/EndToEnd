@@ -7,6 +7,6 @@ class RavenDBProfile : IProfile
     {
         cfg.UsePersistence<RavenDBPersistence>()
             .DoNotSetupDatabasePermissions()
-            .SetConnectionString(this.GetConnectionString("RavenDB"));
+            .SetConnectionString(ConfigurationHelper.GetConnectionString("RavenDB"));
     }
 }

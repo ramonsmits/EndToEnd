@@ -9,7 +9,7 @@ using NServiceBus.Logging;
 
 class AzureServiceBusProfile : IProfile, ISetup
 {
-    readonly string connectionstring = ProfileExtensionMethods.GetConnectionString(null, "AzureServiceBus");
+    readonly string connectionstring = ConfigurationHelper.GetConnectionString("AzureServiceBus");
     ILog Log = LogManager.GetLogger(nameof(AzureServiceBusProfile));
 
     public void Configure(EndpointConfiguration endpointConfiguration)

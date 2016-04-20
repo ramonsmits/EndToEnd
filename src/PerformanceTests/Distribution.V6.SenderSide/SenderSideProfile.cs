@@ -13,7 +13,7 @@ class SenderSideProfile : IProfile, INeedContext
         if (Context.Permutation.ScaleOut != ScaleOut.SenderSide) return;
         if (Context.Permutation.Transport != Transport.MSMQ) throw new NotSupportedException("SenderSide should only be used with MSMQ");
 
-        var senderSideArgs = this.FetchSetting("SenderSide");
+        var senderSideArgs = ConfigurationHelper.FetchSetting("SenderSide");
 
         if(string.IsNullOrWhiteSpace(senderSideArgs)) throw new InvalidOperationException("Setting `SenderSide` not resolved.");
 

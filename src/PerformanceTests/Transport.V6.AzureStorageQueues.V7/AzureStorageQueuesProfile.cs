@@ -12,7 +12,7 @@ class AzureStorageQueuesProfile : IProfile, INeedContext
 
         endpointConfiguration
             .UseTransport<AzureStorageQueueTransport>()
-            .ConnectionString(this.GetConnectionString("AzureStorageQueue"));
+            .ConnectionString(ConfigurationHelper.GetConnectionString("AzureStorageQueue"));
     }
 
 }
