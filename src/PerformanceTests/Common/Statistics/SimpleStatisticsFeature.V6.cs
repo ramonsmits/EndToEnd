@@ -40,14 +40,16 @@ namespace NServiceBus.Performance
         {
             public Collector Collector { get; set; }
 
-            protected override async Task OnStart(IMessageSession session)
+            protected override Task OnStart(IMessageSession session)
             {
                 Collector.Start();
+                return Task.FromResult(0);
             }
 
-            protected override async Task OnStop(IMessageSession session)
+            protected override Task OnStop(IMessageSession session)
             {
                 Collector.Stop();
+                return Task.FromResult(0);
             }
         }
 

@@ -4,9 +4,10 @@ using NServiceBus;
 
 partial class SendRunner
 {
-    async Task SendLocal(Command msg)
+    Task SendLocal(Command msg)
     {
         EndpointInstance.SendLocal(msg);
+        return Task.FromResult(0);
     }
 
     class Handler : IHandleMessages<Command>

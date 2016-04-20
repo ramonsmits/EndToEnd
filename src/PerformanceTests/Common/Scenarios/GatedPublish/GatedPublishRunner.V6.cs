@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 partial class GatedPublishRunner
 {
-    async Task Publish(object msg)
+    Task Publish(object msg)
     {
-        await EndpointInstance.Publish(msg);
+        return EndpointInstance.Publish(msg);
     }
 
     class Handler : IHandleMessages<Event>

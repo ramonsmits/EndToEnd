@@ -11,9 +11,9 @@ using NServiceBus;
 /// </summary>    
 partial class SendRunner : LoopRunner
 {
-    protected override async Task SendMessage()
+    protected override Task SendMessage()
     {
-        await SendLocal(new Command { Data = Data });
+        return SendLocal(new Command { Data = Data });
     }
 
     public class Command : ICommand

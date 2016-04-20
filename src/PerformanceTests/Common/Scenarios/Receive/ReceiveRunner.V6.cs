@@ -12,14 +12,15 @@ partial class ReceiveRunner : ICreateSeedData
 
     public partial class Handler : IHandleMessages<Command>
     {
-        public async Task Handle(Command message, IMessageHandlerContext ctx)
+        public Task Handle(Command message, IMessageHandlerContext ctx)
         {
+            return Task.FromResult(0);
         }
     }
 
-    public async Task SendMessage(IEndpointInstance endpointInstance)
+    public Task SendMessage(IEndpointInstance endpointInstance)
     {
-        await endpointInstance.SendLocal(new Command { Data = Data });
+        return endpointInstance.SendLocal(new Command { Data = Data });
     }
 }
 #endif
