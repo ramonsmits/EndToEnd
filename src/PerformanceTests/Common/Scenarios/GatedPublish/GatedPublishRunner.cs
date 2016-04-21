@@ -8,7 +8,7 @@ using NServiceBus.Config;
 /// received it repeats this. Due to the fact that the sending is not transactional
 /// the handler will already process messages while the batch is still being send.
 /// </summary>
-partial class GatedPublishRunner : LoopRunner, IConfigureUnicastBus
+class GatedPublishRunner : LoopRunner, IConfigureUnicastBus
 {
     protected override Task SendMessage()
     {
@@ -39,6 +39,10 @@ partial class GatedPublishRunner : LoopRunner, IConfigureUnicastBus
         });
 
         return mappings;
+    }
+
+    class Handler : Handler<Event>
+    {
     }
 }
 

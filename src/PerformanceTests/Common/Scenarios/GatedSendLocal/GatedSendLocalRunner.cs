@@ -7,7 +7,7 @@ using NServiceBus;
 /// received it repeats this. Due to the fact that the sending is not transactional
 /// the handler will already process messages while the batch is still being send.
 /// </summary>
-partial class GatedSendLocalRunner : LoopRunner
+class GatedSendLocalRunner : LoopRunner
 {
     protected override Task SendMessage()
     {
@@ -21,5 +21,8 @@ partial class GatedSendLocalRunner : LoopRunner
     {
         public string OrderId { get; set; }
         public byte[] Data { get; set; }
+    }
+    class Handler : Handler<Command>
+    {
     }
 }
