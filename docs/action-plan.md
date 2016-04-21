@@ -1,33 +1,13 @@
 ### Current action items
 
-- [x] Restrict splunk to only accept from TC
 - [ ] Document how to update and view results - @williambza
-- [ ] Switch to async-first API @ramon
-- [ ] Investigate batch sizing for `Task.WhenAll` @ramon
-- [x] Implement persistence variables - @ramon
-  - [x] Seed endpoints
-  - [ ] How can we clean the tests up after running tests?
-    - Maybe as part of the actual test?
-     - [x] MSMQ
-     - [x] RabbitMQ
-     - [x] SQL Transport
-     - [ ] ASB
-     - [x] ASQ
-     - [ ] RavenDB
-     - [ ] SQL Server (NHibernate)
-     - [ ] Azure
-    - Perhaps a script?
-  - [x] Azure Storage Persistence V5 connection strings
-- [ ] Create splunk dashboards - @igal + @hadi
- - [x] Add session and permutation ID to statistics info
- - [x] Collect required performance counters manually and report using the `Statistics` object
- - [x] Is there a way to see a graph per test fixture? @william
- - [ ] Include memory usage graph @hmemcpy + @williambza
-- [ ] Implement other test types - @dvdstalt
-  - [x] Receive only
-  - [x] Send only
-  - [x] Sagas
-  - [ ] Task array vs Parallel for
+- [ ] Document test infrastructure - @dvdstelt
+- [ ] ASB Cleanup @ramon
+- [ ] SQL Cleanup @ramon
+- [ ] Enable Ecryption @hmemcpy
+- [x] Fix graphs that no longer show memory, flip labels on smaller graphs @william
+- [ ] Add seeding duration instead of number of messages @dvdstelt
+
 shared files project?)
 - [ ] Collect results for multiple runs to see stability of tests
    - Feed results back to various transport/persistence owners
@@ -49,6 +29,32 @@ shared files project?)
  
  ### Completed actions
 
+- [x] Implement other test types - @dvdstalt
+  - [x] Receive only
+  - [x] Send only
+  - [x] Sagas
+- [x] Investigate batch sizing for `Task.WhenAll` @ramon
+- [x] Create splunk dashboards - @igal + @hadi
+ - [x] Add session and permutation ID to statistics info
+ - [x] Collect required performance counters manually and report using the `Statistics` object
+ - [x] Is there a way to see a graph per test fixture? @william
+ - [x] Include memory usage graph @hmemcpy + @williambza
+- [x] Restrict splunk to only accept from TC
+- [x] Switch to async-first API @ramon
+- [x] Implement persistence variables - @ramon
+  - [x] Seed endpoints
+  - [ ] How can we clean the tests up after running tests?
+    - Maybe as part of the actual test?
+     - [x] MSMQ
+     - [x] RabbitMQ
+     - [x] SQL Transport
+     - [ ] ASB
+     - [x] ASQ
+     - [ ] RavenDB
+     - [ ] SQL Server (NHibernate)
+     - [ ] Azure
+    - Perhaps a script?
+  - [x] Azure Storage Persistence V5 connection strings
 - [x] Remove hard dependency on splunk @tim
 - [x] Tweak permutation string display to include label of on/off @william
 - [x] Invert dependency chain between V5/V6, transports, persistences and tests project (investigate what _should_ actually be in the 
