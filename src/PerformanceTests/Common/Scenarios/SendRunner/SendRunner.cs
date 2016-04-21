@@ -1,9 +1,4 @@
 ﻿using System.Threading.Tasks;
-#if Version6
-using Configuration = NServiceBus.EndpointConfiguration;
-#else
-using Configuration = NServiceBus.BusConfiguration;
-#endif
 using NServiceBus;
 
 /// <summary>
@@ -13,7 +8,7 @@ partial class SendRunner : LoopRunner
 {
     protected override Task SendMessage()
     {
-        return SendLocal(new Command { Data = Data });
+        return Session.SendLocal(new Command { Data = Data });
     }
 
     public class Command : ICommand

@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConcurrencyProfile.cs" />
+    <Compile Include="Session.cs" />
   </ItemGroup>
   <Import Project="..\Common\Common.Data.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

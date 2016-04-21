@@ -1,14 +1,11 @@
 ﻿#if Version5
-using Common.Scenarios;
 using NServiceBus;
 
 /// <summary>
 /// Does a continuous test where a pre-seeded amount of messages will be handled
 /// </summary>    
-partial class ReceiveRunner : ICreateSeedData
+partial class ReceiveRunner
 {
-    public int SeedSize { get; } = 25000;
-
     public partial class Handler : IHandleMessages<Command>
     {
         public IBus Bus { get; set; }
@@ -16,16 +13,6 @@ partial class ReceiveRunner : ICreateSeedData
         public void Handle(Command message)
         {
         }
-    }
-
-    public void SendMessage(ISendOnlyBus sendOnlyBus)
-    {
-        var unicastBus = (NServiceBus.Unicast.UnicastBus)sendOnlyBus;
-        var machine = unicastBus.Configure.LocalAddress.Machine;
-        var queue = unicastBus.Configure.LocalAddress.Queue;
-
-        var address = new Address(queue, machine);
-        sendOnlyBus.Send(address, new Command { Data = Data });
     }
 }
 #endif

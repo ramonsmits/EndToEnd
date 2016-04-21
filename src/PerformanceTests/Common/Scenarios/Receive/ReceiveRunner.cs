@@ -1,14 +1,12 @@
-﻿#if Version6
-using Configuration = NServiceBus.EndpointConfiguration;
-#else
-using Configuration = NServiceBus.BusConfiguration;
-#endif
+﻿
+using System.Threading.Tasks;
+using Common.Scenarios;
 using NServiceBus;
 
 /// <summary>
 /// Does a continuous test where a pre-seeded amount of messages will be handled
 /// </summary>    
-partial class ReceiveRunner : BaseRunner
+partial class ReceiveRunner : BaseRunner, ICreateSeedData
 {
     public class Command : ICommand
     {
@@ -17,6 +15,13 @@ partial class ReceiveRunner : BaseRunner
 
     partial class Handler
     {
+    }
+
+    public int SeedSize { get; } = 50000;
+
+    public Task SendMessage(ISession session)
+    {
+        return session.SendLocal(new Command { Data = Data });
     }
 }
 

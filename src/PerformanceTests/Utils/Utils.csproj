@@ -71,6 +71,7 @@
     <Compile Include="DeterministicUuid.cs" />
     <Compile Include="EnumExtensionMethods.cs" />
     <Compile Include="INeedPermutation.cs" />
+    <Compile Include="ISession.cs" />
     <Compile Include="Permutations\Permutation.cs" />
     <Compile Include="Permutations\PermutationGenerator.cs" />
     <Compile Include="Permutations\PermutationParser.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Statistics.cs" />
     <Compile Include="SymbolicLink.cs" />
+    <Compile Include="TaskHelper.cs" />
     <Compile Include="TwoPhaseCommitEnlistment.cs" />
     <Compile Include="Variables\Audit.cs" />
     <Compile Include="Variables\ConcurrencyLevel.cs" />

@@ -36,15 +36,14 @@ abstract class LoopRunner : BaseRunner
         }
     }
 
-
-    Task Loop(object o)
+    async Task Loop(object o)
     {
         try
         {
             countdownEvent = new CountdownEvent(BatchSize);
 
-            Log.Warn("Sleeping 5,000ms for the instance to purge the queue and process subscriptions. Loop requires the queue to be empty.");
-            Thread.Sleep(5000);
+            Log.Warn("Sleeping 3,000ms for the instance to purge the queue and process subscriptions. Loop requires the queue to be empty.");
+            Thread.Sleep(3000);
             Log.Info("Starting");
 
             while (!Shutdown)
@@ -56,7 +55,7 @@ abstract class LoopRunner : BaseRunner
 
                     var d = Stopwatch.StartNew();
 
-                    Parallel.For(0, BatchSize, i => SendMessage());
+                    await TaskHelper.ParallelFor(BatchSize, SendMessage);
 
                     if (d.Elapsed < TimeSpan.FromSeconds(2.5))
                     {
@@ -79,8 +78,6 @@ abstract class LoopRunner : BaseRunner
         {
             Log.Error("Loop", ex);
         }
-
-        return Task.FromResult(0);
     }
 
     internal static void Signal()
