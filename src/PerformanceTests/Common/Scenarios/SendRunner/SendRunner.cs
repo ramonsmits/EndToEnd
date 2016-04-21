@@ -15,5 +15,10 @@ partial class SendRunner : LoopRunner
     {
         public byte[] Data { get; set; }
     }
+
+    public class Handler : Handler<Command>
+    {
+    }
 }
+
 
