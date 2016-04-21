@@ -64,9 +64,7 @@
     <Compile Include="Categories\TransportsFixture.cs" />
     <Compile Include="Categories\ResourceUtilizationFixture.cs" />
     <Compile Include="Categories\SenderSideFixture.cs" />
-    <Compile Include="Integration\MutatorsTests.cs" />
     <Compile Include="Integration\PermutationDirectoryResolverTests.cs" />
-    <Compile Include="Integration\SagasTests.cs" />
     <Compile Include="Tools\PermutationDirectoryResolver.cs" />
     <Compile Include="Tools\TestDescriptor.cs" />
     <Compile Include="Tools\TestEnvironment.cs" />

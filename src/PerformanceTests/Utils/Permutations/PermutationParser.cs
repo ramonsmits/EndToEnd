@@ -59,7 +59,7 @@ namespace Tests.Permutations
                 GarbageCollector = values.Parse<GarbageCollector>(10),
                 TransactionMode = values.Parse<TransactionMode>(11),
                 ConcurrencyLevel = values.Parse<ConcurrencyLevel>(12),
-                ScaleOut = values.Parse<ScaleOut>(13)
+                ScaleOut = values.Parse<ScaleOut>(13),
             };
         }
 

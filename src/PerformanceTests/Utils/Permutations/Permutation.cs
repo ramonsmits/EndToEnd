@@ -26,7 +26,7 @@ namespace Tests.Permutations
         public GarbageCollector GarbageCollector;//10
         public TransactionMode TransactionMode;//11
         public ConcurrencyLevel ConcurrencyLevel;//12
-        public ScaleOut ScaleOut = ScaleOut.NoScaleOut;
+        public ScaleOut ScaleOut = ScaleOut.NoScaleOut;//13
 
         string GenerateId()
         {
