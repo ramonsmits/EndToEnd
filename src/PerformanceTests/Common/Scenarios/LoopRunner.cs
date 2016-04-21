@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using NServiceBus;
 using NServiceBus.Logging;
 
 abstract class LoopRunner : BaseRunner
@@ -85,4 +86,20 @@ abstract class LoopRunner : BaseRunner
         countdownEvent.Signal();
     }
 
+    internal class Handler<K> : IHandleMessages<K>
+    {
+#if Version5
+        public void Handle(K message)
+        {
+            Signal();
+        }
+#else
+        public Task Handle(K message, IMessageHandlerContext context)
+        {
+            Signal();
+            return Task.FromResult(0);
+        }
+#endif
+    }
 }
+
