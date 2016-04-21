@@ -42,11 +42,6 @@ namespace Categories
             Tasks(permutation);
         }
 
-        public virtual void SendRunner(Permutation permutation)
-        {
-            Tasks(permutation);
-        }
-
         void Tasks(Permutation permutation, [CallerMemberName] string memberName = "")
         {
             var fixtureType = GetType();
