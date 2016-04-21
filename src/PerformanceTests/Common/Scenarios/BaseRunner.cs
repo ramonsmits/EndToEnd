@@ -13,6 +13,8 @@ using NServiceBus.Config.ConfigurationSource;
 using NServiceBus.Logging;
 using Tests.Permutations;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Common.Scenarios;
 using Variables;
 
@@ -41,10 +43,10 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         {
             Start();
             Log.InfoFormat("Warmup: {0}", Settings.WarmupDuration);
-            System.Threading.Thread.Sleep(Settings.WarmupDuration);
+            Thread.Sleep(Settings.WarmupDuration);
             Statistics.Instance.Reset(GetType().Name);
             Log.InfoFormat("Run: {0}", Settings.RunDuration);
-            System.Threading.Thread.Sleep(Settings.RunDuration);
+            Thread.Sleep(Settings.RunDuration);
             Statistics.Instance.Dump();
             Stop();
         }
@@ -67,16 +69,25 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         var seedCreator = this as ICreateSeedData;
         if (seedCreator == null) return;
 
-        if (seedCreator.SeedSize == 0) throw new InvalidOperationException("SeedSize was not set.");
-
         CreateOrPurgeQueues();
         CreateSendOnlyEndpoint();
 
         try
         {
-            TaskHelper.ParallelFor(seedCreator.SeedSize, () => ((ICreateSeedData)this).SendMessage(Session))
-                .GetAwaiter().GetResult();
-            Log.InfoFormat("Seeded total of {0:N0} messages.", seedCreator.SeedSize);
+            Log.InfoFormat("Start seeding messages for {0} seconds...", Settings.SeedDuration.TotalSeconds);
+            var cts = new CancellationTokenSource();
+            cts.CancelAfter(Settings.SeedDuration);
+
+            var count = 0L;
+
+            Parallel.ForEach(IterateUntilFalse(() => !cts.Token.IsCancellationRequested), b =>
+            {
+                Interlocked.Increment(ref count);
+                ((ICreateSeedData)this).SendMessage(Session).GetAwaiter().GetResult();
+            });
+
+            var avg = count / Settings.SeedDuration.TotalSeconds;
+            Log.InfoFormat("Done seeding, seeded {0:N0} messages, {1:N1} msg/s", count, avg);
         }
         finally
         {
@@ -227,4 +238,9 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 
     bool QueuesWerePurgedWhenSeedingData => this is ICreateSeedData;
     bool IsPurgingSupported => Permutation.Transport != Transport.AzureServiceBus;
+
+    static IEnumerable<bool> IterateUntilFalse(Func<bool> condition)
+    {
+        while (condition()) yield return true;
+    }
 }
