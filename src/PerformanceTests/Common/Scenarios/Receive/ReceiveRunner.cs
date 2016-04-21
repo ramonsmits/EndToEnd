@@ -17,8 +17,6 @@ partial class ReceiveRunner : BaseRunner, ICreateSeedData
     {
     }
 
-    public int SeedSize { get; } = 50000;
-
     public Task SendMessage(ISession session)
     {
         return session.SendLocal(new Command { Data = Data });

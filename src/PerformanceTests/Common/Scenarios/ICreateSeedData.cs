@@ -4,8 +4,6 @@
 
     interface ICreateSeedData
     {
-        //int SeedSize { get; }
-
         /// <summary>
         /// Sends or publishes a single message
         /// </summary>

@@ -7,8 +7,6 @@ partial class SagaInitiateRunner : BaseRunner, ICreateSeedData
 {
     int messageId;
 
-    public int SeedSize { get; } = 10000;
-
     public Task SendMessage(ISession session)
     {
         return session.SendLocal(new Command(Interlocked.Increment(ref messageId)));
