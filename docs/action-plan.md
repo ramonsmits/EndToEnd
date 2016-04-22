@@ -4,11 +4,9 @@
 - [ ] Document test infrastructure - @dvdstelt
 - [ ] ASB Cleanup @ramon
 - [ ] SQL Cleanup @ramon
-- [ ] Enable Ecryption @hmemcpy
-- [x] Fix graphs that no longer show memory, flip labels on smaller graphs @william
-- [ ] Add seeding duration instead of number of messages @dvdstelt
+- [ ] Check outbox graphs not showing v6 results - @williambza
+- [ ] Add drop down on graphs to filter on results - @williambza
 
-shared files project?)
 - [ ] Collect results for multiple runs to see stability of tests
    - Feed results back to various transport/persistence owners
 - [ ] Inform @andreas once we feel we are ready to start Stability tests
@@ -29,6 +27,9 @@ shared files project?)
  
  ### Completed actions
 
+- [x] Add seeding duration instead of number of messages @dvdstelt
+- [x] Enable Ecryption @hmemcpy
+- [x] Fix graphs that no longer show memory, flip labels on smaller graphs @william
 - [x] Implement other test types - @dvdstalt
   - [x] Receive only
   - [x] Send only
