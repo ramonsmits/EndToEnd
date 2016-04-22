@@ -27,6 +27,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
     protected ISession Session { get; private set; }
 
     protected byte[] Data { private set; get; }
+    protected bool SendOnly { get; set; }
 
     public virtual void Execute(Permutation permutation, string endpointName)
     {
@@ -116,8 +117,13 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
         configuration.CustomConfigurationSource(this);
 
+        if (SendOnly)
+        {
+            Session = new Session(Bus.CreateSendOnly(configuration));
+            return;
+        }
+        
         configuration.PurgeOnStartup(!QueuesWerePurgedWhenSeedingData && IsPurgingSupported);
-
         Session = new Session(Bus.Create(configuration).Start());
     }
 
@@ -172,6 +178,13 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         var configuration = CreateConfiguration();
         configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
         configuration.CustomConfigurationSource(this);
+
+        if (SendOnly)
+        {
+            configuration.SendOnly();
+            Session = new Session(Endpoint.Start(configuration).GetAwaiter().GetResult());
+            return;
+        }
 
         configuration.PurgeOnStartup(!QueuesWerePurgedWhenSeedingData && IsPurgingSupported);
 
