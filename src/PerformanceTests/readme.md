@@ -60,17 +60,17 @@ The following steps are taken to run a scenario.
 
 # Settings
 
-## Duration
+** Duration **
 
 By default the scenario is run for 18 (3+15) seconds for a Debug build and 60 (10+50) seconds for a Release build. It has a warmup and run duration and both can be modified in the appSettings.
 
-## Log output
+** Log output **
 
 A Debug build will log to file, console and trace output and the release build will log to Splunk (network) and only WARN or higher will be logged to file.
 
 This is done via configuration transformations. Open the `App.Release.config` files to see or modify these.
 
-## InvokeEnabled
+** InvokeEnabled **
 
 The test project has a setting `InvokeEnabled` which by default is set to `True`. When you set it to `False` all NUnit fixtures can be prepared on the file system without actually invoking them. This can be of use to generate all of them during a build and them move them to an environment to actually execute.
 
