@@ -1,11 +1,11 @@
 ### Current action items
 
-- [ ] Document how to update and view results - @williambza
 - [ ] Document test infrastructure - @dvdstelt
 - [ ] ASB Cleanup @ramon
 - [ ] SQL Cleanup @ramon
-- [ ] Check outbox graphs not showing v6 results - @williambza
 - [ ] Add drop down on graphs to filter on results - @williambza
+- [ ] Update nuget packages if applicable
+- [ ] Record demo of navigation in splunk
 
 - [ ] Collect results for multiple runs to see stability of tests
    - Feed results back to various transport/persistence owners
@@ -27,6 +27,8 @@
  
  ### Completed actions
 
+- [x] Document how to update and view results - @williambza
+- [x] Check outbox graphs not showing v6 results - @williambza
 - [x] Add seeding duration instead of number of messages @dvdstelt
 - [x] Enable Ecryption @hmemcpy
 - [x] Fix graphs that no longer show memory, flip labels on smaller graphs @william
