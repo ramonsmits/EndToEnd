@@ -48,15 +48,15 @@ The current structure is that the **Common** shared project contains a **Scenari
 The following steps are taken to run a scenario.
 
 * Build
-** NUnit
-*** Fixture
-**** Generate test permutations
-***** Execute NUnit Test
-****** Assemble files to permutation folder
-******* Invoke permutation test host
-******** Resolve scenario based on executing test
-********* Run test
-********** Log results
+* NUnit
+* Fixture
+* Generate test permutations
+* Execute NUnit Test
+* Assemble files to permutation folder
+* Invoke permutation test host
+* Resolve scenario based on executing test
+* Run test
+* Log results
 
 # Settings
 
