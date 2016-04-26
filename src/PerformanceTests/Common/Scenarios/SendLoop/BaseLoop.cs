@@ -108,7 +108,7 @@ abstract class BaseLoop : BaseRunner
         public Task Handle(K message, IMessageHandlerContext context)
         {
             WarnAtReceive();
-            return Task.FromResult(0);
+            return Task.CompletedTask;
         }
 #endif
 
