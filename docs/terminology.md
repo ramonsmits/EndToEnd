@@ -2,7 +2,7 @@
 
 The permutation meeting agreed on a way on how to run the most value benchmark results and defined some terminology:
 
-> Variable
+## Variable
 
 An item that  has multiple values. Examples are:
 
@@ -14,7 +14,7 @@ An item that  has multiple values. Examples are:
 
 In code this could be an `enum`
 
-> Value
+## Value
 
 The possible values for a variable. Examples are:
 
@@ -25,7 +25,7 @@ The possible values for a variable. Examples are:
 - 0%, 50%, 80%
 - 5.2.17, 6.0.0
 
-> Mode
+## Mode
 
 The configuration of a transport. Examples are:
 
@@ -33,7 +33,7 @@ The configuration of a transport. Examples are:
 - Default, No ACK
 - Connection Encryption, Large connection pool
 
-> Environment
+## Environment
 
 The identification of the environment. Examples are:
 
@@ -41,7 +41,7 @@ The identification of the environment. Examples are:
 - Azure
 - Amazon
 
-> Instance type
+## Instance type
 
 The type of machine on which the benchmark is run. Example are:
 
@@ -53,7 +53,7 @@ The type of machine on which the benchmark is run. Example are:
 - i2.2xlarge
 
 
-> Category
+## Category
 
 A specific set of variable values. The following examples do not mention the defaults, only the values that influence the number of permutations
 
@@ -74,6 +74,10 @@ Publish vs Send
 - Transport: RabbitMQ, MSMQ, SQL, ASB, ASQ
 - Persistence: InMemory, NHibernate, RavenDB
 
-> Permutation
+## Permutation
 
 A specific combination of Value, Mode and Environment. This basically identies a specific benchmark configuration.
+
+## Scenario
+
+A specific sort test that can be run against a permutation. For example receiving messages, publishing messages or creating a Saga.
