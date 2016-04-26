@@ -21,26 +21,25 @@ class Session : ISession
         localAddress = new Address(queue, machine);
     }
 
-    public Task Send(object message)
+    public async Task Send(object message)
     {
+        await Task.Yield();
         instance.Send(message);
-        return Task.CompletedTask;
     }
 
-    public Task Publish(object message)
+    public async Task Publish(object message)
     {
+        await Task.Yield();
         instance.Publish(message);
-        return Task.CompletedTask;
     }
 
-    public Task SendLocal(object message)
+    public async Task SendLocal(object message)
     {
+        await Task.Yield();
         if (localAddress == null)
             instance.SendLocal(message);
         else
             instance.Send(localAddress, message);
-
-        return Task.CompletedTask;
     }
 
     public Task Close()
