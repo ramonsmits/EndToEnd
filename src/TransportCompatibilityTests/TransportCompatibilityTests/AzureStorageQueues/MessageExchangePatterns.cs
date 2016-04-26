@@ -16,40 +16,32 @@
         [SetUp]
         public void SetUp()
         {
-            this.sourceEndpointDefinition = new AzureStorageQueuesEndpointDefinition()
-            {
-                Name = "Source"
-            };
-            this.destinationEndpointDefinition = new AzureStorageQueuesEndpointDefinition()
-            {
-                Name = "Destination"
-            };
+            sourceEndpointDefinition = new AzureStorageQueuesEndpointDefinition { Name = "Source" };
+            destinationEndpointDefinition = new AzureStorageQueuesEndpointDefinition { Name = "Destination" };
         }
 
         [Category("AzureStorageQueues")]
         [Test, TestCaseSource(nameof(GenerateVersionsPairs))]
         public void It_is_possible_to_send_command_between_different_versions(int sourceVersion, int destinationVersion)
         {
-            this.sourceEndpointDefinition.Mappings = new[]
+            sourceEndpointDefinition.Mappings = new[]
             {
                 new MessageMapping
                 {
                     MessageType = typeof(TestCommand),
-                    TransportAddress = sourceEndpointDefinition.Name
+                    TransportAddress = destinationEndpointDefinition.Name
                 }
             };
 
             using (var source = EndpointFacadeBuilder.CreateAndConfigure(this.sourceEndpointDefinition, sourceVersion))
-            {                
-                using (var destination = EndpointFacadeBuilder.CreateAndConfigure(this.destinationEndpointDefinition, destinationVersion))
-                {
-                    var messageId = Guid.NewGuid();
+            using (var destination = EndpointFacadeBuilder.CreateAndConfigure(this.destinationEndpointDefinition, destinationVersion))
+            {
+                var messageId = Guid.NewGuid();
 
-                    source.SendCommand(messageId);
+                source.SendCommand(messageId);
 
-                    // ReSharper disable once AccessToDisposedClosure
-                    AssertEx.WaitUntilIsTrue(() => destination.ReceivedMessageIds.Any(mi => mi == messageId));
-                }
+                // ReSharper disable once AccessToDisposedClosure
+                AssertEx.WaitUntilIsTrue(() => destination.ReceivedMessageIds.Any(mi => mi == messageId));
             }
         }
 
@@ -58,7 +50,7 @@
         [Test, TestCaseSource(nameof(GenerateVersionsPairs))]
         public void It_is_possible_to_send_request_and_receive_replay(int sourceVersion, int destinationVersion)
         {
-            this.sourceEndpointDefinition.Mappings = new[]
+            sourceEndpointDefinition.Mappings = new[]
             {
                 new MessageMapping
                 {
@@ -68,16 +60,14 @@
             };
 
             using (var source = EndpointFacadeBuilder.CreateAndConfigure(this.sourceEndpointDefinition, sourceVersion))
+            using (EndpointFacadeBuilder.CreateAndConfigure(this.destinationEndpointDefinition, destinationVersion))
             {
-                using (EndpointFacadeBuilder.CreateAndConfigure(this.destinationEndpointDefinition, destinationVersion))
-                {
-                    var requestId = Guid.NewGuid();
+                var requestId = Guid.NewGuid();
 
-                    source.SendRequest(requestId);
+                source.SendRequest(requestId);
 
-                    // ReSharper disable once AccessToDisposedClosure
-                    AssertEx.WaitUntilIsTrue(() => source.ReceivedResponseIds.Any(responseId => responseId == requestId));
-                }
+                // ReSharper disable once AccessToDisposedClosure
+                AssertEx.WaitUntilIsTrue(() => source.ReceivedResponseIds.Any(responseId => responseId == requestId));
             }
         }
 
@@ -95,19 +85,17 @@
             };
 
             using (var source = EndpointFacadeBuilder.CreateAndConfigure(this.sourceEndpointDefinition, sourceVersion))
+            using (var destination = EndpointFacadeBuilder.CreateAndConfigure(this.destinationEndpointDefinition, destinationVersion))
             {
-                using (var destination = EndpointFacadeBuilder.CreateAndConfigure(this.destinationEndpointDefinition, destinationVersion))
-                {
-                    // ReSharper disable once AccessToDisposedClosure
-                    AssertEx.WaitUntilIsTrue(() => source.NumberOfSubscriptions > 0);
+                // ReSharper disable once AccessToDisposedClosure
+                AssertEx.WaitUntilIsTrue(() => source.NumberOfSubscriptions > 0);
 
-                    var eventId = Guid.NewGuid();
+                var eventId = Guid.NewGuid();
 
-                    source.PublishEvent(eventId);
+                source.PublishEvent(eventId);
 
-                    // ReSharper disable once AccessToDisposedClosure
-                    AssertEx.WaitUntilIsTrue(() => destination.ReceivedEventIds.Any(ei => ei == eventId));
-                }
+                // ReSharper disable once AccessToDisposedClosure
+                AssertEx.WaitUntilIsTrue(() => destination.ReceivedEventIds.Any(ei => ei == eventId));
             }
         }
 

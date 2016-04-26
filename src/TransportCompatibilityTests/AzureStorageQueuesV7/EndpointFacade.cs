@@ -3,7 +3,8 @@
     using System;
     using System.Threading.Tasks;
     using NServiceBus;
-    using TransportCompatibilityTests.AzureStorageQueues;
+    using NServiceBus.Logging;
+    using NServiceBus.Pipeline;
     using TransportCompatibilityTests.Common;
     using TransportCompatibilityTests.Common.AzureStorageQueues;
     using TransportCompatibilityTests.Common.Messages;
@@ -25,6 +26,9 @@
 
         private async Task InitializeEndpoint(AzureStorageQueuesEndpointDefinition endpointDefinition)
         {
+            var defaultFactory = LogManager.Use<DefaultFactory>();
+            defaultFactory.Level(LogLevel.Error);
+
             var endpointConfiguration = new EndpointConfiguration(endpointDefinition.Name);
 
             endpointConfiguration.Conventions().DefiningMessagesAs(t => t.Namespace != null && t.Namespace.EndsWith(".Messages") && t != typeof(TestEvent));
@@ -41,9 +45,12 @@
 
             messageStore = new MessageStore();
             subscriptionStore = new SubscriptionStore();
+            callbackResultStore = new CallbackResultStore();
 
             endpointConfiguration.RegisterComponents(c => c.RegisterSingleton(messageStore));
             endpointConfiguration.RegisterComponents(c => c.RegisterSingleton(subscriptionStore));
+
+            endpointConfiguration.Pipeline.Register<SubscriptionMonitoringBehavior.Registration>();
 
             endpointInstance = await Endpoint.Start(endpointConfiguration);
         }
@@ -89,5 +96,30 @@
         public CallbackEnum[] ReceivedEnumCallbacks => callbackResultStore.Get<CallbackEnum>();
 
         public int NumberOfSubscriptions => subscriptionStore.NumberOfSubscriptions;
+
+        class SubscriptionMonitoringBehavior : Behavior<IIncomingPhysicalMessageContext>
+        {
+            public SubscriptionStore SubscriptionStore { get; set; }
+
+            public override async Task Invoke(IIncomingPhysicalMessageContext context, Func<Task> next)
+            {
+                await next();
+                string intent;
+
+                if (context.Message.Headers.TryGetValue(Headers.MessageIntent, out intent) && intent == "Subscribe")
+                {
+                    SubscriptionStore.Increment();
+                }
+            }
+
+            internal class Registration : RegisterStep
+            {
+                public Registration()
+                    : base("SubscriptionBehavior", typeof(SubscriptionMonitoringBehavior), "So we can get subscription events")
+                {
+                    InsertBefore("ProcessSubscriptionRequests");
+                }
+            }
+        }
     }
 }
