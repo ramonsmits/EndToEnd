@@ -3,7 +3,8 @@
 - [ ] Document test infrastructure - @dvdstelt
 - [ ] ASB Cleanup @ramon
 - [ ] SQL Cleanup @ramon
-- [ ] Add drop down on graphs to filter on results - @williambza
+- [ ] Add drop down on graphs to filter on results - @hmemcpy & @williambza
+  - [ ] Reduce the number of duplicated searches in favor of inline search filtering
 - [ ] Update nuget packages if applicable
 - [ ] Record demo of navigation in splunk
 
