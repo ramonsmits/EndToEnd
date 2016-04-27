@@ -6,7 +6,6 @@
     using TransportCompatibilityTests.Common;
     using TransportCompatibilityTests.Common.Messages;
     using TransportCompatibilityTests.Common.RabbitMQ;
-    using TransportCompatibilityTests.RabbitMQ.Infrastructure;
 
     public class EndpointFacade : MarshalByRefObject, IEndpointFacade
     {
@@ -87,37 +86,11 @@
 
         public CallbackEnum[] ReceivedEnumCallbacks => callbackResultStore.Get<CallbackEnum>();
 
-        public int NumberOfSubscriptions => 0; //subscriptionStore.NumberOfSubscriptions;
+        public int NumberOfSubscriptions => 0;
 
         public void Dispose()
         {
             startableBus.Dispose();
         }
-
-        //class SubscriptionBehavior : IBehavior<IncomingContext>
-        //{
-        //    public SubscriptionStore SubscriptionStore { get; set; }
-
-        //    public void Invoke(IncomingContext context, Action next)
-        //    {
-        //        string intent;
-
-        //        if (context.PhysicalMessage.Headers.TryGetValue(Headers.MessageIntent, out intent) && intent == "Subscribe")
-        //        {
-        //            SubscriptionStore.Increment();
-        //        }
-
-        //        next();
-        //    }
-
-        //    internal class Registration : RegisterStep
-        //    {
-        //        public Registration()
-        //            : base("SubscriptionBehavior", typeof(SubscriptionBehavior), "So we can get subscription events")
-        //        {
-        //            InsertBefore(WellKnownStep.CreateChildContainer);
-        //        }
-        //    }
-        //}
     }
 }

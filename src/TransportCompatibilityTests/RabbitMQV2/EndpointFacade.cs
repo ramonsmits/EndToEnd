@@ -6,14 +6,12 @@
     using TransportCompatibilityTests.Common;
     using TransportCompatibilityTests.Common.Messages;
     using TransportCompatibilityTests.Common.RabbitMQ;
-    using TransportCompatibilityTests.RabbitMQ.Infrastructure;
 
     public class EndpointFacade : MarshalByRefObject, IEndpointFacade
     {
         private IBus bus;
         private MessageStore messageStore;
         private CallbackResultStore callbackResultStore;
-        //private SubscriptionStore subscriptionStore;
 
         public void Bootstrap(EndpointDefinition endpointDefinition)
         {
@@ -35,13 +33,9 @@
             busConfiguration.CustomConfigurationSource(customConfiguration);
 
             messageStore = new MessageStore();
-            //subscriptionStore = new SubscriptionStore();
             callbackResultStore = new CallbackResultStore();
 
             busConfiguration.RegisterComponents(c => c.RegisterSingleton(messageStore));
-            //busConfiguration.RegisterComponents(c => c.RegisterSingleton(subscriptionStore));
-
-            //busConfiguration.Pipeline.Register<SubscriptionBehavior.Registration>();
 
             var startableBus = Bus.Create(busConfiguration);
 
@@ -93,37 +87,11 @@
 
         public CallbackEnum[] ReceivedEnumCallbacks => callbackResultStore.Get<CallbackEnum>();
 
-        public int NumberOfSubscriptions => 0; //subscriptionStore.NumberOfSubscriptions;
+        public int NumberOfSubscriptions => 0;
 
         public void Dispose()
         {
             bus.Dispose();
         }
-
-        //class SubscriptionBehavior : IBehavior<IncomingContext>
-        //{
-        //    public SubscriptionStore SubscriptionStore { get; set; }
-
-        //    public void Invoke(IncomingContext context, Action next)
-        //    {
-        //        string intent;
-
-        //        if (context.PhysicalMessage.Headers.TryGetValue(Headers.MessageIntent, out intent) && intent == "Subscribe")
-        //        {
-        //            SubscriptionStore.Increment();
-        //        }
-
-        //        next();
-        //    }
-
-        //    internal class Registration : RegisterStep
-        //    {
-        //        public Registration()
-        //            : base("SubscriptionBehavior", typeof(SubscriptionBehavior), "So we can get subscription events")
-        //        {
-        //            InsertBefore(WellKnownStep.CreateChildContainer);
-        //        }
-        //    }
-        //}
     }
 }

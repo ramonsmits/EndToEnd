@@ -21,7 +21,7 @@
 
             if (!SpinWait.SpinUntil(predicate, timeout.Value))
             {
-                throw new AssertionException($"Condition has not been met for {timeout.Value.Seconds} seconds.");
+                throw new AssertionException($"Condition has not been met for {timeout.Value.TotalSeconds} seconds.");
             }
         }
         

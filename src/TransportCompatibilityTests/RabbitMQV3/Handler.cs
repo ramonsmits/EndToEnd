@@ -4,9 +4,7 @@
     using TransportCompatibilityTests.Common;
     using TransportCompatibilityTests.Common.Messages;
 
-    public class Handler : IHandleMessages<TestCommand>,
-        IHandleMessages<TestEvent>,
-        IHandleMessages<TestRequest>, IHandleMessages<TestResponse>
+    public class Handler : IHandleMessages<TestCommand>, IHandleMessages<TestEvent>, IHandleMessages<TestRequest>, IHandleMessages<TestResponse>, IHandleMessages<TestIntCallback>, IHandleMessages<TestEnumCallback>
     {
         public IBus Bus { get; set; }
         public MessageStore Store { get; set; }
@@ -29,6 +27,16 @@
         public void Handle(TestResponse message)
         {
             Store.Add<TestResponse>(message.ResponseId);
+        }
+
+        public void Handle(TestIntCallback message)
+        {
+            Bus.Return(message.Response);
+        }
+
+        public void Handle(TestEnumCallback message)
+        {
+            Bus.Return(message.CallbackEnum);
         }
     }
 }

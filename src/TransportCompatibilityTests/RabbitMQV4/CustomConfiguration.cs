@@ -1,4 +1,4 @@
-﻿namespace RabbitMQV3
+﻿namespace RabbitMQV4
 {
     using System.Configuration;
     using System.Linq;
