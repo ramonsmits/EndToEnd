@@ -3,9 +3,6 @@
 - [ ] Document test infrastructure - @dvdstelt
 - [ ] ASB Cleanup @ramon
 - [ ] SQL Cleanup @ramon
-- [ ] Add drop down on graphs to filter on results - @hmemcpy & @williambza
-  - [ ] Reduce the number of duplicated searches in favor of inline search filtering
-- [ ] Update nuget packages if applicable
 - [ ] Record demo of navigation in splunk
 
 - [ ] Collect results for multiple runs to see stability of tests
@@ -28,6 +25,9 @@
  
  ### Completed actions
 
+- [x] Add drop down on graphs to filter on results - @hmemcpy & @williambza
+  - [x] Reduce the number of duplicated searches in favor of inline search filtering
+- [x] Update nuget packages if applicable
 - [x] Document how to update and view results - @williambza
 - [x] Check outbox graphs not showing v6 results - @williambza
 - [x] Add seeding duration instead of number of messages @dvdstelt
