@@ -8,9 +8,7 @@ class NHibernateProfile : IProfile, ISetup
     {
         cfg
             .UsePersistence<NHibernatePersistence>()
-            .ConnectionString(ConfigurationHelper.GetConnectionString("NHibernate"))
-            //.EnableCachingForSubscriptionStorage(TimeSpan.FromSeconds(5))
-            ;
+            .ConnectionString(ConfigurationHelper.GetConnectionString("NHibernate"));
     }
 
     void ISetup.Setup()
