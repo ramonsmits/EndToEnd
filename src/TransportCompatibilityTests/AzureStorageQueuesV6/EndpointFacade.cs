@@ -2,7 +2,8 @@
 {
     using System;
     using NServiceBus;
-    using TransportCompatibilityTests.AzureStorageQueues;
+    using NServiceBus.Pipeline;
+    using NServiceBus.Pipeline.Contexts;
     using TransportCompatibilityTests.Common;
     using TransportCompatibilityTests.Common.AzureStorageQueues;
     using TransportCompatibilityTests.Common.Messages;
@@ -24,14 +25,15 @@
             var busConfiguration = new BusConfiguration();
 
             busConfiguration.Conventions()
-                .DefiningMessagesAs(
-                    t => t.Namespace != null && t.Namespace.EndsWith(".Messages") && t != typeof(TestEvent));
-            busConfiguration.Conventions().DefiningEventsAs(t => t == typeof(TestEvent));
+                .DefiningMessagesAs(t => t.Namespace != null && t.Namespace.EndsWith(".Messages") && t != typeof(TestEvent));
+            busConfiguration.Conventions()
+                .DefiningEventsAs(t => t == typeof(TestEvent));
 
             busConfiguration.EndpointName(endpointDefinition.Name);
             busConfiguration.UsePersistence<InMemoryPersistence>();
             busConfiguration.EnableInstallers();
-            busConfiguration.UseTransport<AzureStorageQueueTransport>().ConnectionString(AzureStorageQueuesConnectionStringBuilder.Build());
+            busConfiguration.UseTransport<AzureStorageQueueTransport>()
+                .ConnectionString(AzureStorageQueuesConnectionStringBuilder.Build());
 
             busConfiguration.CustomConfigurationSource(new CustomConfiguration(endpointDefinition.Mappings));
 
@@ -40,6 +42,9 @@
             callbackResultStore = new CallbackResultStore();
 
             busConfiguration.RegisterComponents(c => c.RegisterSingleton(messageStore));
+            busConfiguration.RegisterComponents(c => c.RegisterSingleton(subscriptionStore));
+
+            busConfiguration.Pipeline.Register<SubscriptionBehavior.Registration>();
 
             var startableBus = Bus.Create(busConfiguration);
 
@@ -87,5 +92,31 @@
         public CallbackEnum[] ReceivedEnumCallbacks => callbackResultStore.Get<CallbackEnum>();
 
         public int NumberOfSubscriptions => subscriptionStore.NumberOfSubscriptions;
+
+        class SubscriptionBehavior : IBehavior<IncomingContext>
+        {
+            public SubscriptionStore SubscriptionStore { get; set; }
+
+            public void Invoke(IncomingContext context, Action next)
+            {
+                next();
+
+                string intent;
+
+                if (context.PhysicalMessage.Headers.TryGetValue(Headers.MessageIntent, out intent) && intent == "Subscribe")
+                {
+                    SubscriptionStore.Increment();
+                }
+            }
+
+            internal class Registration : RegisterStep
+            {
+                public Registration()
+                    : base("SubscriptionBehavior", typeof(SubscriptionBehavior), "So we can get subscription events")
+                {
+                    InsertBefore(WellKnownStep.CreateChildContainer);
+                }
+            }
+        }
     }
 }
