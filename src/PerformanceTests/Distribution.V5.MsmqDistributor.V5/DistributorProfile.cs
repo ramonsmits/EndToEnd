@@ -15,7 +15,7 @@ class DistributorProfile : IProfile, INeedPermutation, IProvideConfiguration<Mas
     {
         if (Permutation.ScaleOut != ScaleOut.MsmqDistributor) return;
 
-        var value = this.FetchSetting(DistributorKey);
+        var value = ConfigurationHelper.FetchSetting(DistributorKey);
 
         if (value == null) throw new InvalidOperationException($"Expected setting {DistributorKey}");
 

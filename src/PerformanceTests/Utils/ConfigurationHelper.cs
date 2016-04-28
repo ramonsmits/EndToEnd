@@ -1,31 +1,31 @@
 ﻿using System;
 using System.Configuration;
-using NServiceBus.Logging;
+using NLog;
 
-public static class ProfileExtensionMethods
+public static class ConfigurationHelper
 {
-    static readonly ILog Log = LogManager.GetLogger(typeof(ProfileExtensionMethods));
+    static readonly ILogger Log = LogManager.GetLogger(nameof(Configuration));
 
-    public static string GetConnectionString(this IProfile currentProfile, string connectionStringName)
+    public static string GetConnectionString(string connectionStringName)
     {
         var environmentVariableConnectionString = Environment.GetEnvironmentVariable(connectionStringName);
         if (!string.IsNullOrWhiteSpace(environmentVariableConnectionString))
         {
-            Log.InfoFormat("Environment variable found {0}", environmentVariableConnectionString);
+            Log.Info("Environment variable found {0}", environmentVariableConnectionString);
             return environmentVariableConnectionString;
         }
 
         var applicationConfigConnectionString = ConfigurationManager.ConnectionStrings[connectionStringName];
         if (applicationConfigConnectionString != null)
         {
-            Log.InfoFormat("App.config connection string variable found {0}", environmentVariableConnectionString);
+            Log.Info("App.config connection string variable found {0}", environmentVariableConnectionString);
             return applicationConfigConnectionString.ConnectionString;
         }
 
         return string.Empty;
     }
 
-    public static string FetchSetting(this IProfile instance, string key)
+    public static string FetchSetting(string key)
     {
         string value;
 
@@ -33,7 +33,7 @@ public static class ProfileExtensionMethods
 
         if (!string.IsNullOrWhiteSpace(value))
         {
-            Log.InfoFormat("Setting: {0} = {1} ({2})", key, value, "Environment");
+            Log.Info("Setting: {0} = {1} ({2})", key, value, "Environment");
             return value;
         }
 
@@ -41,7 +41,7 @@ public static class ProfileExtensionMethods
 
         if (!string.IsNullOrWhiteSpace(value))
         {
-            Log.InfoFormat("Setting: {0} = {1} ({2})", key, value, "AppSetting");
+            Log.Info("Setting: {0} = {1} ({2})", key, value, "AppSetting");
             return value;
         }
 

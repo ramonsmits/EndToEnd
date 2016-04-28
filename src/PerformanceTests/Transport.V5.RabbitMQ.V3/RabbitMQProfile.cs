@@ -6,7 +6,6 @@ class RabbitMQProfile : IProfile
     {
         busConfiguration
             .UseTransport<RabbitMQTransport>()
-            //.DisableCallbackReceiver()
-            .ConnectionString(this.GetConnectionString("RabbitMQ"));
+            .ConnectionString(ConfigurationHelper.GetConnectionString("RabbitMQ"));
     }
 }
