@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BFE9635E-E2B4-46A3-AC73-2C4E07A788E0}</ProjectGuid>
+    <ProjectGuid>{65952710-8290-49C6-B64B-1016D461F55E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TransportCompatibilityTests</RootNamespace>
-    <AssemblyName>TransportCompatibilityTests</AssemblyName>
+    <RootNamespace>RabbitMQV4</RootNamespace>
+    <AssemblyName>RabbitMQV4</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,19 +30,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
+    <Reference Include="NServiceBus.Callbacks, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\NServiceBus.Callbacks.1.0.0-beta0001\lib\net452\NServiceBus.Callbacks.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="nunit.mocks, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NUnit.2.5.10.11092\lib\nunit.mocks.dll</HintPath>
+    <Reference Include="NServiceBus.Core, Version=6.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\NServiceBus.6.0.0-beta0002\lib\net452\NServiceBus.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="pnunit.framework, Version=1.0.4109.34242, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NUnit.2.5.10.11092\lib\pnunit.framework.dll</HintPath>
+    <Reference Include="NServiceBus.Transports.RabbitMQ, Version=4.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\NServiceBus.RabbitMQ.4.0.0-alpha0216\lib\net452\NServiceBus.Transports.RabbitMQ.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RabbitMQ.Client, Version=3.6.1.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\RabbitMQ.Client.3.6.1\lib\net45\RabbitMQ.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -52,49 +57,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssertExtensions.cs" />
-    <Compile Include="AzureServiceBus\Callbacks.cs" />
-    <Compile Include="AzureServiceBus\Infrastructure\AzureServiceBusContext.cs" />
-    <Compile Include="AzureServiceBus\MessageExchangePatterns.cs" />
-    <Compile Include="AzureStorageQueues\Infrastructure\AzureStorageQueueContext.cs" />
-    <Compile Include="AzureStorageQueues\MessageExchangePatterns.cs" />
-    <Compile Include="RabbitMQ\Callbacks.cs" />
-    <Compile Include="RabbitMQ\Infrastructure\RabbitMqContext.cs" />
-    <Compile Include="SqlServer\Infrastructure\SqlServerContext.cs" />
-    <Compile Include="RabbitMQ\MessageExchangePatterns.cs" />
-    <Compile Include="SqlServer\Callbacks.cs" />
-    <Compile Include="SqlServer\MessageExchangePatterns.cs" />
-    <Compile Include="SqlServer\UpgradingV2SubscriberToV3SubscriberWithV3Publisher.cs" />
+    <Compile Include="CustomConfiguration.cs" />
+    <Compile Include="EndpointFacade.cs" />
+    <Compile Include="Handler.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SqlServerV1\SqlServerV1.csproj">
-      <Project>{b5d74165-91f9-46cf-8523-1775598f5ee6}</Project>
-      <Name>SqlServerV1</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SqlServerV2\SqlServerV2.csproj">
-      <Project>{eeae4525-249c-4aee-be10-bd338d537594}</Project>
-      <Name>SqlServerV2</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SqlServerV3\SqlServerV3.csproj">
-      <Project>{fec856e8-44ee-4e93-8964-32fd236e9df7}</Project>
-      <Name>SqlServerV3</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TransportCompatibilityTests.Common\TransportCompatibilityTests.Common.csproj">
-      <Project>{531AB217-EFFE-428C-8CA0-A8A70C907992}</Project>
+      <Project>{531ab217-effe-428c-8ca0-a8a70c907992}</Project>
       <Name>TransportCompatibilityTests.Common</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+    <ProjectReference Include="..\TransportCompatibilityTests\TransportCompatibilityTests.csproj">
+      <Project>{BFE9635E-E2B4-46A3-AC73-2C4E07A788E0}</Project>
+      <Name>TransportCompatibilityTests</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

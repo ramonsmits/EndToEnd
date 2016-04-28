@@ -19,8 +19,19 @@
         public static NetworkCredential Credentials()
         {
             var builder = new Builder(Build());
+            string username = "guest", password = "guest";
 
-            return new NetworkCredential(builder["username"].ToString(), builder["password"].ToString());
+            if (builder.ContainsKey("UserName"))
+            {
+                username = (string) builder["UserName"];
+            }
+
+            if (builder.ContainsKey("Password"))
+            {
+                password = (string)builder["Password"];
+            }
+
+            return new NetworkCredential(username, password);
         }
 
         public static Uri VirtualHostAPI()

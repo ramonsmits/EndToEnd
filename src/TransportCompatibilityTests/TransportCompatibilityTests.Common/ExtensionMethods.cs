@@ -14,7 +14,7 @@
 
         public static string TransportAddressForVersion(this RabbitMqEndpointDefinition endpointDefinition, int version)
         {
-            return endpointDefinition.Name + "." + Environment.MachineName;
+            return (version < 4) ? endpointDefinition.Name + "." + Environment.MachineName : endpointDefinition.Name;
         }
 
         public static string TransportAddressForVersion(this SqlServerEndpointDefinition endpointDefinition, int version)

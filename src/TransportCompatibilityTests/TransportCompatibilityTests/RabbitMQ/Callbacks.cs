@@ -1,6 +1,5 @@
 ﻿namespace TransportCompatibilityTests.RabbitMQ
 {
-    using System;
     using System.Linq;
     using NUnit.Framework;
     using TransportCompatibilityTests.Common;
@@ -9,7 +8,7 @@
     using TransportCompatibilityTests.RabbitMQ.Infrastructure;
 
     [TestFixture]
-    public class MessageExchangePatterns : RabbitMqContext
+    public class Callbacks : RabbitMqContext
     {
         private RabbitMqEndpointDefinition sourceEndpointDefinition;
         private RabbitMqEndpointDefinition destinationEndpointDefinition;
@@ -23,53 +22,14 @@
 
         [Category("RabbitMQ")]
         [Test, TestCaseSource(nameof(GenerateVersionsPairs))]
-        public void It_is_possible_to_send_command_between_different_versions(int sourceVersion, int destinationVersion)
-        {
-            this.sourceEndpointDefinition.Mappings = new []
-            {
-                new MessageMapping
-                {
-                    MessageType = typeof(TestCommand),
-                    TransportAddress = this.destinationEndpointDefinition.TransportAddressForVersion(destinationVersion)
-                }
-            };
-
-            using (var source = EndpointFacadeBuilder.CreateAndConfigure(this.sourceEndpointDefinition, sourceVersion))
-            using (var destination = EndpointFacadeBuilder.CreateAndConfigure(this.destinationEndpointDefinition, destinationVersion))
-            {
-                var messageId = Guid.NewGuid();
-
-                source.SendCommand(messageId);
-
-                // ReSharper disable once AccessToDisposedClosure
-                AssertEx.WaitUntilIsTrue(() => destination.ReceivedMessageIds.Any(mi => mi == messageId));
-            }
-        }
-
-        [Category("RabbitMQ")]
-        [Test, TestCaseSource(nameof(GenerateVersionsPairs))]
-        public void It_is_possible_to_publish_events(int sourceVersion, int destinationVersion)
-        {
-            using (var source = EndpointFacadeBuilder.CreateAndConfigure(this.sourceEndpointDefinition, sourceVersion))
-            using (var destination = EndpointFacadeBuilder.CreateAndConfigure(this.destinationEndpointDefinition, destinationVersion))
-            {
-                var eventId = Guid.NewGuid();
-
-                source.PublishEvent(eventId);
-
-                // ReSharper disable once AccessToDisposedClosure
-                AssertEx.WaitUntilIsTrue(() => destination.ReceivedEventIds.Any(ei => ei == eventId));
-            }
-        }
-
-        [Test, TestCaseSource(nameof(GenerateVersionsPairs))]
-        public void It_is_possible_to_send_request_and_receive_replay(int sourceVersion, int destinationVersion)
+        // ReSharper disable once InconsistentNaming
+        public void Int_callbacks_work(int sourceVersion, int destinationVersion)
         {
             this.sourceEndpointDefinition.Mappings = new[]
             {
                 new MessageMapping
                 {
-                    MessageType = typeof(TestRequest),
+                    MessageType = typeof(TestIntCallback),
                     TransportAddress = this.destinationEndpointDefinition.TransportAddressForVersion(destinationVersion)
                 }
             };
@@ -77,12 +37,38 @@
             using (var source = EndpointFacadeBuilder.CreateAndConfigure(this.sourceEndpointDefinition, sourceVersion))
             using (EndpointFacadeBuilder.CreateAndConfigure(this.destinationEndpointDefinition, destinationVersion))
             {
-                var requestId = Guid.NewGuid();
+                var value = 42;
 
-                source.SendRequest(requestId);
+                source.SendAndCallbackForInt(value);
 
                 // ReSharper disable once AccessToDisposedClosure
-                AssertEx.WaitUntilIsTrue(() => source.ReceivedResponseIds.Any(responseId => responseId == requestId));
+                AssertEx.WaitUntilIsTrue(() => source.ReceivedIntCallbacks.Contains(value));
+            }
+        }
+
+        [Category("RabbitMQ")]
+        [Test, TestCaseSource(nameof(GenerateVersionsPairs))]
+        // ReSharper disable once InconsistentNaming
+        public void Enum_callbacks_work(int sourceVersion, int destinationVersion)
+        {
+            this.sourceEndpointDefinition.Mappings = new[]
+            {
+                new MessageMapping
+                {
+                    MessageType = typeof(TestEnumCallback),
+                    TransportAddress = this.destinationEndpointDefinition.TransportAddressForVersion(destinationVersion)
+                }
+            };
+
+            using (var source = EndpointFacadeBuilder.CreateAndConfigure(this.sourceEndpointDefinition, sourceVersion))
+            using (EndpointFacadeBuilder.CreateAndConfigure(this.destinationEndpointDefinition, destinationVersion))
+            {
+                var value = CallbackEnum.Three;
+
+                source.SendAndCallbackForEnum(value);
+
+                // ReSharper disable once AccessToDisposedClosure
+                AssertEx.WaitUntilIsTrue(() => source.ReceivedEnumCallbacks.Contains(value));
             }
         }
 
