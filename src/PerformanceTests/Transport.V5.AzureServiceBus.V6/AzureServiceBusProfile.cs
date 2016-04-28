@@ -18,9 +18,10 @@ class AzureServiceBusProfile : IProfile, ISetup
             .ConnectionString(connectionstring);
     }
 
-    public void Setup()
+    void ISetup.Setup()
     {
-        CleanupTopology();
+        Log.WarnFormat("Skipping topology cleanup!");
+        //CleanupTopology();
     }
 
     void CleanupTopology()
