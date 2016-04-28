@@ -44,11 +44,19 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         {
             Start();
             Log.InfoFormat("Warmup: {0}", Settings.WarmupDuration);
+
             Thread.Sleep(Settings.WarmupDuration);
+
+            var runDuration = IsSeedingData
+                ? Settings.RunDuration - Settings.SeedDuration
+                : Settings.RunDuration;
+
+            Log.InfoFormat("Run: {0}", runDuration);
+
             Statistics.Instance.Reset(GetType().Name);
-            Log.InfoFormat("Run: {0}", Settings.RunDuration);
-            Thread.Sleep(Settings.RunDuration);
+            Thread.Sleep(runDuration); 
             Statistics.Instance.Dump();
+
             Stop();
         }
         finally
@@ -123,7 +131,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
             return;
         }
         
-        configuration.PurgeOnStartup(!QueuesWerePurgedWhenSeedingData && IsPurgingSupported);
+        configuration.PurgeOnStartup(!IsSeedingData && IsPurgingSupported);
         Session = new Session(Bus.Create(configuration).Start());
     }
 
@@ -186,7 +194,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
             return;
         }
 
-        configuration.PurgeOnStartup(!QueuesWerePurgedWhenSeedingData && IsPurgingSupported);
+        configuration.PurgeOnStartup(!IsSeedingData && IsPurgingSupported);
 
         var instance = Endpoint.Start(configuration).GetAwaiter().GetResult();
         Session = new Session(instance);
@@ -249,7 +257,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         new Random(0).NextBytes(Data);
     }
 
-    bool QueuesWerePurgedWhenSeedingData => this is ICreateSeedData;
+    bool IsSeedingData => this is ICreateSeedData;
     bool IsPurgingSupported => Permutation.Transport != Transport.AzureServiceBus;
 
     static IEnumerable<bool> IterateUntilFalse(Func<bool> condition)
