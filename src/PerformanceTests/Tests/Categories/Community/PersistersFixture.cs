@@ -5,8 +5,8 @@ namespace Categories
     using Tests.Permutations;
     using Variables;
 
-    [TestFixture(Description = "Persisters", Category = "Community")]
-    public class PersistersFixture : Base
+    [TestFixture(Description = "MongoDB", Category = "Community")]
+    public class MongoDBFixture : Base
     {
         [TestCaseSource(nameof(CreatePermutations))]
         public override void GatedPublishRunner(Permutation permutation)
@@ -24,10 +24,12 @@ namespace Categories
         {
             return PermutationGenerator.Generate(new Permutations
             {
+                Versions = new[] { NServiceBusVersion.V5 },
                 Transports = new[] { Transport.MSMQ },
-                Persisters = new[] { Persistence.Azure, Persistence.InMemory, Persistence.NHibernate, Persistence.RavenDB },
-                Serializers = new[] { Serialization.Json, },
-                OutboxModes = new[] { Outbox.Off, },
+                Persisters = new[] { Persistence.MongoDB },
+                Serializers = new[] { Serialization.Json },
+                OutboxModes = new[] { Outbox.Off, Outbox.On },
+                DTCModes = new[] { DTC.Off }
             });
         }
     }

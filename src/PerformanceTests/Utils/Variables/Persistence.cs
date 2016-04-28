@@ -6,6 +6,7 @@ namespace Variables
         NHibernate,
         RavenDB,
         //MSMQ,
-        Azure
+        Azure,
+        MongoDB
     }
 }

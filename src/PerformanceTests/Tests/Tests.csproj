@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Categories\Community\PersistersFixture.cs" />
     <Compile Include="Categories\SerializerFixture.cs" />
     <Compile Include="Categories\SendThroughputFixture.cs" />
     <Compile Include="Categories\DistributorFixture.cs" />
