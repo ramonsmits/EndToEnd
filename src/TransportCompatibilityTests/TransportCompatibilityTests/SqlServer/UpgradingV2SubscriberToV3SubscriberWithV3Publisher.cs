@@ -2,7 +2,6 @@ namespace TransportCompatibilityTests.SqlServer
 {
     using System;
     using System.Linq;
-    using System.Threading;
     using NUnit.Framework;
     using TransportCompatibilityTests.Common;
     using TransportCompatibilityTests.Common.Messages;

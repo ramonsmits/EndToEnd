@@ -7,7 +7,7 @@
     using TransportCompatibilityTests.Common.SqlServer;
 
     [TestFixture]
-    public class Callbacks
+    public class Callbacks: SqlServerContext
     {
         private SqlServerEndpointDefinition sourceEndpointDefinition;
         private SqlServerEndpointDefinition destinationEndpointDefinition;
@@ -77,6 +77,7 @@
 
             var pairs = from l in sqlTransportVersions
                         from r in sqlTransportVersions
+                        where l != r
                         select new object[] { l, r };
 
             return pairs.ToArray();

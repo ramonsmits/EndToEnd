@@ -62,6 +62,7 @@
             }
         }
 
+        [Category("RabbitMQ")]
         [Test, TestCaseSource(nameof(GenerateVersionsPairs))]
         public void It_is_possible_to_send_request_and_receive_replay(int sourceVersion, int destinationVersion)
         {
