@@ -1,10 +1,12 @@
 ﻿namespace TransportCompatibilityTests.RabbitMQ.Infrastructure
 {
     using System;
+    using System.Linq;
     using System.Net;
     using System.Net.Http;
     using NUnit.Framework;
     using TransportCompatibilityTests.Common;
+    using TransportCompatibilityTests.Common.RabbitMQ;
 
     [TestFixture]
     public abstract class RabbitMqContext
@@ -76,6 +78,19 @@
 
                 throw new Exception("Couldn't execute the REST call.");
             }
+        }
+
+        protected static object[][] GenerateVersionsPairs()
+        {
+            var versions = new[] { 1, 2, 3, 4 };
+
+            var pairs = from l in versions
+                        from r in versions
+                        from t in new[] {Topology.Direct, Topology.Convention}
+                        where l != r
+                        select new object[] { l, r, t };
+
+            return pairs.ToArray();
         }
     }
 }

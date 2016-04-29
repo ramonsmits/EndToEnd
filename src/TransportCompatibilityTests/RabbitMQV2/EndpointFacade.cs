@@ -26,11 +26,17 @@
             busConfiguration.EndpointName(endpointDefinition.Name);
             busConfiguration.UsePersistence<InMemoryPersistence>();
             busConfiguration.EnableInstallers();
-            busConfiguration.UseTransport<RabbitMQTransport>()
-                .ConnectionString(RabbitConnectionStringBuilder.Build());
+            var transportExtensions = busConfiguration.UseTransport<RabbitMQTransport>();
+            transportExtensions.ConnectionString(RabbitConnectionStringBuilder.Build());
 
-            var customConfiguration = new CustomConfiguration(endpointDefinition.As<RabbitMqEndpointDefinition>().Mappings);
+            var rabbitMqEndpointDefinition = endpointDefinition.As<RabbitMqEndpointDefinition>();
+            var customConfiguration = new CustomConfiguration(rabbitMqEndpointDefinition.Mappings);
             busConfiguration.CustomConfigurationSource(customConfiguration);
+
+            if (rabbitMqEndpointDefinition.RoutingTopology == Topology.Direct)
+            {
+                transportExtensions.UseDirectRoutingTopology();
+            }
 
             messageStore = new MessageStore();
             callbackResultStore = new CallbackResultStore();

@@ -4,7 +4,6 @@
     using System.Threading.Tasks;
     using NServiceBus;
     using NServiceBus.AzureServiceBus;
-    using TransportCompatibilityTests.AzureServiceBus;
     using TransportCompatibilityTests.Common;
     using TransportCompatibilityTests.Common.AzureServiceBus;
     using TransportCompatibilityTests.Common.Messages;

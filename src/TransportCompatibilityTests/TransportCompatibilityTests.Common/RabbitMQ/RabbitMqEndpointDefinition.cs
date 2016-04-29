@@ -7,10 +7,18 @@
     {
         public override string TransportName => "RabbitMQ";
         public MessageMapping[] Mappings { get; set; }
+        public Topology RoutingTopology { get; set; }
 
         public RabbitMqEndpointDefinition()
         {
+            RoutingTopology = Topology.Convention;
             Mappings = new MessageMapping[0];
         }
+    }
+
+    public enum Topology
+    {
+        Direct,
+        Convention
     }
 }

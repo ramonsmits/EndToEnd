@@ -17,25 +17,26 @@
         [SetUp]
         public void SetUp()
         {
-            this.sourceEndpointDefinition = new RabbitMqEndpointDefinition { Name = "src" };
-            this.destinationEndpointDefinition = new RabbitMqEndpointDefinition { Name = "dst" };
+            sourceEndpointDefinition = new RabbitMqEndpointDefinition { Name = "src" };
+            destinationEndpointDefinition = new RabbitMqEndpointDefinition { Name = "dst" };
         }
 
         [Category("RabbitMQ")]
-        [Test, TestCaseSource(nameof(GenerateVersionsPairs))]
-        public void It_is_possible_to_send_command_between_different_versions(int sourceVersion, int destinationVersion)
+        [Test, TestCaseSource(typeof(RabbitMqContext), nameof(GenerateVersionsPairs))]
+        public void It_is_possible_to_send_command_between_different_versions(int sourceVersion, int destinationVersion, Topology topology)
         {
-            this.sourceEndpointDefinition.Mappings = new []
+            destinationEndpointDefinition.RoutingTopology = sourceEndpointDefinition.RoutingTopology = topology;
+            sourceEndpointDefinition.Mappings = new []
             {
                 new MessageMapping
                 {
                     MessageType = typeof(TestCommand),
-                    TransportAddress = this.destinationEndpointDefinition.TransportAddressForVersion(destinationVersion)
+                    TransportAddress = destinationEndpointDefinition.TransportAddressForVersion(destinationVersion)
                 }
             };
 
-            using (var source = EndpointFacadeBuilder.CreateAndConfigure(this.sourceEndpointDefinition, sourceVersion))
-            using (var destination = EndpointFacadeBuilder.CreateAndConfigure(this.destinationEndpointDefinition, destinationVersion))
+            using (var source = EndpointFacadeBuilder.CreateAndConfigure(sourceEndpointDefinition, sourceVersion))
+            using (var destination = EndpointFacadeBuilder.CreateAndConfigure(destinationEndpointDefinition, destinationVersion))
             {
                 var messageId = Guid.NewGuid();
 
@@ -47,11 +48,13 @@
         }
 
         [Category("RabbitMQ")]
-        [Test, TestCaseSource(nameof(GenerateVersionsPairs))]
-        public void It_is_possible_to_publish_events(int sourceVersion, int destinationVersion)
+        [Test, TestCaseSource(typeof(RabbitMqContext), nameof(GenerateVersionsPairs))]
+        public void It_is_possible_to_publish_events(int sourceVersion, int destinationVersion, Topology topology)
         {
-            using (var source = EndpointFacadeBuilder.CreateAndConfigure(this.sourceEndpointDefinition, sourceVersion))
-            using (var destination = EndpointFacadeBuilder.CreateAndConfigure(this.destinationEndpointDefinition, destinationVersion))
+            destinationEndpointDefinition.RoutingTopology = sourceEndpointDefinition.RoutingTopology = topology;
+
+            using (var source = EndpointFacadeBuilder.CreateAndConfigure(sourceEndpointDefinition, sourceVersion))
+            using (var destination = EndpointFacadeBuilder.CreateAndConfigure(destinationEndpointDefinition, destinationVersion))
             {
                 var eventId = Guid.NewGuid();
 
@@ -63,20 +66,21 @@
         }
 
         [Category("RabbitMQ")]
-        [Test, TestCaseSource(nameof(GenerateVersionsPairs))]
-        public void It_is_possible_to_send_request_and_receive_replay(int sourceVersion, int destinationVersion)
+        [Test, TestCaseSource(typeof(RabbitMqContext), nameof(GenerateVersionsPairs))]
+        public void It_is_possible_to_send_request_and_receive_replay(int sourceVersion, int destinationVersion, Topology topology)
         {
-            this.sourceEndpointDefinition.Mappings = new[]
+            destinationEndpointDefinition.RoutingTopology = sourceEndpointDefinition.RoutingTopology = topology;
+            sourceEndpointDefinition.Mappings = new[]
             {
                 new MessageMapping
                 {
                     MessageType = typeof(TestRequest),
-                    TransportAddress = this.destinationEndpointDefinition.TransportAddressForVersion(destinationVersion)
+                    TransportAddress = destinationEndpointDefinition.TransportAddressForVersion(destinationVersion)
                 }
             };
 
-            using (var source = EndpointFacadeBuilder.CreateAndConfigure(this.sourceEndpointDefinition, sourceVersion))
-            using (EndpointFacadeBuilder.CreateAndConfigure(this.destinationEndpointDefinition, destinationVersion))
+            using (var source = EndpointFacadeBuilder.CreateAndConfigure(sourceEndpointDefinition, sourceVersion))
+            using (EndpointFacadeBuilder.CreateAndConfigure(destinationEndpointDefinition, destinationVersion))
             {
                 var requestId = Guid.NewGuid();
 
@@ -85,18 +89,6 @@
                 // ReSharper disable once AccessToDisposedClosure
                 AssertEx.WaitUntilIsTrue(() => source.ReceivedResponseIds.Any(responseId => responseId == requestId));
             }
-        }
-
-        private static object[][] GenerateVersionsPairs()
-        {
-            var versions = new[] { 1, 2, 3, 4 };
-
-            var pairs = from l in versions
-                        from r in versions
-                        where l != r
-                        select new object[] { l, r };
-
-            return pairs.ToArray();
         }
     }
 }

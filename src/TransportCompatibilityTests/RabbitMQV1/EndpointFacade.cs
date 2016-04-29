@@ -27,12 +27,17 @@
 
             configure.UseInMemoryTimeoutPersister();
             configure.InMemorySubscriptionStorage();
-            configure.UseTransport<RabbitMQ>(() => RabbitConnectionStringBuilder.Build());
+            configure.UseTransport<RabbitMQ>(RabbitConnectionStringBuilder.Build);
 
-            var customConfiguration = new CustomConfiguration(endpointDefinition.As<RabbitMqEndpointDefinition>().Mappings);
+            var rabbitMqEndpointDefinition = endpointDefinition.As<RabbitMqEndpointDefinition>();
+            var customConfiguration = new CustomConfiguration(rabbitMqEndpointDefinition.Mappings);
             configure.CustomConfigurationSource(customConfiguration);
-
             configure.Configurer.ConfigureComponent<MessageStore>(DependencyLifecycle.SingleInstance);
+
+            if (rabbitMqEndpointDefinition.RoutingTopology == Topology.Direct)
+            {
+                Configure.Transports.RabbitMq(settings => settings.UseDirectRoutingTopology());
+            }
 
             startableBus = configure.UnicastBus().CreateBus();
             bus = startableBus.Start(() => configure.ForInstallationOn<NServiceBus.Installation.Environments.Windows>().Install());

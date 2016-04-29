@@ -16,26 +16,27 @@
         [SetUp]
         public void SetUp()
         {
-            this.sourceEndpointDefinition = new RabbitMqEndpointDefinition { Name = "src" };
-            this.destinationEndpointDefinition = new RabbitMqEndpointDefinition { Name = "dst" };
+            sourceEndpointDefinition = new RabbitMqEndpointDefinition { Name = "src" };
+            destinationEndpointDefinition = new RabbitMqEndpointDefinition { Name = "dst" };
         }
 
         [Category("RabbitMQ")]
-        [Test, TestCaseSource(nameof(GenerateVersionsPairs))]
+        [Test, TestCaseSource(typeof(RabbitMqContext), nameof(GenerateVersionsPairs))]
         // ReSharper disable once InconsistentNaming
-        public void Int_callbacks_work(int sourceVersion, int destinationVersion)
+        public void Int_callbacks_work(int sourceVersion, int destinationVersion, Topology topology)
         {
-            this.sourceEndpointDefinition.Mappings = new[]
+            destinationEndpointDefinition.RoutingTopology = sourceEndpointDefinition.RoutingTopology = topology;
+            sourceEndpointDefinition.Mappings = new[]
             {
                 new MessageMapping
                 {
                     MessageType = typeof(TestIntCallback),
-                    TransportAddress = this.destinationEndpointDefinition.TransportAddressForVersion(destinationVersion)
+                    TransportAddress = destinationEndpointDefinition.TransportAddressForVersion(destinationVersion)
                 }
             };
 
-            using (var source = EndpointFacadeBuilder.CreateAndConfigure(this.sourceEndpointDefinition, sourceVersion))
-            using (EndpointFacadeBuilder.CreateAndConfigure(this.destinationEndpointDefinition, destinationVersion))
+            using (var source = EndpointFacadeBuilder.CreateAndConfigure(sourceEndpointDefinition, sourceVersion))
+            using (EndpointFacadeBuilder.CreateAndConfigure(destinationEndpointDefinition, destinationVersion))
             {
                 var value = 42;
 
@@ -47,21 +48,22 @@
         }
 
         [Category("RabbitMQ")]
-        [Test, TestCaseSource(nameof(GenerateVersionsPairs))]
+        [Test, TestCaseSource(typeof(RabbitMqContext), nameof(GenerateVersionsPairs))]
         // ReSharper disable once InconsistentNaming
-        public void Enum_callbacks_work(int sourceVersion, int destinationVersion)
+        public void Enum_callbacks_work(int sourceVersion, int destinationVersion, Topology topology)
         {
-            this.sourceEndpointDefinition.Mappings = new[]
+            destinationEndpointDefinition.RoutingTopology = sourceEndpointDefinition.RoutingTopology = topology;
+            sourceEndpointDefinition.Mappings = new[]
             {
                 new MessageMapping
                 {
                     MessageType = typeof(TestEnumCallback),
-                    TransportAddress = this.destinationEndpointDefinition.TransportAddressForVersion(destinationVersion)
+                    TransportAddress = destinationEndpointDefinition.TransportAddressForVersion(destinationVersion)
                 }
             };
 
-            using (var source = EndpointFacadeBuilder.CreateAndConfigure(this.sourceEndpointDefinition, sourceVersion))
-            using (EndpointFacadeBuilder.CreateAndConfigure(this.destinationEndpointDefinition, destinationVersion))
+            using (var source = EndpointFacadeBuilder.CreateAndConfigure(sourceEndpointDefinition, sourceVersion))
+            using (EndpointFacadeBuilder.CreateAndConfigure(destinationEndpointDefinition, destinationVersion))
             {
                 var value = CallbackEnum.Three;
 
@@ -70,18 +72,6 @@
                 // ReSharper disable once AccessToDisposedClosure
                 AssertEx.WaitUntilIsTrue(() => source.ReceivedEnumCallbacks.Contains(value));
             }
-        }
-
-        private static object[][] GenerateVersionsPairs()
-        {
-            var versions = new[] { 1, 2, 3, 4 };
-
-            var pairs = from l in versions
-                        from r in versions
-                        where l != r
-                        select new object[] { l, r };
-
-            return pairs.ToArray();
         }
     }
 }

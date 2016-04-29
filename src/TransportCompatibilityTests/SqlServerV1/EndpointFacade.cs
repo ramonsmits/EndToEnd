@@ -1,14 +1,12 @@
-﻿using System;
-using NServiceBus;
-using NServiceBus.Unicast.Subscriptions.MessageDrivenSubscriptions;
-using TransportCompatibilityTests.Common;
-using TransportCompatibilityTests.Common.Messages;
-
-namespace SqlServerV1
+﻿namespace SqlServerV1
 {
-    using System.Data.SqlClient;
+    using System;
     using System.Threading.Tasks;
+    using NServiceBus;
     using NServiceBus.Features;
+    using NServiceBus.Unicast.Subscriptions.MessageDrivenSubscriptions;
+    using TransportCompatibilityTests.Common;
+    using TransportCompatibilityTests.Common.Messages;
     using TransportCompatibilityTests.Common.SqlServer;
 
     internal class EndpointFacade : MarshalByRefObject, IEndpointFacade
@@ -49,8 +47,6 @@ namespace SqlServerV1
                 configure.CustomConfigurationSource(customConfiguration);
 
                 Feature.Enable<MessageDrivenSubscriptions>();
-
-                //ConfigureLog4Net(endpointInfo.EndpointName);
 
                 configure.Configurer.ConfigureComponent<MessageStore>(DependencyLifecycle.SingleInstance);
 

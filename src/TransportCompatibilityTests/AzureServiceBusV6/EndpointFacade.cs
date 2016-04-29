@@ -6,7 +6,6 @@ using TransportCompatibilityTests.Common.Messages;
 namespace AzureServiceBusV6
 {
     using System.Threading.Tasks;
-    using TransportCompatibilityTests.AzureServiceBus;
     using TransportCompatibilityTests.Common.AzureServiceBus;
 
     public class EndpointFacade : MarshalByRefObject, IEndpointFacade
