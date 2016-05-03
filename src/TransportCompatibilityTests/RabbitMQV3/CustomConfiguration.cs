@@ -18,7 +18,14 @@
         public T GetConfiguration<T>() where T : class, new()
         {
             if (typeof(T) == typeof(MessageForwardingInCaseOfFaultConfig))
+            {
                 return new MessageForwardingInCaseOfFaultConfig { ErrorQueue = "error" } as T;
+            }
+
+            if (typeof(T) == typeof(AuditConfig))
+            {
+                return new AuditConfig { QueueName = "audit" } as T;
+            }
 
             if (typeof(T) == typeof(UnicastBusConfig))
             {
