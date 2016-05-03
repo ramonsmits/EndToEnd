@@ -67,7 +67,7 @@
 
         [Category("RabbitMQ")]
         [Test, TestCaseSource(typeof(RabbitMqContext), nameof(GenerateVersionsPairs))]
-        public void It_is_possible_to_send_request_and_receive_replay(int sourceVersion, int destinationVersion, Topology topology)
+        public void It_is_possible_to_send_request_and_receive_reply(int sourceVersion, int destinationVersion, Topology topology)
         {
             destinationEndpointDefinition.RoutingTopology = sourceEndpointDefinition.RoutingTopology = topology;
             sourceEndpointDefinition.Mappings = new[]
