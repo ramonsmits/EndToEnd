@@ -1,14 +1,9 @@
 ### Current action items
 
-- [ ] Document test infrastructure - @dvdstelt
-- [ ] ASB Cleanup @ramon
-- [ ] SQL Cleanup @ramon
-- [ ] Record demo of navigation in splunk
-
-- [ ] Collect results for multiple runs to see stability of tests
-   - Feed results back to various transport/persistence owners
-- [ ] Inform @andreas once we feel we are ready to start Stability tests
 - [ ] Delete previous performance test code in ProductionTests repo
+- [ ] Fix the tests reporting zero results
+- [ ] Create feedback report
+- [ ] Final merge + change TC to point to master
 
 ### Future actions
 
@@ -25,6 +20,13 @@
  
  ### Completed actions
 
+- [x] Document test infrastructure - @dvdstelt
+- [x] ASB Cleanup @ramon
+- [X] SQL Cleanup @ramon
+- [x] Record demo of navigation in splunk
+- [x] Collect results for multiple runs to see stability of tests
+   - Feed results back to various transport/persistence owners
+- [x] Inform @andreas once we feel we are ready to start Stability tests
 - [x] Add drop down on graphs to filter on results - @hmemcpy & @williambza
   - [x] Reduce the number of duplicated searches in favor of inline search filtering
 - [x] Update nuget packages if applicable
