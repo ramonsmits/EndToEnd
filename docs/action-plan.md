@@ -1,6 +1,6 @@
 ### Current action items
 
-- [ ] Delete previous performance test code in ProductionTests repo
+- [x] Delete previous performance test code in ProductionTests repo
 - [x] Fix the tests reporting zero results
 - [x] Create feedback report
 - [ ] Final merge + change TC to point to master
