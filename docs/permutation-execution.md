@@ -17,7 +17,7 @@ With the created classes, the focus is on the scenario itself, rather then on ge
 
 In the picture below you can see the classes and interfaces created for running scenarios. A shared `Program` class was created for both NServiceBus 5 and NServiceBus 6, which will execute the `BaseRunner` class. Multiple scenarios inherit from this class. For more specialized scenarios the `LoopRunner` class was created, which also has various implementations. For adding additional features, the `ICreateSeedData` and `IConfigureUnicastBus` interfaces were created. All the classes and interfaces are explained, including their usage and how they work internally.
 
-![UML Base Classes](https://raw.githubusercontent.com/Particular/EndToEnd/doco/docs/images/baseclasses.png)
+![UML Base Classes](images/baseclasses.png)
 
 ----------
 
