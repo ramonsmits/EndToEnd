@@ -3,7 +3,7 @@
 - [x] Delete previous performance test code in ProductionTests repo
 - [x] Fix the tests reporting zero results
 - [x] Create feedback report
-- [ ] Final merge + change TC to point to master
+- [x] Final merge + change TC to point to master
 
 ### Future actions
 
