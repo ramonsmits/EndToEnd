@@ -24,7 +24,7 @@ This template file is copied to two projects during the pre build when they do n
 
 You can run the tests just like you would run any other NUnit. Just open the relevant test runner. Select a namespace, fixture or test to run. You will not see the permutations yet because those are dynamic. Run it once and you will see all permutations appearing for that fixture.
 
-![Permutations in test](Images/permutations.png)
+![Permutations in test](docs/Images/permutations.png)
 
 ## Run Visual Studio as administrator to save disk space
 
