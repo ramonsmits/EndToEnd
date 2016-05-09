@@ -1,6 +1,7 @@
 ﻿namespace TransportCompatibilityTests.Common
 {
     using System;
+    using System.Diagnostics;
     using System.IO;
     using TransportCompatibilityTests.Common.Messages;
 
@@ -49,9 +50,9 @@
             {
                 AppDomain.Unload(domain);
             }
-            catch (CannotUnloadAppDomainException)
+            catch (CannotUnloadAppDomainException ex)
             {
-                //could not unload
+                Trace.TraceError("Could not unload appdomain", ex);
             }
             
         }
