@@ -44,7 +44,16 @@
         public void Dispose()
         {
             facade.Dispose();
-            AppDomain.Unload(domain);
+
+            try
+            {
+                AppDomain.Unload(domain);
+            }
+            catch (CannotUnloadAppDomainException)
+            {
+                //could not unload
+            }
+            
         }
 
         public void Bootstrap(EndpointDefinition endpointDefinition)
