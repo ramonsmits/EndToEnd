@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
     using NServiceBus;
     using NServiceBus.AzureServiceBus;
+    using NServiceBus.AzureServiceBus.Addressing;
     using TransportCompatibilityTests.Common;
     using TransportCompatibilityTests.Common.AzureServiceBus;
     using TransportCompatibilityTests.Common.Messages;
@@ -27,7 +28,8 @@
             endpointConfiguration.UseTransport<AzureServiceBusTransport>()
                 .UseTopology<EndpointOrientedTopology>()
                 .RegisterPublisherForType("source", typeof(TestEvent))
-                .ConnectionString(AzureServiceBusConnectionStringBuilder.Build);
+                .ConnectionString(AzureServiceBusConnectionStringBuilder.Build)
+                .Sanitization().UseStrategy<EndpointOrientedTopologySanitization>();
 
             // TODO: remove when core v6 & asb V7 package are updated
             endpointConfiguration.UseSerialization<JsonSerializer>(); 
