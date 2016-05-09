@@ -1,5 +1,5 @@
 # Permutations
-The team building the performance tests did a careful selection on which [permutations](EndToEnd/docs/terminology.md) to test, to limit the number of tests to run. All possible unique scenario would've resulted in thousands of different tests, which was trimmed down to only a few dozen scenarios.
+The team building the performance tests did a careful selection on which [permutations](docs/terminology.md) to test, to limit the number of tests to run. All possible unique scenario would've resulted in thousands of different tests, which was trimmed down to only a few dozen scenarios.
 
 ## Permutation generation
 Each permutation tested is generated in a single folder that holds an executable and the appropriate test assemblies and NServiceBus related transport and persistence assemblies. A batch file is included to execute the test with the appropriate parameters.
