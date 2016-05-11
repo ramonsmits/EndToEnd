@@ -6,11 +6,11 @@ namespace Tests.Permutations
 
     public static class PermutationParser
     {
-        static readonly string Seperator = ";";
+        static readonly string Separator = ";";
 
         public static string ToArgs(Permutation instance)
         {
-            return "--tests:" + string.Join(Seperator, instance.Tests) + 
+            return "--tests:" + string.Join(Separator, instance.Tests) + 
                    " --category:" + instance.Category +
                    " --description:\"" + instance.Description + "\"" +
                    " --variables:" + ToString(instance);
@@ -33,7 +33,7 @@ namespace Tests.Permutations
 
         static string[] SplitValues(this string value)
         {
-            return value.Split(new[] { Seperator }, StringSplitOptions.None);
+            return value.Split(new[] { Separator }, StringSplitOptions.None);
         }
         static string GetVar(string[] args, string name)
         {

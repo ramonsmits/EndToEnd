@@ -22,8 +22,8 @@ class MsmqProfile : IProfile, INeedPermutation
         RunInspections();
     }
 
-    long SizeThresshold = 1024 * 1024 * 1024; // 1GB
-    long CountThresshold = 100000;
+    long SizeThreshold = 1024 * 1024 * 1024; // 1GB
+    long CountThreshold = 100000;
 
     void RunInspections()
     {
@@ -43,9 +43,9 @@ class MsmqProfile : IProfile, INeedPermutation
 
             Log.InfoFormat("MSMQ Currently contains {0:N0} messages, occupying {1:N0} bytes", count, size);
 
-            if (count > CountThresshold || size > SizeThresshold)
+            if (count > CountThreshold || size > SizeThreshold)
             {
-                Log.WarnFormat("MSMQ message count ({0:N0}) or size ({1:N0}) exceeded. Please verify if MSMQ has a lot of (journaled) messages or message in the system (transactional) dead letter queue.", CountThresshold, SizeThresshold);
+                Log.WarnFormat("MSMQ message count ({0:N0}) or size ({1:N0}) exceeded. Please verify if MSMQ has a lot of (journaled) messages or message in the system (transactional) dead letter queue.", CountThreshold, SizeThreshold);
             }
         }
         catch (Exception ex)

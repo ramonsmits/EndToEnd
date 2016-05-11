@@ -11,7 +11,7 @@ public class Statistics : IDisposable
 {
     public DateTime? First;
     public DateTime Last;
-    public readonly DateTime AplicationStart = DateTime.UtcNow;
+    public readonly DateTime ApplicationStart = DateTime.UtcNow;
     public DateTime StartTime;
     public DateTime Warmup;
     public long NumberOfMessages;
@@ -105,7 +105,7 @@ public class Statistics : IDisposable
 
         LogStats("NumberOfRetries", NumberOfRetries, "#");
 
-        var ttfm = (First - AplicationStart)?.TotalSeconds ?? -1;
+        var ttfm = (First - ApplicationStart)?.TotalSeconds ?? -1;
 
         LogStats("TimeToFirstMessage", ttfm, "s");
 

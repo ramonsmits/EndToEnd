@@ -18,7 +18,7 @@
         }
 
         [Test]
-        public void Should_resolve_files_based_on_premutation()
+        public void Should_resolve_files_based_on_permutation()
         {
             var permutation = new Permutation
             {
