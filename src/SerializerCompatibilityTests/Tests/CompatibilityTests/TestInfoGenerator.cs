@@ -12,7 +12,7 @@
     {
         public IEnumerable<TestInfo> Generate()
         {
-            TestsGlobal.ClenupAfterPreviousRuns();
+            TestsGlobal.CleanupAfterPreviousRuns();
 
             var packages = DownloadPackages(PackageInfos);
 

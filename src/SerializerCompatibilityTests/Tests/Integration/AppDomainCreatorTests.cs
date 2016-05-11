@@ -21,10 +21,8 @@
         AppDomain CreateDomain(PackageInfo packageInfo)
         {
             var package = nuGetPackageResolver.DownloadPackageWithDependencies(packageInfo).Result;
-
-            var appDomainDesciptor = domainCreator.CreateDomain(TestsGlobal.BinDirectoryTemplate, package);
-
-            return appDomainDesciptor.AppDomain;
+            var appDomainDescriptor = domainCreator.CreateDomain(TestsGlobal.BinDirectoryTemplate, package);
+            return appDomainDescriptor.AppDomain;
         }
 
         [Test]

@@ -16,9 +16,9 @@
 
         public override void Populate(object instance)
         {
-            var expcected = (PolymorphicCollection)instance;
+            var expected = (PolymorphicCollection)instance;
 
-            expcected.Items = new List<BaseEntity>
+            expected.Items = new List<BaseEntity>
             {
                 new SpecializationA
                 {

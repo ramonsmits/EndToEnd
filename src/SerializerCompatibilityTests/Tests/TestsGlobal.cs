@@ -10,10 +10,10 @@
         [SetUp]
         public void RunsBeforeAnyTest()
         {
-            ClenupAfterPreviousRuns();
+            CleanupAfterPreviousRuns();
         }
 
-        public static void ClenupAfterPreviousRuns()
+        public static void CleanupAfterPreviousRuns()
         {
             if (CleanupDone == false)
             {
@@ -26,13 +26,13 @@
         static void RemoveAppDomainCodeBaseDirs()
         {
             new DirectoryInfo(".")
-                .GetDirectories(BinDriectorySearchPattern).ToList()
+                .GetDirectories(BinDirectorySearchPattern).ToList()
                 .ForEach(d => d.Delete(true));
         }
 
         public static string BinDirectoryTemplate = "NServiceBus_{0}_{1}";
 
-        static string BinDriectorySearchPattern = string.Format(BinDirectoryTemplate, "*", "*");
+        static string BinDirectorySearchPattern = string.Format(BinDirectoryTemplate, "*", "*");
         static bool CleanupDone;
     }
 }
