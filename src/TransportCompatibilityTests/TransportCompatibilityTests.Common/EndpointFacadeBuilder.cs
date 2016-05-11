@@ -26,7 +26,7 @@
 
             var facade = (IEndpointFacade)appDomain.CreateInstanceFromAndUnwrap(assemblyPath, typeName);
             facade.Bootstrap(endpointDefinition);
-            
+
             return new MyWrapper(facade, appDomain);
         }
     }
@@ -50,11 +50,10 @@
             {
                 AppDomain.Unload(domain);
             }
-            catch (CannotUnloadAppDomainException ex)
+            catch (CannotUnloadAppDomainException exception)
             {
-                Trace.TraceError("Could not unload appdomain", ex);
+                Trace.TraceError($"Could not unload appdomain: {exception}");
             }
-            
         }
 
         public void Bootstrap(EndpointDefinition endpointDefinition)

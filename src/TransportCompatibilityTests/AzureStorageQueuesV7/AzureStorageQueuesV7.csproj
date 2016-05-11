@@ -84,7 +84,6 @@
     <Compile Include="CustomConfiguration.cs" />
     <Compile Include="EndpointFacade.cs" />
     <Compile Include="Handler.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TransportCompatibilityTests.Common\TransportCompatibilityTests.Common.csproj">
@@ -101,11 +100,4 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
