@@ -5,6 +5,8 @@ namespace Tests.Permutations
 
     public class PermutationGenerator
     {
+        static readonly string Separator = "~";
+
         public static IEnumerable<Permutation> Generate(Permutations permutations)
         {
             var items =
@@ -41,20 +43,20 @@ namespace Tests.Permutations
                     ScaleOut = ScaleOut,
 
                     Code = string.Empty
-                     + (permutations.Versions.Length > 1 ? Version.ToString() : string.Empty)
-                     + (permutations.IOPS.Length > 1 ? IOPS.ToString() : string.Empty)
-                     + (permutations.Platforms.Length > 1 ? Platform.ToString() : string.Empty)
-                     + (permutations.GarbageCollectors.Length > 1 ? GarbageCollector.ToString() : string.Empty)
-                     + (permutations.Transports.Length > 1 ? Transport.ToString() : string.Empty)
-                     + (permutations.Persisters.Length > 1 ? Persister.ToString() : string.Empty)
-                     + (permutations.Serializers.Length > 1 ? Serializer.ToString() : string.Empty)
-                     + (permutations.MessageSizes.Length > 1 ? MessageSize.ToString() : string.Empty)
-                     + (permutations.OutboxModes.Length > 1 ? OutboxMode.ToString() : string.Empty)
-                     + (permutations.DTCModes.Length > 1 ? DTCMode.ToString() : string.Empty)
-                     + (permutations.TransactionMode.Length > 1 ? TransactionMode.ToString() : string.Empty)
-                     + (permutations.AuditModes.Length > 1 ? AuditMode.ToString() : string.Empty)
-                     + (permutations.ConcurrencyLevels.Length > 1 ? ConcurrencyLevel.ToString() : string.Empty)
-                     + (permutations.ScaleOuts.Length > 1 ? ScaleOut.ToString() : string.Empty)
+                     + (permutations.Versions.Length > 1 ? Version + Separator : string.Empty)
+                     + (permutations.IOPS.Length > 1 ? IOPS + Separator : string.Empty)
+                     + (permutations.Platforms.Length > 1 ? Platform + Separator : string.Empty)
+                     + (permutations.GarbageCollectors.Length > 1 ? GarbageCollector + Separator : string.Empty)
+                     + (permutations.Transports.Length > 1 ? Transport + Separator : string.Empty)
+                     + (permutations.Persisters.Length > 1 ? Persister + Separator : string.Empty)
+                     + (permutations.Serializers.Length > 1 ? Serializer + Separator : string.Empty)
+                     + (permutations.MessageSizes.Length > 1 ? MessageSize + Separator : string.Empty)
+                     + (permutations.OutboxModes.Length > 1 ? OutboxMode + Separator : string.Empty)
+                     + (permutations.DTCModes.Length > 1 ? DTCMode + Separator : string.Empty)
+                     + (permutations.TransactionMode.Length > 1 ? TransactionMode + Separator : string.Empty)
+                     + (permutations.AuditModes.Length > 1 ? AuditMode + Separator : string.Empty)
+                     + (permutations.ConcurrencyLevels.Length > 1 ? ConcurrencyLevel + Separator : string.Empty)
+                     + (permutations.ScaleOuts.Length > 1 ? ScaleOut + Separator : string.Empty)
                 };
             return items
                 .OrderBy(x => x.Code);
