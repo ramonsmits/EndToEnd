@@ -44,7 +44,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
             Start(Session);
             Log.InfoFormat("Warmup: {0}", Settings.WarmupDuration);
 
-            Thread.Sleep(Settings.WarmupDuration);
+            Task.Delay(Settings.WarmupDuration).GetAwaiter().GetResult();
 
             var runDuration = IsSeedingData
                 ? Settings.RunDuration - Settings.SeedDuration
@@ -53,7 +53,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
             Log.InfoFormat("Run: {0}", runDuration);
 
             Statistics.Instance.Reset(GetType().Name);
-            Thread.Sleep(runDuration); 
+            Task.Delay(runDuration).GetAwaiter().GetResult(); 
             Statistics.Instance.Dump();
 
             Stop();
