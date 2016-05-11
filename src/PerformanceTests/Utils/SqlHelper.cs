@@ -53,7 +53,7 @@ public static class SqlHelper
             }
 
             var master = builder.ToString();
-            ExecuteScript(master, $"IF db_id('{catalog}') IS NULL CREATE DATABASE {catalog}");
+            ExecuteScript(master, $"IF NOT exists(select * from sys.databases where name='{catalog}') CREATE DATABASE [{catalog}]");
         }
         catch (Exception ex)
         {
