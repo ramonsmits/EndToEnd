@@ -42,9 +42,12 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         try
         {
             Start(Session);
-            Log.InfoFormat("Warmup: {0}", Settings.WarmupDuration);
 
-            Task.Delay(Settings.WarmupDuration).GetAwaiter().GetResult();
+            if (!IsSeedingData)
+            {
+                Log.InfoFormat("Warmup: {0}", Settings.WarmupDuration);
+                Task.Delay(Settings.WarmupDuration).GetAwaiter().GetResult();
+            }
 
             var runDuration = IsSeedingData
                 ? Settings.RunDuration - Settings.SeedDuration
@@ -96,6 +99,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 
             var avg = count / Settings.SeedDuration.TotalSeconds;
             Log.InfoFormat("Done seeding, seeded {0:N0} messages, {1:N1} msg/s", count, avg);
+            LogManager.GetLogger("Statistics").InfoFormat("{0}: {1:0.0} ({2})", "SeedThroughputAvg", avg, "msg/s");
         }
         finally
         {
