@@ -32,6 +32,18 @@ You can run the tests just like you would run any other NUnit. Just open the rel
 
 ![Permutations in test](Images/permutations.png)
 
+# Howto prevent 'XXX Has stopped working' dialog
+
+If a lot of test fail you will get the following dialog:
+
+![XXX Has stopped working dialog](Images/has-stopped-working-dialog.png)
+
+Add the following registry key to prevent the Windows Error Reporting debug dialog from being displayed.
+
+`HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\@DontShowUI=1(DWORD)`
+
+Source: http://itgeorge.net/disabling-has-stopped-working-dialogs/
+
 # Run Visual Studio as administrator to save disk space
 
 A lot of file copying is done when executing a test. Each permutation of each fixture test is put in its own folder. This can use considerable amounts of storage! When you run Visual Studio as administrator the permutation generation will make use of **symbolic links** instead of copying files and each permutation will use less then 20KB.
