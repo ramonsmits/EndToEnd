@@ -2,10 +2,9 @@ using System;
 using System.Configuration;
 using System.Data.Common;
 using NServiceBus;
-using NServiceBus.Persistence;
-using NServiceBus.RavenDB;
+using NServiceBus.Persistence.RavenDB;
 
-static class RavenDBPersistenceExtentions
+static class RavenDBPersistenceExtensions
 {
     public static PersistenceExtentions<RavenDBPersistence> SetConnectionStringName(this PersistenceExtentions<RavenDBPersistence> cfg, string name)
     {
