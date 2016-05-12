@@ -30,24 +30,24 @@ public abstract class BaseRunner : IConfigurationSource, IContext
     protected byte[] Data { private set; get; }
     protected bool SendOnly { get; set; }
 
-    public virtual void Execute(Permutation permutation, string endpointName)
+    public async Task Execute(Permutation permutation, string endpointName)
     {
         Permutation = permutation;
         EndpointName = endpointName;
 
         InitData();
 
-        CreateSeedData();
-        CreateEndpoint();
+        await CreateSeedData();
+        await CreateEndpoint();
 
         try
         {
-            Start(Session);
+            await Start(Session);
 
             if (!IsSeedingData)
             {
                 Log.InfoFormat("Warmup: {0}", Settings.WarmupDuration);
-                Task.Delay(Settings.WarmupDuration).ConfigureAwait(false).GetAwaiter().GetResult();
+                await Task.Delay(Settings.WarmupDuration).ConfigureAwait(false);
             }
 
             var runDuration = IsSeedingData
@@ -57,32 +57,34 @@ public abstract class BaseRunner : IConfigurationSource, IContext
             Log.InfoFormat("Run: {0}", runDuration);
 
             Statistics.Instance.Reset(GetType().Name);
-            Task.Delay(runDuration).ConfigureAwait(false).GetAwaiter().GetResult();
+            await Task.Delay(runDuration).ConfigureAwait(false);
             Statistics.Instance.Dump();
 
-            Stop();
+            await Stop();
         }
         finally
         {
-            Session.Close();
+            await Session.Close();
         }
     }
 
-    protected virtual void Start(ISession session)
+    protected virtual Task Start(ISession session)
     {
+        return Task.FromResult(0);
     }
 
-    protected virtual void Stop()
+    protected virtual Task Stop()
     {
-    }
+        return Task.FromResult(0);
+;    }
 
-    void CreateSeedData()
+    async Task CreateSeedData()
     {
         var seedCreator = this as ICreateSeedData;
         if (seedCreator == null) return;
 
-        CreateOrPurgeQueues();
-        CreateSendOnlyEndpoint();
+        await CreateOrPurgeQueues();
+        await CreateSendOnlyEndpoint();
 
         try
         {
@@ -100,11 +102,22 @@ public abstract class BaseRunner : IConfigurationSource, IContext
             {
                 MaxDegreeOfParallelism = maxConcurrency
             };
+
             Parallel.ForEach(IterateUntilFalse(() => !cts.Token.IsCancellationRequested), po, b =>
             {
                 instance.SendMessage(Session).ConfigureAwait(false).GetAwaiter().GetResult();
                 Interlocked.Increment(ref count);
             });
+
+
+            //var tasks = new List<Task>();
+            //while (!cts.IsCancellationRequested)
+            //{
+            //    tasks.Add(instance.SendMessage(Session));
+            //}
+
+            //foreach (var t in tasks)
+            //    await Task.WhenAll(tasks);
 
             var elapsed = start.Elapsed;
             var avg = count / elapsed.TotalSeconds;
@@ -115,26 +128,28 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         }
         finally
         {
-            Session.Close();
+            await Session.Close();
         }
     }
 
 #if Version5
-    void CreateOrPurgeQueues()
+    Task CreateOrPurgeQueues()
     {
         var configuration = CreateConfiguration();
         if (IsPurgingSupported) configuration.PurgeOnStartup(true);
         using (Bus.Create(configuration).Start()) { }
+        return Task.FromResult(0);
     }
 
-    void CreateSendOnlyEndpoint()
+    Task CreateSendOnlyEndpoint()
     {
         var configuration = CreateConfiguration();
         var instance = Bus.CreateSendOnly(configuration);
         Session = new Session(instance);
+        return Task.FromResult(0);
     }
 
-    void CreateEndpoint()
+    Task CreateEndpoint()
     {
         var configuration = CreateConfiguration();
         configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
@@ -143,11 +158,12 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         if (SendOnly)
         {
             Session = new Session(Bus.CreateSendOnly(configuration));
-            return;
+            return Task.FromResult(0);
         }
 
         configuration.PurgeOnStartup(!IsSeedingData && IsPurgingSupported);
         Session = new Session(Bus.Create(configuration).Start());
+        return Task.FromResult(0);
     }
 
     BusConfiguration CreateConfiguration()
@@ -180,23 +196,23 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         return finalInternalListToScan.ToList();
     }
 #else
-    void CreateOrPurgeQueues()
+    async Task CreateOrPurgeQueues()
     {
         var configuration = CreateConfiguration();
         if (IsPurgingSupported) configuration.PurgeOnStartup(true);
-        var instance = Endpoint.Start(configuration).ConfigureAwait(false).GetAwaiter().GetResult();
-        instance.Stop().ConfigureAwait(false).GetAwaiter().GetResult();
+        var instance = await Endpoint.Start(configuration).ConfigureAwait(false);
+        await instance.Stop().ConfigureAwait(false);
     }
 
-    void CreateSendOnlyEndpoint()
+    async Task CreateSendOnlyEndpoint()
     {
         var configuration = CreateConfiguration();
         configuration.SendOnly();
-        var instance = Endpoint.Start(configuration).ConfigureAwait(false).GetAwaiter().GetResult();
+        var instance = await Endpoint.Start(configuration).ConfigureAwait(false);
         Session = new Session(instance);
     }
 
-    void CreateEndpoint()
+    async Task CreateEndpoint()
     {
         var configuration = CreateConfiguration();
         configuration.EnableFeature<NServiceBus.Performance.SimpleStatisticsFeature>();
@@ -205,7 +221,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         if (SendOnly)
         {
             configuration.SendOnly();
-            Session = new Session(Endpoint.Start(configuration).ConfigureAwait(false).GetAwaiter().GetResult());
+            Session = new Session(await Endpoint.Start(configuration).ConfigureAwait(false));
             return;
         }
 

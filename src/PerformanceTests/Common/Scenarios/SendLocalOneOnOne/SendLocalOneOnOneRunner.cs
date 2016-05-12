@@ -1,4 +1,5 @@
-﻿using NServiceBus;
+﻿using System.Threading.Tasks;
+using NServiceBus;
 
 /// <summary>
 /// Does a continious test where a configured set of messages are 'seeded' on the
@@ -13,15 +14,15 @@ partial class SendLocalOneOnOneRunner : BaseRunner
 {
     const int seedSize = 1000;
 
-    protected override void Start(ISession session)
+    protected override Task Start(ISession session)
     {
-        TaskHelper.ParallelFor(seedSize, () => session.SendLocal(new Command { Data = Data }))
-            .ConfigureAwait(false).GetAwaiter().GetResult();
+        return TaskHelper.ParallelFor(seedSize, () => session.SendLocal(new Command { Data = Data }));
     }
 
-    protected override void Stop()
+    protected override Task Stop()
     {
         Handler.Shutdown = true;
+        return Task.FromResult(0);
     }
 
     public class Command : ICommand
