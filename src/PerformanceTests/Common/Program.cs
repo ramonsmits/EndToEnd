@@ -12,7 +12,12 @@ namespace Host
     class Program
     {
         static ILog Log;
-        static string endpointName = "PerformanceTests_" + AppDomain.CurrentDomain.FriendlyName.Replace(' ', '_');
+
+        static string endpointName = "PerformanceTests_" + AppDomain.CurrentDomain.FriendlyName
+            .Replace(".exe", string.Empty)
+            .Replace(' ', '_')
+            .Replace('.', '_');
+
         static int Main()
         {
             LogManager.Use<NLogFactory>();
@@ -30,7 +35,7 @@ namespace Host
                 var permutation = PermutationParser.FromCommandlineArgs();
                 LogPermutation(permutation);
 
-                InvokeSetupImplementations();
+                InvokeSetupImplementations(permutation);
 
                 using (Statistics.Initialize(permutation))
                 {
@@ -61,10 +66,12 @@ namespace Host
             return (int)ReturnCodes.OK;
         }
 
-        static void InvokeSetupImplementations()
+        static void InvokeSetupImplementations(Permutation permutation)
         {
             foreach (var instance in AssemblyScanner.GetAll<ISetup>())
             {
+                var p = instance as INeedPermutation;
+                if (p != null) p.Permutation = permutation;
                 Log.InfoFormat("Invoke setup: {0}", instance);
                 instance.Setup();
             }

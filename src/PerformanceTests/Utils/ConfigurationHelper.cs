@@ -22,7 +22,7 @@ public static class ConfigurationHelper
             return applicationConfigConnectionString.ConnectionString;
         }
 
-        return string.Empty;
+        throw new NotSupportedException($"Connection string {connectionStringName} could not be resolved.");
     }
 
     public static string FetchSetting(string key)

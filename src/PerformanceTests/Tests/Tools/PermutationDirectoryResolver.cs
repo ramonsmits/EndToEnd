@@ -48,10 +48,23 @@ namespace Tests.Tools
             }
         }
 
+        string GetImplementation(object instance)
+        {
+            var value = instance.ToString();
+            var index = value.IndexOf('_');
+
+            if (index == -1) return value;
+
+            return value.Substring(0, index);
+        }
+
         IEnumerable<string> GetPermutationComponents(Permutation permutation)
         {
-            yield return $"Persistence.{permutation.Version}.{permutation.Persister}";
-            yield return $"Transport.{permutation.Version}.{permutation.Transport}";
+            var persister = GetImplementation(permutation.Persister);
+            var transport = GetImplementation(permutation.Transport);
+
+            yield return $"Persistence.{permutation.Version}.{persister}";
+            yield return $"Transport.{permutation.Version}.{transport}";
             yield return $"Distribution.{permutation.Version}.{permutation.ScaleOut}";
         }
 
