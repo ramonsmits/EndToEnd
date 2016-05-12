@@ -9,7 +9,7 @@ namespace SqlServerV3
 {
     using System.Linq;
     using NServiceBus.Persistence;
-    using NServiceBus.Transports.SQLServer;
+    using NServiceBus.Transport.SQLServer;
     using TransportCompatibilityTests.Common.SqlServer;
 
     public class EndpointFacade : MarshalByRefObject, IEndpointFacade
