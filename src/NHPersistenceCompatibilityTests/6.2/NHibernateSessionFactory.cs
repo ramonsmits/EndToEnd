@@ -11,7 +11,7 @@ namespace Version_6_2
 
         public void Init()
         {
-            var connectionString = @"Data Source=SCHMETTERLING\SQLEXPRESS;Initial Catalog=persistencetests;Integrated Security=True";//ConfigurationManager.ConnectionStrings[0].ConnectionString;
+            var connectionString = @"Data Source=localhost\SQLEXPRESS;Initial Catalog=persistencetests;Integrated Security=True";//ConfigurationManager.ConnectionStrings[0].ConnectionString;
 
             var configuration = new NHibernate.Cfg.Configuration()
                 .AddProperties(new Dictionary<string, string>

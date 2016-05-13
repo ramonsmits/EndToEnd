@@ -18,7 +18,7 @@ namespace Version_7_0
 
         public void Init()
         {
-            var connectionString = @"Data Source=SCHMETTERLING\SQLEXPRESS;Initial Catalog=persistencetests;Integrated Security=True"; //ConfigurationManager.ConnectionStrings[0].ConnectionString;
+            var connectionString = @"Data Source=localhost\SQLEXPRESS;Initial Catalog=persistencetests;Integrated Security=True"; //ConfigurationManager.ConnectionStrings[0].ConnectionString;
 
             var configuration = new Configuration()
                 .AddProperties(new Dictionary<string, string>
