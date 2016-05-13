@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using NHibernate;
 using NServiceBus.SagaPersisters.NHibernate;
 using NUnit.Framework;
 using PersistenceCompatibilityTests;
@@ -7,12 +8,19 @@ using Version_6_2;
 
 class TestPersistence : MarshalByRefObject, ITestPersistence
 {
-    public void Persist(Guid id, string version)
+    private readonly ISessionFactory sessionFactory;
+
+    public TestPersistence()
     {
         var factory = new NHibernateSessionFactory<TestSagaData>();
         factory.Init();
 
-        using (var session = factory.SessionFactory.OpenSession())
+        sessionFactory = factory.SessionFactory;
+
+    }
+    public void Persist(Guid id, string version)
+    {
+        using (var session = sessionFactory.OpenSession())
         {
             var persister = new SagaPersister(new TestSessionProvider(session));
 
@@ -29,10 +37,7 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
 
     public void Verify(Guid id, string version)
     {
-        var factory = new NHibernateSessionFactory<TestSagaData>();
-        factory.Init();
-
-        var session = factory.SessionFactory.OpenSession();
+        var session = sessionFactory.OpenSession();
         var persister = new SagaPersister(new TestSessionProvider(session));
 
         var data = persister.Get<TestSagaData>(id);

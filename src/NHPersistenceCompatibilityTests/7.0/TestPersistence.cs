@@ -1,4 +1,5 @@
 ﻿using System;
+using NHibernate;
 using NServiceBus.Extensibility;
 using NServiceBus.SagaPersisters.NHibernate;
 using NServiceBus.Sagas;
@@ -8,35 +9,39 @@ using Version_7_0;
 
 class TestPersistence : MarshalByRefObject, ITestPersistence
 {
-    public void Persist(Guid id, string version)
+    private readonly SagaPersister persister;
+    private readonly ISessionFactory sessionFactory;
+
+    public TestPersistence()
     {
         var factory = new NHibernateSessionFactory<TestSagaData>();
         factory.Init();
 
-        using (var session = factory.SessionFactory.OpenSession())
+        sessionFactory = factory.SessionFactory;
+        persister = new SagaPersister();
+    }
+    public void Persist(Guid id, string version)
+    {
+        using (var session = sessionFactory.OpenSession())
         {
             var persister = new SagaPersister();
-            
-                persister.Save(new TestSagaData
-                {
-                    Id = id,
-                    OriginalMessageId = id.ToString(),
-                    Originator = version
-                }, new SagaCorrelationProperty("corr", id), new TestSessionProvider(session), new ContextBag())
-                    .GetAwaiter()
-                    .GetResult();
-                
+
+            persister.Save(new TestSagaData
+            {
+                Id = id,
+                OriginalMessageId = id.ToString(),
+                Originator = version
+            }, new SagaCorrelationProperty("corr", id), new TestSessionProvider(session), new ContextBag())
+                .GetAwaiter()
+                .GetResult();
+
             session.Flush();
         }
     }
 
     public void Verify(Guid id, string version)
     {
-        var factory = new NHibernateSessionFactory<TestSagaData>();
-        factory.Init();
-
-        var session = factory.SessionFactory.OpenSession();
-        var persister = new SagaPersister();
+        var session = sessionFactory.OpenSession();
 
         var data = persister.Get<TestSagaData>(id, new TestSessionProvider(session), new ContextBag()).GetAwaiter().GetResult();
 
