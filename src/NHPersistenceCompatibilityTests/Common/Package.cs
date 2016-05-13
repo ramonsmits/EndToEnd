@@ -15,29 +15,27 @@ namespace Common
     [Serializable]
     public class PackageInfo
     {
-        public PackageInfo(string packageName, string version)
+        public PackageInfo(string assemblyName, string version)
         {
-            PackageName = packageName;
+            AssemblyName = assemblyName;
             Version = version;
         }
 
-        public string PackageName { get; }
         public string Version { get; }
-        public string FolderName => $"{PackageName}_{Version}";
-        public string AssemblyName => $"{ToString()}.dll";
+        public string AssemblyName { get; }
 
         public static implicit operator PackageInfo(string package)
         {
-            var pair = package.Split('_');
-            if (pair.Length == 2)
-                return new PackageInfo(pair[0], pair[1]);
+            var part = package.Split('_');
+            if (part.Length == 2)
+                return new PackageInfo(part[0], part[1]);
 
-            throw new ArgumentException($"The value '{package}' is not in a correct format. Use 'PackageName_Version'.");
+            throw new ArgumentException($"The value '{package}' is not in a correct format. Use 'AssemblyName_Version'.");
         }
 
         public override string ToString()
         {
-            return $"{PackageName}_{Version}";
+            return $"{AssemblyName}_{Version}";
         }
     }
 }

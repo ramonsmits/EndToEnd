@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Version_7.0", "Version_7_0\Version_7.0.csproj", "{59859466-3F15-40A0-9A9B-003096CCAD02}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "7.0", "7.0\7.0.csproj", "{59859466-3F15-40A0-9A9B-003096CCAD02}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Version_6.2", "Version_6_2\Version_6.2.csproj", "{67E400DF-1FA1-4B04-A985-68F187C03610}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "6.2", "6.2\6.2.csproj", "{67E400DF-1FA1-4B04-A985-68F187C03610}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{77FF50AE-A243-45EE-9598-0B0E870457C5}"
 EndProject

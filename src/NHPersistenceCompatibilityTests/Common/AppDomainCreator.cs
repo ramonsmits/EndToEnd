@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Paket;
 
 namespace Common
 {
@@ -16,7 +15,7 @@ namespace Common
             CopyAssembliesToStarupDir(startupDir, package.Files);
 
             var appDomain = AppDomain.CreateDomain(
-                $"{package.Info.PackageName} {package.Version}",
+                $"{package.Info.AssemblyName} {package.Version}",
                 null,
                 new AppDomainSetup
                 {
@@ -30,7 +29,7 @@ namespace Common
             return new AppDomainDescriptor
             {
                 AppDomain = appDomain,
-                ProjectAssemblyPath = Path.Combine(startupDir.FullName, package.Info.AssemblyName),
+                ProjectAssemblyPath = Path.Combine(startupDir.FullName, package.Info.AssemblyName + ".dll"),
                 PackageVersion = package.Version
             };
         }

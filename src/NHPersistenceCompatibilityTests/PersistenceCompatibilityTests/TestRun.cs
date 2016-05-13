@@ -8,7 +8,7 @@ namespace PersistenceCompatibilityTests
 {
     public abstract class TestRun
     {
-        private static string BinDirectoryTemplate = "Version_{0}_{1}";
+        private static string BinDirectoryTemplate = "TestRun_{0}_{1}";
 
         protected AppDomainRunner<T> CreateTestFacade<T>(PackageInfo packages)
         {
