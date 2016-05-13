@@ -11,13 +11,13 @@ namespace Version_6_2
 
         public void Init()
         {
-            var connectionString = "Data Source=.;Initial Catalog=persistencetests; Trusted_Connection=True;";//ConfigurationManager.ConnectionStrings[0].ConnectionString;
+            var connectionString = @"Data Source=localhost\SQLEXPRESS;Initial Catalog=persistencetests;Integrated Security=True";//ConfigurationManager.ConnectionStrings[0].ConnectionString;
 
-            var configuration = new global::NHibernate.Cfg.Configuration()
+            var configuration = new NHibernate.Cfg.Configuration()
                 .AddProperties(new Dictionary<string, string>
                 {
                     { "dialect", dialect },
-                    { global::NHibernate.Cfg.Environment.ConnectionString, connectionString }
+                    { NHibernate.Cfg.Environment.ConnectionString, connectionString }
                 });
 
             var modelMapper = new SagaModelMapper(new[] { typeof(TSagaData) });

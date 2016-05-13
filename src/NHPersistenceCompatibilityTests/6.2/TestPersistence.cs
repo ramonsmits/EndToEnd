@@ -23,6 +23,6 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
 
     public void Verify(Guid id, string version)
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 }
