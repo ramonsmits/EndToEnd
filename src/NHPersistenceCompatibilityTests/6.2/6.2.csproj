@@ -77,10 +77,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{77ff50ae-a243-45ee-9598-0b0e870457c5}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PersistenceCompatibilityTests\PersistenceCompatibilityTests.csproj">
       <Project>{A56D3BE8-0A16-4B72-8231-64431A534B57}</Project>
       <Name>PersistenceCompatibilityTests</Name>

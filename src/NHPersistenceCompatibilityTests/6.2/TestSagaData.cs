@@ -1,5 +1,6 @@
 ﻿using System;
 using NServiceBus.Saga;
+using NServiceBus.SagaPersisters.NHibernate;
 
 namespace Version_6_2
 {

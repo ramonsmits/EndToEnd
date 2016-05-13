@@ -11,14 +11,19 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
         var factory = new NHibernateSessionFactory<TestSagaData>();
         factory.Init();
 
-        var persister = new SagaPersister(new TestSessionProvider(factory.SessionFactory.OpenSession()));
-
-        persister.Save(new TestSagaData
+        using (var session = factory.SessionFactory.OpenSession())
         {
-            Id = id,
-            OriginalMessageId = id.ToString(),
-            Originator = version
-        });
+            var persister = new SagaPersister(new TestSessionProvider(session));
+
+            persister.Save(new TestSagaData
+            {
+                Id = id,
+                OriginalMessageId = id.ToString(),
+                Originator = version
+            });
+
+            session.Flush();
+        }
     }
 
     public void Verify(Guid id, string version)

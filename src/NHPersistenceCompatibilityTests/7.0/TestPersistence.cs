@@ -12,7 +12,6 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
 {
     public void Persist(Guid id, string version)
     {
-        
     }
 
     public void Verify(Guid id, string version)
@@ -22,6 +21,7 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
 
         var session = factory.SessionFactory.OpenSession();
         var persister = new SagaPersister();
+
         var data = persister.Get<TestSagaData>(id, new TestSessionProvider(session), new ContextBag()).GetAwaiter().GetResult();
 
         Assert.AreEqual(id, data.Id);

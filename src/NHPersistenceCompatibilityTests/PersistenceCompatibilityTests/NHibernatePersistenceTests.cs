@@ -16,6 +16,8 @@ namespace PersistenceCompatibilityTests
 
             v6Runner.Run(t => t.Persist(id, "v6.2"));
             v7Runner.Run(t => t.Verify(id, "v6.2"));
+
+
         }
     }
 }

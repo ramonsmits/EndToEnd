@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
 using NServiceBus.Features;
@@ -31,6 +32,10 @@ namespace Version_7_0
             metaModel.Initialize(types);
             settings.Set<SagaMetadataCollection>(metaModel);
             settings.Set("TypesToScan", types);
+
+            Func<Type, string> tableNameConvention = t => t.Name;
+            settings.Set("NHibernate.Sagas.TableNamingConvention", tableNameConvention);
+
             builder.ApplyMappings(settings, configuration);
 
             SessionFactory = configuration.BuildSessionFactory();
