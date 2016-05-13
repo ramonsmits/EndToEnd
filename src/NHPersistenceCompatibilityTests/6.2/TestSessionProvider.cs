@@ -11,7 +11,7 @@ namespace Version_6_2
             Session = session;
         }
 
-        public ISession Session { get; }
+        private ISession Session { get; }
 
         public void ExecuteInTransaction(Action<ISession> operation)
         {

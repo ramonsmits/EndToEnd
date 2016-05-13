@@ -1,6 +1,5 @@
 ﻿using System;
 using NServiceBus;
-using NServiceBus.SagaPersisters.NHibernate;
 
 namespace Version_7_0
 {

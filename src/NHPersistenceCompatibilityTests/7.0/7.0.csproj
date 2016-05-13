@@ -80,7 +80,9 @@
     <Compile Include="NHibernateSessionFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestPersistence.cs" />
+    <Compile Include="TestSaga.cs" />
     <Compile Include="TestSagaData.cs" />
+    <Compile Include="TestSessionProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
