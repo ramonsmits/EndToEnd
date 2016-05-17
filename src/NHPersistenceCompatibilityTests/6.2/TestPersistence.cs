@@ -18,6 +18,7 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
         sessionFactory = factory.SessionFactory;
 
     }
+
     public void Persist(Guid id, string originator)
     {
         using (var session = sessionFactory.OpenSession())
