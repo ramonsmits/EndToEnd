@@ -72,6 +72,6 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
         var data = persister.Get<TestSagaDataWithList>(id);
 
         Assert.AreEqual(id, data.Id);
-        Assert.AreEqual(originator, data.Originator);
+        CollectionAssert.AreEqual(originator, data.Originator);
     }
 }

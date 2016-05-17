@@ -77,6 +77,6 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
         var data = persister.Get<TestSagaDataWithList>(id, new TestSessionProvider(session), new ContextBag()).GetAwaiter().GetResult();
 
         Assert.AreEqual(id, data.Id);
-        Assert.AreEqual(ints, data.Ints);
+        CollectionAssert.AreEqual(ints, data.Ints);
     }
 }
