@@ -1,34 +1,24 @@
 ﻿using System;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 
 namespace PersistenceCompatibilityTests
 {
     [TestFixture]
     public class NHibernatePersistenceTests : TestRun
     {
-        [Test]
-        public void can_fetch_saga_persisted_by_another_version()
+        [TestCase("6.2", "7.0")]
+        [TestCase("7.0", "6.2")]
+        public void can_fetch_saga_persisted_by_another_version(string sourceVersion, string destinationVersion)
         {
-            var v6Runner = CreateTestFacade<ITestPersistence>("NServiceBus.NHibernate.Tests_6.2");
-            var v7Runner = CreateTestFacade<ITestPersistence>("NServiceBus.NHibernate.Tests_7.0");
+            var sourceRunner = CreateTestFacade<ITestPersistence>(sourceVersion);
+            var destinationRunner = CreateTestFacade<ITestPersistence>(destinationVersion);
 
             var id = Guid.NewGuid();
+            var originator = sourceVersion;
 
-            v6Runner.Run(t => t.Persist(id, "v6.2"));
-            v7Runner.Run(t => t.Verify(id, "v6.2"));
-        }
-
-
-        [Test]
-        public void can_fetch_saga_persisted_by_another_version_2()
-        {
-            var v6Runner = CreateTestFacade<ITestPersistence>("NServiceBus.NHibernate.Tests_6.2");
-            var v7Runner = CreateTestFacade<ITestPersistence>("NServiceBus.NHibernate.Tests_7.0");
-
-            var id = Guid.NewGuid();
-
-            v7Runner.Run(t => t.Persist(id, "v7.0"));
-            v6Runner.Run(t => t.Verify(id, "v7.0"));
+            sourceRunner.Run(t => t.Persist(id, originator));
+            destinationRunner.Run(t => t.Verify(id, originator));
         }
     }
 }

@@ -20,7 +20,7 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
         sessionFactory = factory.SessionFactory;
         persister = new SagaPersister();
     }
-    public void Persist(Guid id, string version)
+    public void Persist(Guid id, string originator)
     {
         using (var session = sessionFactory.OpenSession())
         {
@@ -30,7 +30,7 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
             {
                 Id = id,
                 OriginalMessageId = id.ToString(),
-                Originator = version
+                Originator = originator
             }, new SagaCorrelationProperty("corr", id), new TestSessionProvider(session), new ContextBag())
                 .GetAwaiter()
                 .GetResult();
@@ -39,13 +39,13 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
         }
     }
 
-    public void Verify(Guid id, string version)
+    public void Verify(Guid id, string originator)
     {
         var session = sessionFactory.OpenSession();
 
         var data = persister.Get<TestSagaData>(id, new TestSessionProvider(session), new ContextBag()).GetAwaiter().GetResult();
 
         Assert.AreEqual(id, data.Id);
-        Assert.AreEqual(version, data.Originator);
+        Assert.AreEqual(originator, data.Originator);
     }
 }

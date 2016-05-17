@@ -18,7 +18,7 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
         sessionFactory = factory.SessionFactory;
 
     }
-    public void Persist(Guid id, string version)
+    public void Persist(Guid id, string originator)
     {
         using (var session = sessionFactory.OpenSession())
         {
@@ -28,14 +28,14 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
             {
                 Id = id,
                 OriginalMessageId = id.ToString(),
-                Originator = version
+                Originator = originator
             });
 
             session.Flush();
         }
     }
 
-    public void Verify(Guid id, string version)
+    public void Verify(Guid id, string originator)
     {
         var session = sessionFactory.OpenSession();
         var persister = new SagaPersister(new TestSessionProvider(session));
@@ -43,6 +43,6 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
         var data = persister.Get<TestSagaData>(id);
 
         Assert.AreEqual(id, data.Id);
-        Assert.AreEqual(version, data.Originator);
+        Assert.AreEqual(originator, data.Originator);
     }
 }

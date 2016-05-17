@@ -10,9 +10,10 @@ namespace PersistenceCompatibilityTests
     {
         private static string BinDirectoryTemplate = "TestRun_{0}_{1}";
 
-        protected AppDomainRunner<T> CreateTestFacade<T>(PackageInfo packages)
+        protected AppDomainRunner<T> CreateTestFacade<T>(string versionName)
         {
-            var package = packageResolver.GetLocalPackage(packages);
+            var packageInfo = new PackageInfo("NServiceBus.NHibernate.Tests", versionName);
+            var package = packageResolver.GetLocalPackage(packageInfo);
             var appDomainDescriptor = domainCreator.CreateDomain(BinDirectoryTemplate, package);
             var runner = new AppDomainRunner<T>(appDomainDescriptor);
 
