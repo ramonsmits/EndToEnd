@@ -40,6 +40,12 @@ namespace Version_7_0
             mapper = new SagaModelMapper(metaModel, new[] { metadata.SagaEntityType });
             configuration.AddMapping(mapper.Compile());
 
+            metaModel = new SagaMetadataCollection();
+            metaModel.Initialize(new[] { typeof(TestSagaWithComposite) });
+            metadata = metaModel.Find(typeof(TestSagaWithComposite));
+            mapper = new SagaModelMapper(metaModel, new[] { metadata.SagaEntityType });
+            configuration.AddMapping(mapper.Compile());
+
             SessionFactory = configuration.BuildSessionFactory();
             new SchemaUpdate(configuration).Execute(false, true);
         }

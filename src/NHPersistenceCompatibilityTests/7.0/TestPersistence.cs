@@ -79,4 +79,35 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
         Assert.AreEqual(id, data.Id);
         CollectionAssert.AreEqual(ints, data.Ints);
     }
+
+    public void Persist(Guid id, string compositeValue, string originator)
+    {
+        using (var session = sessionFactory.OpenSession())
+        {
+            var persister = new SagaPersister();
+
+            persister.Save(new TestSagaDataWithComposite
+            {
+                Id = id,
+                OriginalMessageId = id.ToString(),
+                Originator = originator,
+                Composite = new TestSagaDataWithComposite.SagaComposite { Value = compositeValue }
+            }, new SagaCorrelationProperty("corr", id), new TestSessionProvider(session), new ContextBag())
+                .GetAwaiter()
+                .GetResult();
+
+            session.Flush();
+        }
+    }
+
+    public void Verify(Guid id, string compositeValue, string originator)
+    {
+        var session = sessionFactory.OpenSession();
+
+        var data = persister.Get<TestSagaDataWithComposite>(id, new TestSessionProvider(session), new ContextBag()).GetAwaiter().GetResult();
+
+        Assert.AreEqual(id, data.Id);
+        Assert.AreEqual(originator, data.Originator);
+        Assert.AreEqual(compositeValue, data.Composite.Value);
+    }
 }

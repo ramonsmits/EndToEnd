@@ -35,6 +35,21 @@ namespace PersistenceCompatibilityTests
 
         }
 
+        [TestCaseSource(nameof(GenerateTestCases))]
+        public void can_fetch_composite_saga_persisted_by_another_version(string sourceVersion, string destinationVersion)
+        {
+            var sourceRunner = CreateTestFacade<ITestPersistence>(sourceVersion);
+            var destinationRunner = CreateTestFacade<ITestPersistence>(destinationVersion);
+
+            var id = Guid.NewGuid();
+            var compositeText = "composite-value";
+            var originator = sourceVersion;
+
+            sourceRunner.Run(t => t.Persist(id, compositeText, originator));
+            destinationRunner.Run(t => t.Verify(id, compositeText, originator));
+        }
+
+
         static object[] GenerateTestCases()
         {
             var versions = new [] {"4.5", "5.0", "6.2", "7.0"};
