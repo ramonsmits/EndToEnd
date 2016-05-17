@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace PersistenceCompatibilityTests
 {
@@ -7,5 +7,9 @@ namespace PersistenceCompatibilityTests
     {
         void Persist(Guid id, string originator);
         void Verify(Guid id, string originator);
+
+
+        void Persist(Guid id, IList<int> data, string originator);
+        void Verify(Guid id, IList<int> ints, string originator);
     }
 }

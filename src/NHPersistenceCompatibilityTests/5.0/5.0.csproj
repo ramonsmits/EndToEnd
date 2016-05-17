@@ -68,6 +68,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestPersistence.cs" />
     <Compile Include="TestSagaData.cs" />
+    <Compile Include="TestSagaDataWithList.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

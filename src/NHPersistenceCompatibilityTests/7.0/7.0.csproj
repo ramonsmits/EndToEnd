@@ -82,6 +82,7 @@
     <Compile Include="TestPersistence.cs" />
     <Compile Include="TestSaga.cs" />
     <Compile Include="TestSagaData.cs" />
+    <Compile Include="TestSagaDataWithList.cs" />
     <Compile Include="TestSessionProvider.cs" />
   </ItemGroup>
   <ItemGroup>

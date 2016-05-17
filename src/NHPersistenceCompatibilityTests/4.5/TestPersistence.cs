@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NHibernate;
 using NServiceBus.SagaPersisters.NHibernate;
 using NServiceBus.UnitOfWork;
@@ -9,19 +10,11 @@ using Version_4_5;
 
 class TestPersistence : MarshalByRefObject, ITestPersistence
 {
-    private readonly ISessionFactory sessionFactory;
-
-    public TestPersistence()
+    public void Persist(Guid id, string originator)
     {
         var factory = new NHibernateSessionFactory<TestSagaData>();
         factory.Init();
-
-        sessionFactory = factory.SessionFactory;
-    }
-
-    public void Persist(Guid id, string originator)
-    {
-        var unitOfWorkManager = new UnitOfWorkManager {SessionFactory = sessionFactory};
+        var unitOfWorkManager = new UnitOfWorkManager {SessionFactory = factory.SessionFactory };
         var persister = new SagaPersister {UnitOfWorkManager = unitOfWorkManager};
 
         ((IManageUnitsOfWork) unitOfWorkManager).Begin();
@@ -38,10 +31,45 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
 
     public void Verify(Guid id, string originator)
     {
-        var unitOfWorkManager = new UnitOfWorkManager { SessionFactory = sessionFactory };
+        var factory = new NHibernateSessionFactory<TestSagaData>();
+        factory.Init();
+        var unitOfWorkManager = new UnitOfWorkManager { SessionFactory = factory.SessionFactory };
         var persister = new SagaPersister { UnitOfWorkManager = unitOfWorkManager };
 
         var data = persister.Get<TestSagaData>(id);
+
+        Assert.AreEqual(id, data.Id);
+        Assert.AreEqual(originator, data.Originator);
+    }
+
+    public void Persist(Guid id, IList<int> data, string originator)
+    {
+        var factory = new NHibernateSessionFactory<TestSagaDataWithList>();
+        factory.Init();
+        var unitOfWorkManager = new UnitOfWorkManager { SessionFactory = factory.SessionFactory };
+        var persister = new SagaPersister { UnitOfWorkManager = unitOfWorkManager };
+
+        ((IManageUnitsOfWork)unitOfWorkManager).Begin();
+
+        persister.Save(new TestSagaDataWithList
+        {
+            Id = id,
+            OriginalMessageId = id.ToString(),
+            Originator = originator,
+            Ints = data
+        });
+
+        ((IManageUnitsOfWork)unitOfWorkManager).End();
+    }
+
+    public void Verify(Guid id, IList<int> ints, string originator)
+    {
+        var factory = new NHibernateSessionFactory<TestSagaDataWithList>();
+        factory.Init();
+        var unitOfWorkManager = new UnitOfWorkManager { SessionFactory = factory.SessionFactory };
+        var persister = new SagaPersister { UnitOfWorkManager = unitOfWorkManager };
+
+        var data = persister.Get<TestSagaDataWithList>(id);
 
         Assert.AreEqual(id, data.Id);
         Assert.AreEqual(originator, data.Originator);

@@ -16,6 +16,19 @@ namespace Version_7_0
         }
     }
 
+    class TestSagaWithList : Saga<TestSagaDataWithList>, IAmStartedByMessages<TMsg>
+    {
+        protected override void ConfigureHowToFindSaga(SagaPropertyMapper<TestSagaDataWithList> mapper)
+        {
+
+        }
+
+        public Task Handle(TMsg message, IMessageHandlerContext context)
+        {
+            return Task.FromResult(0);
+        }
+    }
+
     public  class TMsg: IMessage
     {
     }

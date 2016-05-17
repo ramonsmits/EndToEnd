@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 
 namespace PersistenceCompatibilityTests
 {
@@ -20,6 +19,20 @@ namespace PersistenceCompatibilityTests
 
             sourceRunner.Run(t => t.Persist(id, originator));
             destinationRunner.Run(t => t.Verify(id, originator));
+        }
+
+        [TestCaseSource(nameof(GenerateTestCases))]
+        public void can_fetch_saga_with_list_persisted_by_another_version(string sourceVersion, string destinationVersion)
+        {
+            var sourceRunner = CreateTestFacade<ITestPersistence>(sourceVersion);
+            var destinationRunner = CreateTestFacade<ITestPersistence>(destinationVersion);
+
+            var id = Guid.NewGuid();
+            var originator = sourceVersion;
+
+            sourceRunner.Run(t => t.Persist(id, new List<int> {1, 13, 19}, originator));
+            destinationRunner.Run(t => t.Verify(id, new List<int> {1, 13, 19}, originator));
+
         }
 
         static object[] GenerateTestCases()
