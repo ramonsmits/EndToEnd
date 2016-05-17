@@ -1,9 +1,12 @@
 ﻿using System;
 using NHibernate;
 using NServiceBus.SagaPersisters.NHibernate;
+using NServiceBus.UnitOfWork;
+using NServiceBus.UnitOfWork.NHibernate;
 using NUnit.Framework;
 using PersistenceCompatibilityTests;
-using Version_6_2;
+using Version_5_0;
+
 
 class TestPersistence : MarshalByRefObject, ITestPersistence
 {
@@ -15,30 +18,29 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
         factory.Init();
 
         sessionFactory = factory.SessionFactory;
-
     }
 
     public void Persist(Guid id, string originator)
     {
-        using (var session = sessionFactory.OpenSession())
+        var unitOfWorkManager = new UnitOfWorkManager { SessionFactory = sessionFactory };
+        var persister = new SagaPersister { UnitOfWorkManager = unitOfWorkManager };
+
+        ((IManageUnitsOfWork)unitOfWorkManager).Begin();
+
+        persister.Save(new TestSagaData
         {
-            var persister = new SagaPersister(new TestSessionProvider(session));
+            Id = id,
+            OriginalMessageId = id.ToString(),
+            Originator = originator
+        });
 
-            persister.Save(new TestSagaData
-            {
-                Id = id,
-                OriginalMessageId = id.ToString(),
-                Originator = originator
-            });
-
-            session.Flush();
-        }
+        ((IManageUnitsOfWork)unitOfWorkManager).End();
     }
 
     public void Verify(Guid id, string originator)
     {
-        var session = sessionFactory.OpenSession();
-        var persister = new SagaPersister(new TestSessionProvider(session));
+        var unitOfWorkManager = new UnitOfWorkManager { SessionFactory = sessionFactory };
+        var persister = new SagaPersister { UnitOfWorkManager = unitOfWorkManager };
 
         var data = persister.Get<TestSagaData>(id);
 

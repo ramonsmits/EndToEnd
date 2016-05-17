@@ -24,7 +24,7 @@ namespace PersistenceCompatibilityTests
 
         static object[] GenerateTestCases()
         {
-            var versions = new [] {"4.5", "6.2", "7.0"};
+            var versions = new [] {"4.5", "5.0", "6.2", "7.0"};
 
             var cases = from va in versions
                 from vb in versions
