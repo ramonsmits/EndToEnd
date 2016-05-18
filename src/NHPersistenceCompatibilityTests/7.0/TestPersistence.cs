@@ -5,7 +5,7 @@ using NServiceBus.SagaPersisters.NHibernate;
 using NServiceBus.Sagas;
 using NUnit.Framework;
 using PersistenceCompatibilityTests;
-using Version_7_0;
+using Shared;
 
 class TestPersistence : MarshalByRefObject, ITestPersistence
 {

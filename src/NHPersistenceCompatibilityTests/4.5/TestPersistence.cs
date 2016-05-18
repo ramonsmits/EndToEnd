@@ -5,7 +5,7 @@ using NServiceBus.UnitOfWork;
 using NServiceBus.UnitOfWork.NHibernate;
 using NUnit.Framework;
 using PersistenceCompatibilityTests;
-using Version_4_5;
+using Shared;
 
 class TestPersistence : MarshalByRefObject, ITestPersistence
 {
@@ -18,10 +18,10 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
 
     public void Persist(Guid id, string originator)
     {
-        var unitOfWorkManager = new UnitOfWorkManager {SessionFactory = factory.SessionFactory.Value };
-        var persister = new SagaPersister {UnitOfWorkManager = unitOfWorkManager};
+        var unitOfWorkManager = new UnitOfWorkManager { SessionFactory = factory.SessionFactory.Value };
+        var persister = new SagaPersister { UnitOfWorkManager = unitOfWorkManager };
 
-        ((IManageUnitsOfWork) unitOfWorkManager).Begin();
+        ((IManageUnitsOfWork)unitOfWorkManager).Begin();
 
         persister.Save(new TestSagaData
         {
@@ -30,7 +30,7 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
             Originator = originator
         });
 
-        ((IManageUnitsOfWork) unitOfWorkManager).End();
+        ((IManageUnitsOfWork)unitOfWorkManager).End();
     }
 
     public void Verify(Guid id, string originator)
@@ -83,6 +83,7 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
         persister.Save(new TestSagaDataWithComposite
         {
             Id = id,
+            OriginalMessageId = id.ToString(),
             Originator = originator,
             Composite = new TestSagaDataWithComposite.SagaComposite { Value = compositeValue }
         });
@@ -99,6 +100,6 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
 
         Assert.AreEqual(id, data.Id);
         Assert.AreEqual(originator, data.Originator);
-        Assert.AreEqual(data.Composite.Value, compositeValue);
+        Assert.AreEqual(compositeValue, data.Composite.Value);
     }
 }

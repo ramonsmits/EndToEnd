@@ -1,7 +1,11 @@
 ﻿using System;
+#if NHVersion7
+using NServiceBus;
+#else
 using NServiceBus.Saga;
+#endif
 
-namespace Version_6_2
+namespace Shared
 {
     public class TestSagaDataWithComposite : IContainSagaData
     {

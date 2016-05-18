@@ -17,7 +17,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\bin\Debug\7.0\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;NHVersion7</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -25,7 +25,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;NHVersion7</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -69,13 +69,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NHibernateSessionFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestPersistence.cs" />
-    <Compile Include="TestSaga.cs" />
-    <Compile Include="TestSagaData.cs" />
-    <Compile Include="TestSagaDataWithComposite.cs" />
-    <Compile Include="TestSagaDataWithList.cs" />
     <Compile Include="TestSessionProvider.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +87,7 @@
       <Name>PersistenceCompatibilityTests</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\Shared\Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

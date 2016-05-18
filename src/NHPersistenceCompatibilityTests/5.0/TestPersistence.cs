@@ -5,7 +5,7 @@ using NServiceBus.UnitOfWork;
 using NServiceBus.UnitOfWork.NHibernate;
 using NUnit.Framework;
 using PersistenceCompatibilityTests;
-using Version_5_0;
+using Shared;
 
 class TestPersistence : MarshalByRefObject, ITestPersistence
 {
