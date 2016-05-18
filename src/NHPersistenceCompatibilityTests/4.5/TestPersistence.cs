@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using NHibernate;
 using NServiceBus.SagaPersisters.NHibernate;
 using NServiceBus.UnitOfWork;
 using NServiceBus.UnitOfWork.NHibernate;
@@ -10,11 +9,16 @@ using Version_4_5;
 
 class TestPersistence : MarshalByRefObject, ITestPersistence
 {
+    private readonly NHibernateSessionFactory factory;
+
+    public TestPersistence()
+    {
+        factory = new NHibernateSessionFactory();
+    }
+
     public void Persist(Guid id, string originator)
     {
-        var factory = new NHibernateSessionFactory<TestSagaData>();
-        factory.Init();
-        var unitOfWorkManager = new UnitOfWorkManager {SessionFactory = factory.SessionFactory };
+        var unitOfWorkManager = new UnitOfWorkManager {SessionFactory = factory.SessionFactory.Value };
         var persister = new SagaPersister {UnitOfWorkManager = unitOfWorkManager};
 
         ((IManageUnitsOfWork) unitOfWorkManager).Begin();
@@ -31,9 +35,7 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
 
     public void Verify(Guid id, string originator)
     {
-        var factory = new NHibernateSessionFactory<TestSagaData>();
-        factory.Init();
-        var unitOfWorkManager = new UnitOfWorkManager { SessionFactory = factory.SessionFactory };
+        var unitOfWorkManager = new UnitOfWorkManager { SessionFactory = factory.SessionFactory.Value };
         var persister = new SagaPersister { UnitOfWorkManager = unitOfWorkManager };
 
         var data = persister.Get<TestSagaData>(id);
@@ -44,9 +46,7 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
 
     public void Persist(Guid id, IList<int> data, string originator)
     {
-        var factory = new NHibernateSessionFactory<TestSagaDataWithList>();
-        factory.Init();
-        var unitOfWorkManager = new UnitOfWorkManager { SessionFactory = factory.SessionFactory };
+        var unitOfWorkManager = new UnitOfWorkManager { SessionFactory = factory.SessionFactory.Value };
         var persister = new SagaPersister { UnitOfWorkManager = unitOfWorkManager };
 
         ((IManageUnitsOfWork)unitOfWorkManager).Begin();
@@ -64,9 +64,7 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
 
     public void Verify(Guid id, IList<int> ints, string originator)
     {
-        var factory = new NHibernateSessionFactory<TestSagaDataWithList>();
-        factory.Init();
-        var unitOfWorkManager = new UnitOfWorkManager { SessionFactory = factory.SessionFactory };
+        var unitOfWorkManager = new UnitOfWorkManager { SessionFactory = factory.SessionFactory.Value };
         var persister = new SagaPersister { UnitOfWorkManager = unitOfWorkManager };
 
         var data = persister.Get<TestSagaDataWithList>(id);
@@ -77,9 +75,7 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
 
     public void Persist(Guid id, string compositeValue, string originator)
     {
-        var factory = new NHibernateSessionFactory<TestSagaDataWithComposite>();
-        factory.Init();
-        var unitOfWorkManager = new UnitOfWorkManager { SessionFactory = factory.SessionFactory };
+        var unitOfWorkManager = new UnitOfWorkManager { SessionFactory = factory.SessionFactory.Value };
         var persister = new SagaPersister { UnitOfWorkManager = unitOfWorkManager };
 
         ((IManageUnitsOfWork)unitOfWorkManager).Begin();
@@ -96,9 +92,7 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
 
     public void Verify(Guid id, string compositeValue, string originator)
     {
-        var factory = new NHibernateSessionFactory<TestSagaDataWithComposite>();
-        factory.Init();
-        var unitOfWorkManager = new UnitOfWorkManager { SessionFactory = factory.SessionFactory };
+        var unitOfWorkManager = new UnitOfWorkManager { SessionFactory = factory.SessionFactory.Value };
         var persister = new SagaPersister { UnitOfWorkManager = unitOfWorkManager };
 
         var data = persister.Get<TestSagaDataWithComposite>(id);

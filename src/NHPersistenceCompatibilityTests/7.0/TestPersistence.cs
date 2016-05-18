@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using NHibernate;
 using NServiceBus.Extensibility;
 using NServiceBus.SagaPersisters.NHibernate;
 using NServiceBus.Sagas;
@@ -11,22 +10,18 @@ using Version_7_0;
 class TestPersistence : MarshalByRefObject, ITestPersistence
 {
     private readonly SagaPersister persister;
-    private readonly ISessionFactory sessionFactory;
+    private readonly NHibernateSessionFactory factory;
 
     public TestPersistence()
     {
-        var factory = new NHibernateSessionFactory<TestSagaData>();
-        factory.Init();
-
-        sessionFactory = factory.SessionFactory;
+        factory = new NHibernateSessionFactory();
         persister = new SagaPersister();
     }
+
     public void Persist(Guid id, string originator)
     {
-        using (var session = sessionFactory.OpenSession())
+        using (var session = factory.SessionFactory.Value.OpenSession())
         {
-            var persister = new SagaPersister();
-
             persister.Save(new TestSagaData
             {
                 Id = id,
@@ -42,7 +37,7 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
 
     public void Verify(Guid id, string originator)
     {
-        var session = sessionFactory.OpenSession();
+        var session = factory.SessionFactory.Value.OpenSession();
 
         var data = persister.Get<TestSagaData>(id, new TestSessionProvider(session), new ContextBag()).GetAwaiter().GetResult();
 
@@ -52,10 +47,8 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
 
     public void Persist(Guid id, IList<int> data, string originator)
     {
-        using (var session = sessionFactory.OpenSession())
+        using (var session = factory.SessionFactory.Value.OpenSession())
         {
-            var persister = new SagaPersister();
-
             persister.Save(new TestSagaDataWithList
             {
                 Id = id,
@@ -72,8 +65,7 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
 
     public void Verify(Guid id, IList<int> ints, string originator)
     {
-        var session = sessionFactory.OpenSession();
-
+        var session = factory.SessionFactory.Value.OpenSession();
         var data = persister.Get<TestSagaDataWithList>(id, new TestSessionProvider(session), new ContextBag()).GetAwaiter().GetResult();
 
         Assert.AreEqual(id, data.Id);
@@ -82,10 +74,8 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
 
     public void Persist(Guid id, string compositeValue, string originator)
     {
-        using (var session = sessionFactory.OpenSession())
+        using (var session = factory.SessionFactory.Value.OpenSession())
         {
-            var persister = new SagaPersister();
-
             persister.Save(new TestSagaDataWithComposite
             {
                 Id = id,
@@ -102,7 +92,7 @@ class TestPersistence : MarshalByRefObject, ITestPersistence
 
     public void Verify(Guid id, string compositeValue, string originator)
     {
-        var session = sessionFactory.OpenSession();
+        var session = factory.SessionFactory.Value.OpenSession();
 
         var data = persister.Get<TestSagaDataWithComposite>(id, new TestSessionProvider(session), new ContextBag()).GetAwaiter().GetResult();
 

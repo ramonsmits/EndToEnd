@@ -1,38 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
+using Common;
 using NHibernate;
-using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
-using NServiceBus.Features;
 using NServiceBus.SagaPersisters.NHibernate.AutoPersistence;
 using NServiceBus.Sagas;
-using NServiceBus.Settings;
-using Environment = NHibernate.Cfg.Environment;
-
 
 namespace Version_7_0
 {
-    public class NHibernateSessionFactory<TSagaData>
+    public class NHibernateSessionFactory
     {
-        const string dialect = "NHibernate.Dialect.MsSql2012Dialect";
-
-        public void Init()
+        public NHibernateSessionFactory()
         {
-            var connectionString = @"Data Source=localhost\SQLEXPRESS;Initial Catalog=persistencetests;Integrated Security=True"; //ConfigurationManager.ConnectionStrings[0].ConnectionString;
+            SessionFactory = new Lazy<ISessionFactory>(Init);
+        }
 
-            var configuration = new Configuration()
-                .AddProperties(new Dictionary<string, string>
-                {
-                        {"dialect", dialect},
-                        {Environment.ConnectionString, connectionString}
-                });
+        private ISessionFactory Init()
+        {
+            var configuration = new NHibernate.Cfg.Configuration().AddProperties(NHibernateConnectionInfo.Settings);
 
             var metaModel = new SagaMetadataCollection();
             metaModel.Initialize(new[] { typeof(TestSaga) });
             var metadata = metaModel.Find(typeof(TestSaga));
             var mapper = new SagaModelMapper(metaModel, new[] { metadata.SagaEntityType });
             configuration.AddMapping(mapper.Compile());
-
 
             metaModel = new SagaMetadataCollection();
             metaModel.Initialize(new[] { typeof(TestSagaWithList) });
@@ -46,10 +36,11 @@ namespace Version_7_0
             mapper = new SagaModelMapper(metaModel, new[] { metadata.SagaEntityType });
             configuration.AddMapping(mapper.Compile());
 
-            SessionFactory = configuration.BuildSessionFactory();
             new SchemaUpdate(configuration).Execute(false, true);
+
+            return configuration.BuildSessionFactory();
         }
 
-        public ISessionFactory SessionFactory { get; private set; }
+        public Lazy<ISessionFactory> SessionFactory { get; }
     }
 }

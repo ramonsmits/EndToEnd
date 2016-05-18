@@ -32,7 +32,6 @@ namespace PersistenceCompatibilityTests
 
             sourceRunner.Run(t => t.Persist(id, new List<int> {1, 13, 19}, originator));
             destinationRunner.Run(t => t.Verify(id, new List<int> {1, 13, 19}, originator));
-
         }
 
         [TestCaseSource(nameof(GenerateTestCases))]
@@ -49,8 +48,7 @@ namespace PersistenceCompatibilityTests
             destinationRunner.Run(t => t.Verify(id, compositeText, originator));
         }
 
-
-        static object[] GenerateTestCases()
+        static object[][] GenerateTestCases()
         {
             var versions = new [] {"4.5", "5.0", "6.2", "7.0"};
 

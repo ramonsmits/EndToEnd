@@ -1,32 +1,35 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using Common;
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
 using NServiceBus.SagaPersisters.NHibernate.AutoPersistence;
 
 namespace Version_6_2
 {
-    public class NHibernateSessionFactory<TSagaData>
+    public class NHibernateSessionFactory
     {
-        const string dialect = "NHibernate.Dialect.MsSql2012Dialect";
-
-        public void Init()
+        public NHibernateSessionFactory()
         {
-            var connectionString = @"Data Source=localhost\SQLEXPRESS;Initial Catalog=persistencetests;Integrated Security=True";//ConfigurationManager.ConnectionStrings[0].ConnectionString;
-
-            var configuration = new NHibernate.Cfg.Configuration()
-                .AddProperties(new Dictionary<string, string>
-                {
-                    { "dialect", dialect },
-                    { NHibernate.Cfg.Environment.ConnectionString, connectionString }
-                });
-
-            var modelMapper = new SagaModelMapper(new[] { typeof(TSagaData) });
-
-            configuration.AddMapping(modelMapper.Compile());
-            SessionFactory = configuration.BuildSessionFactory();
-            new SchemaUpdate(configuration).Execute(false, true);
+            SessionFactory = new Lazy<ISessionFactory>(Init);
         }
 
-        public ISessionFactory SessionFactory { get; private set; }
+        private ISessionFactory Init()
+        {
+            var configuration = new NHibernate.Cfg.Configuration().AddProperties(NHibernateConnectionInfo.Settings);
+            var modelMapper = new SagaModelMapper(new[]
+            {
+                typeof(TestSagaDataWithList),
+                typeof(TestSagaDataWithComposite),
+                typeof(TestSagaData)
+            });
+
+            configuration.AddMapping(modelMapper.Compile());
+
+            new SchemaUpdate(configuration).Execute(false, true);
+
+            return configuration.BuildSessionFactory();
+        }
+
+        public Lazy<ISessionFactory> SessionFactory { get; }
     }
 }
