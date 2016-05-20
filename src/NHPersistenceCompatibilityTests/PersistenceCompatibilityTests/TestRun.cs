@@ -14,7 +14,7 @@ namespace PersistenceCompatibilityTests
         {
             var packageInfo = new PackageInfo("NServiceBus.NHibernate.Tests", versionName);
             var package = packageResolver.GetLocalPackage(packageInfo);
-            var appDomainDescriptor = domainCreator.CreateDomain(BinDirectoryTemplate, package);
+            var appDomainDescriptor = domainCreator.CreateDomain(BinDirectoryTemplate, package, "NServiceBus.NHibernate");
             var runner = new AppDomainRunner<T>(appDomainDescriptor);
 
             appDomainDescriptors.Add(appDomainDescriptor);
