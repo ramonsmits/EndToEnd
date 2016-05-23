@@ -12,8 +12,8 @@ namespace PersistenceCompatibilityTests
         [TestCaseSource(nameof(GenerateTestCases))]
         public void can_fetch_simple_saga_persisted_by_another_version(string sourceVersion, string destinationVersion)
         {
-            var sourcePersister = CreatePersister(sourceVersion);
-            var destinationPersister = CreatePersister(destinationVersion);
+            var sourcePersister = PersisterFacadeCache[sourceVersion];
+            var destinationPersister = PersisterFacadeCache[destinationVersion];
 
             var writeData = new TestSagaData
             {
@@ -32,8 +32,8 @@ namespace PersistenceCompatibilityTests
         [TestCaseSource(nameof(GenerateTestCases))]
         public void can_fetch_saga_with_list_persisted_by_another_version(string sourceVersion, string destinationVersion)
         {
-            var sourcePersister = CreatePersister(sourceVersion);
-            var destinationPersister = CreatePersister(destinationVersion);
+            var sourcePersister = PersisterFacadeCache[sourceVersion];
+            var destinationPersister = PersisterFacadeCache[destinationVersion];
 
             var writeData = new TestSagaDataWithList 
             {
@@ -52,8 +52,8 @@ namespace PersistenceCompatibilityTests
         [TestCaseSource(nameof(GenerateTestCases))]
         public void can_fetch_composite_saga_persisted_by_another_version(string sourceVersion, string destinationVersion)
         {
-            var sourcePersister = CreatePersister(sourceVersion);
-            var destinationPersister = CreatePersister(destinationVersion);
+            var sourcePersister = PersisterFacadeCache[sourceVersion];
+            var destinationPersister = PersisterFacadeCache[destinationVersion];
 
             var writeData = new TestSagaDataWithComposite
             {
@@ -69,6 +69,28 @@ namespace PersistenceCompatibilityTests
             CollectionAssert.AreEqual(writeData.Composite.Value, readData.Composite.Value);
         }
 
+        public override void OneTimeSetup()
+        {
+            PersisterFacadeCache = new Dictionary<string, PersisterFacade>();
+
+            var combinations = GenerateTestCases();
+            foreach (var versionPair in combinations)
+            {
+                var vFrom = versionPair[0].ToString();
+                var vTo = versionPair[1].ToString();
+
+                if (!PersisterFacadeCache.ContainsKey(vFrom))
+                {
+                    PersisterFacadeCache.Add(vFrom, CreatePersister(vFrom));
+                }
+
+                if (!PersisterFacadeCache.ContainsKey(vTo))
+                {
+                    PersisterFacadeCache.Add(vTo, CreatePersister(vTo));
+                }
+            }
+        }
+
         static object[][] GenerateTestCases()
         {
             var versions = new [] {"4.5", "5.0", "6.2", "7.0"};
@@ -79,5 +101,7 @@ namespace PersistenceCompatibilityTests
 
             return cases.ToArray();
         }
+
+        Dictionary<string, PersisterFacade> PersisterFacadeCache;
     }
 }

@@ -58,6 +58,12 @@ namespace PersistenceCompatibilityTests
             appDomainDescriptors = new List<AppDomainDescriptor>();
             packageResolver = new LocalPackageResolver(path);
             domainCreator = new AppDomainCreator();
+
+            OneTimeSetup();
+        }
+
+        public virtual void OneTimeSetup()
+        {
         }
 
         LocalPackageResolver packageResolver;
