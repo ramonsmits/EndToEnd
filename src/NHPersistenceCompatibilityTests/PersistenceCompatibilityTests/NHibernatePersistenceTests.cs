@@ -7,13 +7,26 @@ using NUnit.Framework;
 namespace PersistenceCompatibilityTests
 {
     [TestFixture]
-    public class NHibernatePersistenceTests : TestRun
+    public class NHibernatePersistenceTests
     {
+        [OneTimeSetUp]
+        public void Setup()
+        {
+            persisterProvider = new PersisterProvider();
+            persisterProvider.Initialize(NHibernatePackageVersions);    
+        }
+
+        [OneTimeTearDown]
+        public void CleanUp()
+        {
+            persisterProvider.Dispose();
+        }
+
         [TestCaseSource(nameof(GenerateTestCases))]
         public void can_fetch_simple_saga_persisted_by_another_version(string sourceVersion, string destinationVersion)
         {
-            var sourcePersister = PersisterFacadeCache[sourceVersion];
-            var destinationPersister = PersisterFacadeCache[destinationVersion];
+            var sourcePersister = persisterProvider.Get(sourceVersion);
+            var destinationPersister = persisterProvider.Get(destinationVersion);
 
             var writeData = new TestSagaData
             {
@@ -32,8 +45,8 @@ namespace PersistenceCompatibilityTests
         [TestCaseSource(nameof(GenerateTestCases))]
         public void can_fetch_saga_with_list_persisted_by_another_version(string sourceVersion, string destinationVersion)
         {
-            var sourcePersister = PersisterFacadeCache[sourceVersion];
-            var destinationPersister = PersisterFacadeCache[destinationVersion];
+            var sourcePersister = persisterProvider.Get(sourceVersion);
+            var destinationPersister = persisterProvider.Get(destinationVersion);
 
             var writeData = new TestSagaDataWithList 
             {
@@ -52,8 +65,8 @@ namespace PersistenceCompatibilityTests
         [TestCaseSource(nameof(GenerateTestCases))]
         public void can_fetch_composite_saga_persisted_by_another_version(string sourceVersion, string destinationVersion)
         {
-            var sourcePersister = PersisterFacadeCache[sourceVersion];
-            var destinationPersister = PersisterFacadeCache[destinationVersion];
+            var sourcePersister = persisterProvider.Get(sourceVersion);
+            var destinationPersister = persisterProvider.Get(destinationVersion);
 
             var writeData = new TestSagaDataWithComposite
             {
@@ -69,39 +82,17 @@ namespace PersistenceCompatibilityTests
             CollectionAssert.AreEqual(writeData.Composite.Value, readData.Composite.Value);
         }
 
-        public override void OneTimeSetup()
-        {
-            PersisterFacadeCache = new Dictionary<string, PersisterFacade>();
-
-            var combinations = GenerateTestCases();
-            foreach (var versionPair in combinations)
-            {
-                var vFrom = versionPair[0].ToString();
-                var vTo = versionPair[1].ToString();
-
-                if (!PersisterFacadeCache.ContainsKey(vFrom))
-                {
-                    PersisterFacadeCache.Add(vFrom, CreatePersister(vFrom));
-                }
-
-                if (!PersisterFacadeCache.ContainsKey(vTo))
-                {
-                    PersisterFacadeCache.Add(vTo, CreatePersister(vTo));
-                }
-            }
-        }
+        static string[] NHibernatePackageVersions => new[] { "4.5", "5.0", "6.2", "7.0" };
 
         static object[][] GenerateTestCases()
         {
-            var versions = new [] {"4.5", "5.0", "6.2", "7.0"};
-
-            var cases = from va in versions
-                from vb in versions
-                select new object[] {va, vb};
+            var cases = from va in NHibernatePackageVersions
+                        from vb in NHibernatePackageVersions
+                        select new object[] {va, vb};
 
             return cases.ToArray();
         }
 
-        Dictionary<string, PersisterFacade> PersisterFacadeCache;
+        PersisterProvider persisterProvider;
     }
 }
