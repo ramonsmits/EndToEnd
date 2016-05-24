@@ -56,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database.cs" />
     <Compile Include="NHibernatePersistenceTests.cs" />
     <Compile Include="PersisterFacade.cs" />
     <Compile Include="PersisterProvider.cs" />
