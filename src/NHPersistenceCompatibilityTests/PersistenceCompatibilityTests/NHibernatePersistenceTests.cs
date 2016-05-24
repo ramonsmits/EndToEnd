@@ -12,8 +12,9 @@ namespace PersistenceCompatibilityTests
         [OneTimeSetUp]
         public void Setup()
         {
+            Database.Cleanup();
             persisterProvider = new PersisterProvider();
-            persisterProvider.Initialize(NHibernatePackageVersions);    
+            persisterProvider.Initialize(NHibernatePackageVersions);
         }
 
         [OneTimeTearDown]
