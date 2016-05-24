@@ -7,13 +7,26 @@ using NUnit.Framework;
 namespace PersistenceCompatibilityTests
 {
     [TestFixture]
-    public class NHibernatePersistenceTests : TestRun
+    public class NHibernatePersistenceTests
     {
+        [OneTimeSetUp]
+        public void Setup()
+        {
+            persisterProvider = new PersisterProvider();
+            persisterProvider.Initialize(NHibernatePackageVersions);    
+        }
+
+        [OneTimeTearDown]
+        public void CleanUp()
+        {
+            persisterProvider.Dispose();
+        }
+
         [TestCaseSource(nameof(GenerateTestCases))]
         public void can_fetch_simple_saga_persisted_by_another_version(string sourceVersion, string destinationVersion)
         {
-            var sourcePersister = CreatePersister(sourceVersion);
-            var destinationPersister = CreatePersister(destinationVersion);
+            var sourcePersister = persisterProvider.Get(sourceVersion);
+            var destinationPersister = persisterProvider.Get(destinationVersion);
 
             var writeData = new TestSagaData
             {
@@ -32,8 +45,8 @@ namespace PersistenceCompatibilityTests
         [TestCaseSource(nameof(GenerateTestCases))]
         public void can_fetch_saga_with_list_persisted_by_another_version(string sourceVersion, string destinationVersion)
         {
-            var sourcePersister = CreatePersister(sourceVersion);
-            var destinationPersister = CreatePersister(destinationVersion);
+            var sourcePersister = persisterProvider.Get(sourceVersion);
+            var destinationPersister = persisterProvider.Get(destinationVersion);
 
             var writeData = new TestSagaDataWithList 
             {
@@ -52,8 +65,8 @@ namespace PersistenceCompatibilityTests
         [TestCaseSource(nameof(GenerateTestCases))]
         public void can_fetch_composite_saga_persisted_by_another_version(string sourceVersion, string destinationVersion)
         {
-            var sourcePersister = CreatePersister(sourceVersion);
-            var destinationPersister = CreatePersister(destinationVersion);
+            var sourcePersister = persisterProvider.Get(sourceVersion);
+            var destinationPersister = persisterProvider.Get(destinationVersion);
 
             var writeData = new TestSagaDataWithComposite
             {
@@ -69,15 +82,17 @@ namespace PersistenceCompatibilityTests
             CollectionAssert.AreEqual(writeData.Composite.Value, readData.Composite.Value);
         }
 
+        static string[] NHibernatePackageVersions => new[] { "4.5", "5.0", "6.2", "7.0" };
+
         static object[][] GenerateTestCases()
         {
-            var versions = new [] {"4.5", "5.0", "6.2", "7.0"};
-
-            var cases = from va in versions
-                from vb in versions
-                select new object[] {va, vb};
+            var cases = from va in NHibernatePackageVersions
+                        from vb in NHibernatePackageVersions
+                        select new object[] {va, vb};
 
             return cases.ToArray();
         }
+
+        PersisterProvider persisterProvider;
     }
 }

@@ -58,7 +58,7 @@
   <ItemGroup>
     <Compile Include="NHibernatePersistenceTests.cs" />
     <Compile Include="PersisterFacade.cs" />
-    <Compile Include="TestRun.cs" />
+    <Compile Include="PersisterProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
