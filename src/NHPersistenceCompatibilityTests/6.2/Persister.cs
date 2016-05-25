@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using NServiceBus.Saga;
 using NServiceBus.SagaPersisters.NHibernate;
 using Version_6_2;
@@ -9,7 +8,8 @@ public class Persister
     public void Save<T>(T data, string correlationPropertyName = null, string correlationPropertyValue = null)
         where T : IContainSagaData
     {
-        using (var session = NHibernateSessionFactory.SessionFactory.OpenSession())
+        using (var sessionFactory = NHibernateSessionFactory.Create())
+        using (var session = sessionFactory.OpenSession())
         {
             var persister = new SagaPersister(new TestSessionProvider(session));
 
@@ -19,46 +19,50 @@ public class Persister
         }
     }
 
+    public void Update<T>(T data) where T : IContainSagaData
+    {
+        using (var sessionFactory = NHibernateSessionFactory.Create())
+        using (var session = sessionFactory.OpenSession())
+        {
+            var persister = new SagaPersister(new TestSessionProvider(session));
+
+            persister.Update(data);
+
+            session.Flush();
+        }
+    }
+
     public T Get<T>(Guid id) where T : IContainSagaData
     {
-        using (var session = NHibernateSessionFactory.SessionFactory.OpenSession())
+        using (var sessionFactory = NHibernateSessionFactory.Create())
+        using (var session = sessionFactory.OpenSession())
         {
             var persister = new SagaPersister(new TestSessionProvider(session));
 
             var data = persister.Get<T>(id);
 
             //Make sure all lazy properties are fetched before returning result
-            Fetcher.Traverse(data, typeof (T));
+            ObjectFetcher.Traverse(data, typeof (T));
 
             return data;
         }
     }
 
-    static class Fetcher
+    public T GetByCorrelationProperty<T>(string correlationPropertyName, object correlationPropertyValue) where T : IContainSagaData
     {
-        public static void Traverse(object instance, Type instanceType)
+        using (var sessionFactory = NHibernateSessionFactory.Create())
+        using (var session = sessionFactory.OpenSession())
         {
-            foreach (var propertyInfo in instanceType.GetProperties())
-            {
-                if (ReferenceEquals(propertyInfo.DeclaringType, typeof (object)))
-                {
-                    continue;
-                }
+            var persister = (ISagaPersister)new SagaPersister(new TestSessionProvider(session));
 
-                if (propertyInfo.PropertyType.GetInterface(typeof (IEnumerable<>).FullName) != null)
-                {
-                    propertyInfo.GetValue(instance, null)?.ToString();
-                }
-                else
-                {
-                    var propertyValue = propertyInfo.GetValue(instance, null);
+            var data = persister.Get<T>(correlationPropertyName, correlationPropertyValue);
 
-                    if (propertyValue != null)
-                    {
-                        Traverse(propertyValue, propertyInfo.PropertyType);
-                    }
-                }
-            }
+            //Make sure all lazy properties are fetched before returning result
+            ObjectFetcher.Traverse(data, typeof(T));
+
+            return data;
         }
     }
+
+   
 }

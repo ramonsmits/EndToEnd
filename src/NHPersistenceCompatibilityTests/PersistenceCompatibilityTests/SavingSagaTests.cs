@@ -6,21 +6,49 @@ using NUnit.Framework;
 
 namespace PersistenceCompatibilityTests
 {
-    [TestFixture]
-    public class NHibernatePersistenceTests
+    [TestFixture]    
+    public class SavingSagaTests
     {
+
         [OneTimeSetUp]
-        public void Setup()
+        public void OneTimeSetup()
         {
-            Database.Cleanup();
             persisterProvider = new PersisterProvider();
             persisterProvider.Initialize(NHibernatePackageVersions);
         }
 
         [OneTimeTearDown]
-        public void CleanUp()
+        public void OneTimeCleanUp()
         {
             persisterProvider.Dispose();
+        }
+
+        [SetUp]
+        public void Setup()
+        {
+            Database.Cleanup();
+        }
+
+        [TestCaseSource(nameof(GenerateTestCases))]
+        public void can_fetch_by_correlation_property(string sourceVersion, string destinationVersion)
+        {
+            var sourcePersister = persisterProvider.Get(sourceVersion);
+            var destinationPersister = persisterProvider.Get(destinationVersion);
+
+            var writeData = new TestSagaData
+            {
+                Id = Guid.NewGuid(),
+                Originator = "test-originator",
+                SomeValue = "test"
+            };
+
+            sourcePersister.Save(writeData, nameof(writeData.Originator), writeData.Originator);
+
+            var readByCorrelationProperty = destinationPersister.GetByCorrelationId<TestSagaData>(nameof(writeData.Originator), writeData.Originator);
+
+            Assert.AreEqual(writeData.Id, readByCorrelationProperty.Id);
+            Assert.AreEqual(writeData.Originator, readByCorrelationProperty.Originator);
+            Assert.AreEqual(writeData.SomeValue, readByCorrelationProperty.SomeValue);
         }
 
         [TestCaseSource(nameof(GenerateTestCases))]
@@ -32,15 +60,17 @@ namespace PersistenceCompatibilityTests
             var writeData = new TestSagaData
             {
                 Id = Guid.NewGuid(),
-                Originator = "test-originator"
+                Originator = "test-originator", 
+                SomeValue = "test"
             };
 
-            sourcePersister.Save(writeData, nameof(writeData.Id), writeData.Id.ToString());
+            sourcePersister.Save(writeData, nameof(writeData.Originator), writeData.Originator);
 
-            var readData = destinationPersister.Get<TestSagaData>(writeData.Id);
+            var readByGuid = destinationPersister.Get<TestSagaData>(writeData.Id);
 
-            Assert.AreEqual(writeData.Id, readData.Id);
-            Assert.AreEqual(writeData.Originator, readData.Originator);
+            Assert.AreEqual(writeData.Id, readByGuid.Id);
+            Assert.AreEqual(writeData.Originator, readByGuid.Originator);
+            Assert.AreEqual("test", readByGuid.SomeValue);
         }
 
         [TestCaseSource(nameof(GenerateTestCases))]
