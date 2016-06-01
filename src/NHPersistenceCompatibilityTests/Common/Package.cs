@@ -33,6 +33,36 @@ namespace Common
             throw new ArgumentException($"The value '{package}' is not in a correct format. Use 'AssemblyName_Version'.");
         }
 
+        public string GetProjectTemplateVersion()
+        {
+            if (Version.StartsWith("4"))
+            {
+                return "4.5";
+            }
+            else if (Version.StartsWith("5"))
+            {
+                return "5.0";
+            }
+            else if (Version.StartsWith("6.0"))
+            {
+                return "6.0";
+            }
+            else if (Version.StartsWith("6.1.0"))
+            {
+                return "6.1.0";
+            }
+            else if (Version.StartsWith("6"))
+            {
+                return "6.2";
+            }
+            else if (Version.StartsWith("7"))
+            {
+                return "7.0";
+            }
+
+            return Version;
+        }
+
         public override string ToString()
         {
             return $"{AssemblyName}_{Version}";
