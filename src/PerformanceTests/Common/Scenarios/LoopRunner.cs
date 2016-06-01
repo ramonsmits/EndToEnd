@@ -49,6 +49,8 @@ abstract class LoopRunner : BaseRunner
             var start = Stopwatch.StartNew();
             countdownEvent = new CountdownEvent(BatchSize);
 
+            var cancellationToken = stopLoop.Token;
+
             while (!Shutdown)
             {
                 try
@@ -67,7 +69,7 @@ abstract class LoopRunner : BaseRunner
                         Log.InfoFormat("Batch size increased to {0}", BatchSize);
                     }
                     Console.Write("2");
-                    countdownEvent.Wait(stopLoop.Token);
+                    countdownEvent.Wait(cancellationToken);
                 }
                 catch (OperationCanceledException)
                 {
