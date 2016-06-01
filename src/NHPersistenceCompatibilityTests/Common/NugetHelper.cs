@@ -22,10 +22,14 @@ namespace Common
             packageSources = packageSourceProvider.GetEnabledPackageSources()
                 .OrderBy(source => source.IsOfficial)
                 .Select(source => source.Source).ToList();
+
+            Console.WriteLine($"### Available package sources: {string.Join("|", packageSources)}");
         }
 
         public IEnumerable<string> GetPossibleVersionsFor(string packageName, string minimumVersion)
         {
+            Console.WriteLine($"### Default package source: {packageSources.First()}");
+
             var repo = PackageRepositoryFactory.Default.CreateRepository(packageSources.First());
             var packages = repo.FindPackagesById(packageName)
                 .Where(p => p.IsListed())
