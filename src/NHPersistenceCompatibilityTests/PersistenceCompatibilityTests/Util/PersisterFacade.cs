@@ -27,6 +27,13 @@ namespace PersistenceCompatibilityTests
             rawPersister.Run(p => p.Update(instance.GetType().FullName, body));
         }
 
+        public void Complete<T>(T instance)
+        {
+            var body = JsonConvert.SerializeObject(instance);
+
+            rawPersister.Run(p => p.Complete(instance.GetType().FullName, body));
+        }
+
         public T Get<T>(Guid sagaId)
         {
             var body = string.Empty;
