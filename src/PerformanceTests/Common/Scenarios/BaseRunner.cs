@@ -37,12 +37,12 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 
         InitData();
 
-        await CreateSeedData();
-        await CreateEndpoint();
+        await CreateSeedData().ConfigureAwait(false);
+        await CreateEndpoint().ConfigureAwait(false);
 
         try
         {
-            await Start(Session);
+            await Start(Session).ConfigureAwait(false);
 
             if (!IsSeedingData)
             {
@@ -60,11 +60,11 @@ public abstract class BaseRunner : IConfigurationSource, IContext
             await Task.Delay(runDuration).ConfigureAwait(false);
             Statistics.Instance.Dump();
 
-            await Stop();
+            await Stop().ConfigureAwait(false);
         }
         finally
         {
-            await Session.Close();
+            await Session.Close().ConfigureAwait(false);
         }
     }
 
@@ -76,15 +76,15 @@ public abstract class BaseRunner : IConfigurationSource, IContext
     protected virtual Task Stop()
     {
         return Task.FromResult(0);
-;    }
+    }
 
     async Task CreateSeedData()
     {
         var seedCreator = this as ICreateSeedData;
         if (seedCreator == null) return;
 
-        await CreateOrPurgeQueues();
-        await CreateSendOnlyEndpoint();
+        await CreateOrPurgeQueues().ConfigureAwait(false);
+        await CreateSendOnlyEndpoint().ConfigureAwait(false);
 
         try
         {
@@ -117,7 +117,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
             //}
 
             //foreach (var t in tasks)
-            //    await Task.WhenAll(tasks);
+            //    await Task.WhenAll(tasks).ConfigureAwait(false);
 
             var elapsed = start.Elapsed;
             var avg = count / elapsed.TotalSeconds;
@@ -128,7 +128,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         }
         finally
         {
-            await Session.Close();
+            await Session.Close().ConfigureAwait(false);
         }
     }
 

@@ -20,7 +20,7 @@ namespace NServiceBus.Performance
             try
             {
                 provider.ConcurrencyInc();
-                await next();
+                await next().ConfigureAwait(false);
                 provider.SuccessInc();
             }
             catch

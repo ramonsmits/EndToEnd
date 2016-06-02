@@ -45,7 +45,7 @@ abstract class LoopRunner : BaseRunner
         try
         {
             Log.Warn("Sleeping 3,000ms for the instance to purge the queue and process subscriptions. Loop requires the queue to be empty.");
-            await Task.Delay(3000);
+            await Task.Delay(3000).ConfigureAwait(false);
             Log.Info("Starting");
             var start = Stopwatch.StartNew();
             countdownEvent = new CountdownEvent(BatchSize);
@@ -60,7 +60,7 @@ abstract class LoopRunner : BaseRunner
                     countdownEvent.Reset(BatchSize);
                     var batchDuration = Stopwatch.StartNew();
 
-                    await TaskHelper.ParallelFor(BatchSize, () => SendMessage(session));
+                    await TaskHelper.ParallelFor(BatchSize, () => SendMessage(session)).ConfigureAwait(false);
 
                     count += BatchSize;
 

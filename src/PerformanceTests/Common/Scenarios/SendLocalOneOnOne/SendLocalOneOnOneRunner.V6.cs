@@ -9,7 +9,7 @@ partial class SendLocalOneOnOneRunner
         public async Task Handle(Command message, IMessageHandlerContext ctx)
         {
             if (Shutdown) return;
-            await ctx.SendLocal(message);
+            await ctx.SendLocal(message).ConfigureAwait(false);
             System.Threading.Interlocked.Increment(ref Count);
         }
     }
