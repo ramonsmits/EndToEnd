@@ -20,11 +20,10 @@ abstract class LoopRunner : BaseRunner
     int BatchSize { get; set; } = 16;
     protected abstract Task SendMessage(ISession session);
 
-    protected override Task Start(ISession session)
+    protected override async Task Start(ISession session)
     {
         stopLoop = new CancellationTokenSource();
-        loopTask = Task.Factory.StartNew(() => Loop(session), TaskCreationOptions.LongRunning);
-        return Task.FromResult(0);
+        loopTask = await Task.Factory.StartNew(() => Loop(session), TaskCreationOptions.LongRunning).ConfigureAwait(false);
     }
 
     protected override Task Stop()
@@ -93,6 +92,7 @@ abstract class LoopRunner : BaseRunner
         catch (Exception ex)
         {
             Log.Error("Loop", ex);
+            throw;
         }
     }
 
