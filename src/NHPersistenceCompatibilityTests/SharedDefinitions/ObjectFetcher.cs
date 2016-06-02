@@ -6,6 +6,9 @@ static class ObjectFetcher
 {
     public static void Traverse(object instance, Type instanceType)
     {
+        if (instance == null)
+            return;
+
         foreach (var propertyInfo in instanceType.GetProperties())
         {
             if (ReferenceEquals(propertyInfo.DeclaringType, typeof(object)))

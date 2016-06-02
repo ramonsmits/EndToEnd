@@ -45,6 +45,17 @@ public class Persister
         }
     }
 
+    public void Complete<T>(T data) where T : IContainSagaData
+    {
+        using (var sessionFactory = NHibernateSessionFactory.Create())
+        using (var sessionProvider = new TestSessionProvider(sessionFactory))
+        {
+            var persister = new SagaPersister(sessionProvider);
+
+            persister.Complete(data);
+        }
+    }
+
     public T GetByCorrelationProperty<T>(string correlationPropertyName, object correlationPropertyValue) where T : IContainSagaData
     {
         using (var sessionFactory = NHibernateSessionFactory.Create())

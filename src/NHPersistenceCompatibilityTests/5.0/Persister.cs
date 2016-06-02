@@ -37,6 +37,21 @@ public class Persister
         }
     }
 
+    public void Complete<T>(T data) where T : IContainSagaData
+    {
+        using (var sessionFactory = NHibernateSessionFactory.Create())
+        {
+            var unitOfWorkManager = new UnitOfWorkManager { SessionFactory = sessionFactory };
+            var persister = new SagaPersister { UnitOfWorkManager = unitOfWorkManager };
+
+            ((IManageUnitsOfWork)unitOfWorkManager).Begin();
+
+            persister.Complete(data);
+
+            ((IManageUnitsOfWork)unitOfWorkManager).End();
+        }
+    }
+
     public T Get<T>(Guid id) where T : IContainSagaData
     {
         using (var sessionFactory = NHibernateSessionFactory.Create())

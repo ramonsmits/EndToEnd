@@ -12,16 +12,11 @@ namespace Common
 
         public NugetHelper()
         {
-            LoadNugetSourcesFromConfig();
-        }
-
-        private void LoadNugetSourcesFromConfig()
-        {
-            var machineSettings = Settings.LoadDefaultSettings(new PhysicalFileSystem("C:\\"), null, null);
-            var packageSourceProvider = new PackageSourceProvider(machineSettings);
-            packageSources = packageSourceProvider.GetEnabledPackageSources()
-                .OrderBy(source => source.IsOfficial)
-                .Select(source => source.Source).ToList();
+            this.packageSources = new[]
+            {
+                "https://packages.nuget.org/api/v2",
+                "https://www.myget.org/F/particular/"
+            };
         }
 
         public IEnumerable<string> GetPossibleVersionsFor(string packageName, string minimumVersion)

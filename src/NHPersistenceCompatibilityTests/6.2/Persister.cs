@@ -31,6 +31,19 @@ public class Persister
             session.Flush();
         }
     }
+    
+    public void Complete<T>(T data) where T : IContainSagaData
+    {
+        using (var sessionFactory = NHibernateSessionFactory.Create())
+        using (var session = sessionFactory.OpenSession())
+        {
+            var persister = new SagaPersister(new TestSessionProvider(session));
+
+            persister.Complete(data);
+
+            session.Flush();
+        }
+    }
 
     public T Get<T>(Guid id) where T : IContainSagaData
     {
