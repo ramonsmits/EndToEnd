@@ -20,13 +20,13 @@ abstract class LoopRunner : BaseRunner
     int BatchSize { get; set; } = 16;
     protected abstract Task SendMessage(ISession session);
 
-    protected override void Start(ISession session)
+    protected override async Task Start(ISession session)
     {
         stopLoop = new CancellationTokenSource();
-        loopTask = Task.Factory.StartNew(() => Loop(session), TaskCreationOptions.LongRunning);
+        loopTask = await Task.Factory.StartNew(() => Loop(session), TaskCreationOptions.LongRunning).ConfigureAwait(false);
     }
 
-    protected override void Stop()
+    protected override Task Stop()
     {
         Shutdown = true;
         using (stopLoop)
@@ -37,6 +37,7 @@ abstract class LoopRunner : BaseRunner
                 loopTask.Wait();
             }
         }
+        return Task.FromResult(0);
     }
 
     async Task Loop(ISession session)
@@ -44,7 +45,7 @@ abstract class LoopRunner : BaseRunner
         try
         {
             Log.Warn("Sleeping 3,000ms for the instance to purge the queue and process subscriptions. Loop requires the queue to be empty.");
-            await Task.Delay(3000);
+            await Task.Delay(3000).ConfigureAwait(false);
             Log.Info("Starting");
             var start = Stopwatch.StartNew();
             countdownEvent = new CountdownEvent(BatchSize);
@@ -59,7 +60,7 @@ abstract class LoopRunner : BaseRunner
                     countdownEvent.Reset(BatchSize);
                     var batchDuration = Stopwatch.StartNew();
 
-                    await TaskHelper.ParallelFor(BatchSize, () => SendMessage(session));
+                    await TaskHelper.ParallelFor(BatchSize, () => SendMessage(session)).ConfigureAwait(false);
 
                     count += BatchSize;
 
@@ -91,6 +92,7 @@ abstract class LoopRunner : BaseRunner
         catch (Exception ex)
         {
             Log.Error("Loop", ex);
+            throw;
         }
     }
 

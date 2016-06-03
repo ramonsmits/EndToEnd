@@ -49,7 +49,8 @@ namespace Host
                     var runnableTest = permutation.Tests.Select(x => (BaseRunner)assembly.CreateInstance(x)).Single();
 
                     Log.InfoFormat("Executing scenario: {0}", runnableTest);
-                    runnableTest.Execute(permutation, endpointName);
+                    runnableTest.Execute(permutation, endpointName)
+                        .ConfigureAwait(false).GetAwaiter().GetResult();
                 }
             }
             catch (NotSupportedException nsex)
