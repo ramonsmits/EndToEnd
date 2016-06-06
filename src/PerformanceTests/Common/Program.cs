@@ -13,10 +13,7 @@ namespace Host
     {
         static ILog Log;
 
-        static string endpointName = "PerformanceTests_" + AppDomain.CurrentDomain.FriendlyName
-            .Replace(".exe", string.Empty)
-            .Replace(' ', '_')
-            .Replace('.', '_');
+        static string endpointName = "PerformanceTest";
 
         static int Main()
         {

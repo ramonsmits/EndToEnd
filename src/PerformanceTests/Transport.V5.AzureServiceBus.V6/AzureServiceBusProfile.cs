@@ -6,8 +6,11 @@ class AzureServiceBusProfile : IProfile
 
     public void Configure(BusConfiguration busConfiguration)
     {
+        busConfiguration.ScaleOut().UseSingleBrokerQueue();
+
         busConfiguration
             .UseTransport<AzureServiceBusTransport>()
             .ConnectionString(connectionstring);
+
     }
 }
