@@ -20,14 +20,18 @@ The [Persistence Compatibility Tests](https://github.com/Particular/EndToEnd/tre
 
 The tests automatically retrieve from NuGet feeds all minor versions of persistence within a given range. The same test cases are verified for all those versions.
 
-Tested versions:
+### Tested versions:
 - NHibernate - versions 4.5 - 7.x
 
-Test cases:
+### Test cases:
 - Saga persistence - testing `ISagaPersistance`
   - Saga data persisted in version X, can be read correctly in version Y, also for complex saga data structures (nested properties, collections)
   - Saga data persisted and updated in version X, can be read correctly in version Y, also for complex saga data structures (nested properties, collections)
   - The data of the saga completed in version X, cannot be accessed in version Y
+  
+### Pre-requisites for running tests locally
+- NHibernate tests - a local SQLExpress instance, with database `persistencetests`
+
 
 ## Serializer compatibility tests
 More info soon...
