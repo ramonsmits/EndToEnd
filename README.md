@@ -16,22 +16,22 @@ The [Visual Studio solution](EndToEnd/src/TransportCompatibilityTests/TransportC
 
 ## Persistence compatibility tests
 
-The [Persistence Compatibility Tests](https://github.com/Particular/EndToEnd/tree/master/src/PersistenceCompatibilityTests) verify that information can be saved and read by various versions of the available [NServiceBus persistences](http://docs.particular.net/nservicebus/persistence/). Those properties are verified on the level of the interfaces.
+The [Persistence Compatibility Tests](https://github.com/Particular/EndToEnd/tree/master/src/PersistenceCompatibilityTests) verify that information can be saved and read by various versions of the available [NServiceBus persistences](http://docs.particular.net/nservicebus/persistence/). Those properties are verified on public API interfaces.
 
-The tests automatically retrieve from NuGet feeds all minor versions of persistence within a given range. The same test cases are verified for all those versions.
+The tests automatically retrieve all minor versions of Persistence packages within a given range from NuGet and MyGet feeds. The same test cases are run against all the versions ensuring data from one version is compatible with the other. This ensures both forward and backward compatibility.
 
 ### Tested versions:
 - NHibernate - versions 4.5 - 7.x
 
 ### Test cases:
-- Saga persistence - testing `ISagaPersistance`
-  - Saga data persisted in version X, can be read correctly in version Y, also for complex saga data structures (nested properties, collections)
-  - Saga data persisted and updated in version X, can be read correctly in version Y, also for complex saga data structures (nested properties, collections)
-  - The data of the saga completed in version X, cannot be accessed in version Y
+- Saga persistence - testing `ISagaPersistance` interface.
+  - Saga data persisted in version X, can be read correctly in version Y. Complex saga data structures like nested properties and collections are also tested.
+  - Saga data persisted and updated in version X, can be read correctly in version Y. Complex saga data structures like nested properties and collections are also tested.
+  - The data of the saga completed in version X, cannot be accessed in version Y.
   
 ### Pre-requisites for running tests locally
-- NHibernate tests - a local SQLExpress instance, with database `persistencetests`
-
+- NHibernate tests - a local SQLExpress instance, with database `PersistenceTests`
+- Being able to resolve and download packages from official Nuget feed and MyGet.
 
 ## Serializer compatibility tests
 More info soon...
