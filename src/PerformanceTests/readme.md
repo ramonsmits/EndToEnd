@@ -145,6 +145,22 @@ The other dashboards included allow the drilldown into the following fixtures:
 * Platform (x86 vs x64, gc Server vs gc Client)
 * Resource utilization (similar to platform, but with concurrency set to sequential)
 
+
+# Updating virtual machines
+
+Changing anything on the VM’s requires:
+
+* Running the initialize VM step
+* RDP into the VM
+* Make the changes
+* Shutdown the MV without running Sysprep
+* Create image with a new name
+* Run shutdown VM step
+* Update TC script with new image name
+ 
+You can test the TC build configurations and pause them to prevent the next configuration to be executed.
+
+
 # Future work
 
 As soon as a new package is released (for alpha, beta, or release), the corresponding projects within the solution must have their nuget references updated to ensure that the new code is included within the test framework.  The same procedure should be followed for adding additional transports and persisters to the test framework which were not released at the original time of development.
