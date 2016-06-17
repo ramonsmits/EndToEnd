@@ -74,7 +74,6 @@ namespace ServiceControlCompatibilityTests
 
         static void UpdateRuntimeSection(Configuration configuration)
         {
-
             var runtimesection = configuration.GetSection("runtime");
             var runtimeXml = XDocument.Parse(runtimesection.SectionInformation.GetRawXml() ?? "<runtime/>");
 
