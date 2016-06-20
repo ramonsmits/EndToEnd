@@ -57,7 +57,7 @@
     <Compile Include="Infrastructure\ServiceControlInstance.cs" />
     <Compile Include="Infrastructure\SettingInfo.cs" />
     <Compile Include="Infrastructure\SettingsList.cs" />
-    <Compile Include="Infrastructure\Sql\SqlScTest.cs" />
+    <Compile Include="Infrastructure\Sql\ServiceControlTest.cs" />
     <Compile Include="Infrastructure\UnderscoreMappingResolver.cs" />
     <Compile Include="SampleTests.cs" />
   </ItemGroup>

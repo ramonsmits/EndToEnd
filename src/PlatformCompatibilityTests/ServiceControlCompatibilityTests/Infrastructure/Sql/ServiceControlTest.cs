@@ -28,8 +28,7 @@
 
         ITransportDetails ActivateInstanceOfTransportDetail(Type transportDetailType)
         {
-            Func<ITransportDetails> activator;
-            transportDetailActivations.TryGetValue(transportDetailType, out activator);
+            var activator = transportDetailActivations[transportDetailType];
 
             return activator?.Invoke();
         }
