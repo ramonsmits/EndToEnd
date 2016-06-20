@@ -3,6 +3,8 @@
     using NUnit.Framework;
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
 
     abstract class SqlScTest
     {
@@ -11,15 +13,20 @@
             { typeof(SqlTransportDetails), () => new SqlTransportDetails("Data Source=.\\SQLEXPRESS;Initial Catalog=nservicebus;Integrated Security=True") }
         };
 
-        [TearDown]
-        public void TearDown()
+        protected void StartUp(Type transportDetailsType)
         {
-            // TODO: Use transport to Clean Up
+            var transportDetails = ActivateInstanceOfTransportDetail(transportDetailsType);
+            serviceControl =  StartServiceControl(transportDetails);
+        }
 
+        [TearDown]
+        public void ShutDown()
+        {
+            // TODO: Clean up using the transportDetails
             serviceControl?.Stop();
         }
 
-        protected ITransportDetails ActivateInstanceOfTransportDetail(Type transportDetailType)
+        ITransportDetails ActivateInstanceOfTransportDetail(Type transportDetailType)
         {
             Func<ITransportDetails> activator;
             transportDetailActivations.TryGetValue(transportDetailType, out activator);
@@ -27,15 +34,34 @@
             return activator?.Invoke();
         }
 
-        protected void StartServiceControl(ITransportDetails transport)
+        ServiceControlInstance StartServiceControl(ITransportDetails transport)
         {
-            // TODO: This is a build artifact from the latest SC build. It should be imported into the working folder of the build
-            var factory = new ServiceControlFactory(@"C:\Temp\ServiceControl");
+            // TODO: If Not Running in TeamCity get this from a different Env variable?
+            var serviceControlPath = @"C:\Temp\ServiceControl";
 
-            serviceControl = factory.Start(transport, TestContext.CurrentContext.Test.Name);
+            var teamCityCheckoutDir = Environment.GetEnvironmentVariable("teamcity.build.checkoutDir");
+            if (teamCityCheckoutDir != null)
+            {
+                Console.WriteLine("Running in TeamCity");
+                serviceControlPath = Path.Combine(teamCityCheckoutDir, "ServiceControl");
+            }
+
+            Console.WriteLine($"Creating SC Factory at {serviceControlPath}");
+            var factory = new ServiceControlFactory(serviceControlPath);
+
+            return factory.Start(transport, TestContext.CurrentContext.Test.Name);
         }
 
+        protected static Type[] AllTransports()
+        {
+            var transports = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(assembly => assembly.GetTypes())
+                .Where(type => type.GetInterfaces().Any(i => i == (typeof(ITransportDetails))));
+
+            return transports.ToArray();
+        }
+
+        ServiceControlInstance serviceControl;
         protected ServiceControlApi ServiceControl => serviceControl.Api;
-        protected ServiceControlInstance serviceControl;
     }
 }
