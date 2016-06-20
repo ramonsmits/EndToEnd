@@ -36,25 +36,14 @@
 
         ServiceControlInstance StartServiceControl(ITransportDetails transport)
         {
+            var runningInTeamCity = Environment.GetEnvironmentVariable("TEAMCITY_VERSION") != null;
+            
+            Console.WriteLine(runningInTeamCity ? "Running in TeamCity" : "Running outside of TeamCity");
+            
             // TODO: If Not Running in TeamCity get this from a different Env variable?
-            var serviceControlPath = @"C:\Temp\ServiceControl";
-
-            var teamCityCheckoutDir = Environment.GetEnvironmentVariable("teamcity.build.checkoutDir");
-            var environmentVariables = Environment.GetEnvironmentVariables();
-            foreach (var key in environmentVariables.Keys)
-            {
-                Console.WriteLine($"ENV: {key} : {environmentVariables[key]}");
-                if (key.ToString().EndsWith("teamCityCheckoutDir"))
-                {
-                    teamCityCheckoutDir = environmentVariables[key].ToString();
-                }
-            }
-
-            if (teamCityCheckoutDir != null)
-            {
-                Console.WriteLine("Running in TeamCity");
-                serviceControlPath = Path.Combine(teamCityCheckoutDir, "ServiceControl");
-            }
+            var serviceControlPath = runningInTeamCity 
+                ? Environment.CurrentDirectory
+                : @"C:\Temp\ServiceControl";
 
             Console.WriteLine($"Creating SC Factory at {serviceControlPath}");
             var factory = new ServiceControlFactory(serviceControlPath);
