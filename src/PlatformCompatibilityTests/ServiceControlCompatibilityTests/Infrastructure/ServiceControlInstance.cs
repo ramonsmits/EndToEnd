@@ -17,7 +17,7 @@
 
         public void Start()
         {
-            Trace.WriteLine("Starting ServiceControl");
+            Console.WriteLine("Starting ServiceControl");
 
             var psi = new ProcessStartInfo
             {
@@ -32,11 +32,11 @@
             // TODO: This should probably by async and eventually give up
             while (!Api.CheckIsAvailable())
             {
-                Trace.WriteLine("ServiceControl not available yet, waiting 200ms");
+                Console.WriteLine("ServiceControl not available yet, waiting 200ms");
                 Thread.Sleep(TimeSpan.FromMilliseconds(200));
             }
 
-            Trace.WriteLine("Service Control successfully started");
+            Console.WriteLine("Service Control successfully started");
         }
 
         public void Stop()

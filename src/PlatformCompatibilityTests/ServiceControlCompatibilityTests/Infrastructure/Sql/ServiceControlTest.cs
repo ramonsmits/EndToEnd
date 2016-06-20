@@ -16,7 +16,7 @@
 
         protected void StartUp(Type transportDetailsType)
         {
-            Trace.WriteLine($"Creating test for {transportDetailsType.Name}");
+            Console.WriteLine($"Creating test for {transportDetailsType.Name}");
             var transportDetails = ActivateInstanceOfTransportDetail(transportDetailsType);
             serviceControl =  StartServiceControl(transportDetails);
         }
@@ -39,14 +39,14 @@
         {
             var runningInTeamCity = Environment.GetEnvironmentVariable("TEAMCITY_VERSION") != null;
             
-            Trace.WriteLine(runningInTeamCity ? "Running in TeamCity" : "Running outside of TeamCity");
+            Console.WriteLine(runningInTeamCity ? "Running in TeamCity" : "Running outside of TeamCity");
             
             // TODO: If Not Running in TeamCity get this from a different Env variable?
             var serviceControlPath = runningInTeamCity 
                 ? Path.Combine(Environment.CurrentDirectory, "ServiceControl")
                 : @"C:\Temp\ServiceControl";
 
-            Trace.WriteLine($"Creating SC Factory at {serviceControlPath}");
+            Console.WriteLine($"Creating SC Factory at {serviceControlPath}");
             var factory = new ServiceControlFactory(serviceControlPath);
 
             return factory.Start(transport, TestContext.CurrentContext.Test.Name);
