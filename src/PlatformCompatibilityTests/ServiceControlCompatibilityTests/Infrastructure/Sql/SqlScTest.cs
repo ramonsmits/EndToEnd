@@ -42,7 +42,7 @@
             
             // TODO: If Not Running in TeamCity get this from a different Env variable?
             var serviceControlPath = runningInTeamCity 
-                ? Environment.CurrentDirectory
+                ? Path.Combine(Environment.CurrentDirectory, "ServiceControl")
                 : @"C:\Temp\ServiceControl";
 
             Console.WriteLine($"Creating SC Factory at {serviceControlPath}");
