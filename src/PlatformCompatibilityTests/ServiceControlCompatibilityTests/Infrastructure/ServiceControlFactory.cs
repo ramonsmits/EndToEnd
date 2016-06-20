@@ -2,6 +2,7 @@ namespace ServiceControlCompatibilityTests
 {
     using System;
     using System.Configuration;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Net.NetworkInformation;
@@ -23,9 +24,15 @@ namespace ServiceControlCompatibilityTests
             var dataPath = Path.Combine(unzipPath, "Data", dataSlug);
             var installPath = Path.Combine(unzipPath, "Install");
 
+            Trace.WriteLine($"Raw Service Control path: {rawScPath}");
+            Trace.WriteLine($"Transport path: {transportPath}");
+            Trace.WriteLine($"Data path: {dataPath}");
+            Trace.WriteLine($"Install path: {installPath}");
+
             Directory.CreateDirectory(dataPath);
             if (Directory.Exists(installPath))
             {
+                Trace.WriteLine("Creating installation path");
                 Directory.Delete(installPath, true);
             }
 
@@ -45,6 +52,8 @@ namespace ServiceControlCompatibilityTests
 
         static void WriteAppConfig(string installPath, string hostName, int port, ITransportDetails transportDetails, string dataPath)
         {
+            Trace.WriteLine("Writing config values");
+
             var exeMapping = new ExeConfigurationFileMap { ExeConfigFilename = Path.Combine(installPath, "ServiceControl.exe.config") };
             var configuration = ConfigurationManager.OpenMappedExeConfiguration(exeMapping, ConfigurationUserLevel.None);
             var settings = configuration.AppSettings.Settings;
@@ -69,7 +78,9 @@ namespace ServiceControlCompatibilityTests
 
             transportDetails.ApplyTo(configuration);
 
+            Trace.WriteLine("Saving config values");
             configuration.Save();
+            Trace.WriteLine("Config values saved");
         }
 
         static void UpdateRuntimeSection(Configuration configuration)
@@ -93,6 +104,8 @@ namespace ServiceControlCompatibilityTests
 
         static int FindAvailablePort(int startPort)
         {
+            Trace.WriteLine("Finding available port");
+
             var activeTcpListeners = IPGlobalProperties
                 .GetIPGlobalProperties()
                 .GetActiveTcpListeners();
@@ -102,10 +115,12 @@ namespace ServiceControlCompatibilityTests
                 var portCopy = port;
                 if (activeTcpListeners.All(endPoint => endPoint.Port != portCopy))
                 {
+                    Trace.WriteLine($"Port found at {port}");
                     return port;
                 }
             }
 
+            Trace.WriteLine($"No available port found. Using startport ({startPort})");
             return startPort;
         }
 
@@ -113,6 +128,8 @@ namespace ServiceControlCompatibilityTests
 
         static void Copy(string sourceDirectory, string targetDirectory)
         {
+            Trace.WriteLine($"Copying files from {sourceDirectory} to {targetDirectory}");
+
             var diSource = new DirectoryInfo(sourceDirectory);
             var diTarget = new DirectoryInfo(targetDirectory);
 
