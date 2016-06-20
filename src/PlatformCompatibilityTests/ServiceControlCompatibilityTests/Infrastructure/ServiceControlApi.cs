@@ -6,6 +6,7 @@
     using System.Net;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
+    using System.Threading.Tasks;
 
     public class ServiceControlApi
     {
@@ -16,11 +17,11 @@
 
         public bool CheckIsAvailable()
         {
-            return Get<object>("") != null;
+            return Get<object>("").Result != null;
         }
 
         // TODO: This was lifted from the SC Acceptance Tests. It may not be appropriate for these tests
-        public T Get<T>(string url) where T : class
+        public async Task<T> Get<T>(string url) where T : class
         {
             var request = (HttpWebRequest)WebRequest.Create($"{rootUri}{url}");
             request.Accept = "application/json";
@@ -28,7 +29,7 @@
             HttpWebResponse response;
             try
             {
-                response = request.GetResponse() as HttpWebResponse;
+                response = await request.GetResponseAsync() as HttpWebResponse;
             }
             catch (WebException ex)
             {
