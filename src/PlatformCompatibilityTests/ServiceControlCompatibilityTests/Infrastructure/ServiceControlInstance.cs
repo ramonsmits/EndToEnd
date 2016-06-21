@@ -21,14 +21,13 @@
 
             var psi = new ProcessStartInfo
             {
-                CreateNoWindow = false,
-                UseShellExecute = true,
+                UseShellExecute = false,
                 WorkingDirectory = installFolder,
                 FileName = Path.Combine(installFolder, "ServiceControl.exe"),
-                
             };
 
             process = Process.Start(psi);
+
 
             // TODO: This should probably by async and eventually give up
             var retryCount = 0;
@@ -40,7 +39,7 @@
 
             if (retryCount >= 20)
             {
-                throw new ApplicationException("Could not start Service Control");
+                throw new ApplicationException("Could not start Service Control after 20 attempts");
             }
 
             Console.WriteLine("Service Control successfully started");
