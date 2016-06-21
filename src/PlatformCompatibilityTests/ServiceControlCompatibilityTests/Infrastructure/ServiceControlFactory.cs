@@ -2,7 +2,6 @@ namespace ServiceControlCompatibilityTests
 {
     using System;
     using System.Configuration;
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Net.NetworkInformation;
@@ -77,6 +76,7 @@ namespace ServiceControlCompatibilityTests
             UpdateRuntimeSection(configuration);
 
             transportDetails.ApplyTo(configuration);
+            transportDetails.EnsurePrerequisites();
 
             Console.WriteLine("Saving config values");
             configuration.Save();
