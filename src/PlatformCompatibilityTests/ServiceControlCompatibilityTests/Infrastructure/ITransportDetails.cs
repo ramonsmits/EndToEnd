@@ -6,6 +6,5 @@ namespace ServiceControlCompatibilityTests
     {
         string TransportName { get; }
         void ApplyTo(Configuration configuration);
-        void EnsurePrerequisites();
     }
 }
