@@ -22,6 +22,12 @@
             var psi = new ProcessStartInfo
             {
                 UseShellExecute = false,
+                RedirectStandardError = true,
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                CreateNoWindow = true,
+                ErrorDialog = false,
+                WindowStyle = ProcessWindowStyle.Hidden,
                 WorkingDirectory = installFolder,
                 FileName = Path.Combine(installFolder, "ServiceControl.exe"),
             };
