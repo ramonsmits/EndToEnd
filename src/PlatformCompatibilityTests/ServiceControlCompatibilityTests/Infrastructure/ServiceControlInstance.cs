@@ -24,16 +24,23 @@
                 CreateNoWindow = true,
                 UseShellExecute = false,
                 WorkingDirectory = installFolder,
-                FileName = Path.Combine(installFolder, "ServiceControl.exe")
+                FileName = Path.Combine(installFolder, "ServiceControl.exe"),
+                
             };
 
             process = Process.Start(psi);
 
             // TODO: This should probably by async and eventually give up
-            while (!Api.CheckIsAvailable())
+            var retryCount = 0;
+            while (!Api.CheckIsAvailable() && retryCount++ < 20)
             {
                 Console.WriteLine("ServiceControl not available yet, waiting 200ms");
                 Thread.Sleep(TimeSpan.FromMilliseconds(200));
+            }
+
+            if (retryCount >= 20)
+            {
+                throw new ApplicationException("Could not start Service Control");
             }
 
             Console.WriteLine("Service Control successfully started");
