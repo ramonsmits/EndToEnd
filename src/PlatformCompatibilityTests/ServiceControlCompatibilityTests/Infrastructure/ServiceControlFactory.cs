@@ -42,6 +42,7 @@ namespace ServiceControlCompatibilityTests
             var port = FindAvailablePort(33333);
 
             WriteAppConfig(installPath, hostName, port, transportDetails, dataPath);
+            transportDetails.EnsurePrerequisites();
 
             var serviceControlInstance = new ServiceControlInstance(installPath, $"http://{hostName}:{port}/api");
             serviceControlInstance.Start();
@@ -76,7 +77,6 @@ namespace ServiceControlCompatibilityTests
             UpdateRuntimeSection(configuration);
 
             transportDetails.ApplyTo(configuration);
-            transportDetails.EnsurePrerequisites();
 
             Console.WriteLine("Saving config values");
             configuration.Save();

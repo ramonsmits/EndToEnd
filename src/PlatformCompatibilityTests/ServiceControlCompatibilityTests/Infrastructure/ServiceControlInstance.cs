@@ -42,7 +42,7 @@
         public void Stop()
         {
             process?.Kill();
-            process?.WaitForExit();
+            process?.WaitForExit(5000);
         }
 
         string installFolder;
