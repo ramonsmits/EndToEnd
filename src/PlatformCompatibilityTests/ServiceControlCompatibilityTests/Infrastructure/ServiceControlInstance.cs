@@ -30,6 +30,7 @@
                 WindowStyle = ProcessWindowStyle.Hidden,
                 WorkingDirectory = installFolder,
                 FileName = Path.Combine(installFolder, "ServiceControl.exe"),
+                Arguments = "-p"
             };
 
             process = Process.Start(psi);
