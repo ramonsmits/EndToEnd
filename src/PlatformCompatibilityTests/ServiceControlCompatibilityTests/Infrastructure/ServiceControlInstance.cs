@@ -34,6 +34,11 @@
 
             process = Process.Start(psi);
 
+            if (process == null)
+            {
+                throw new Exception("The process is null which means it hasn't actually started");
+            }
+
 
             // TODO: This should probably by async and eventually give up
             var retryCount = 0;
