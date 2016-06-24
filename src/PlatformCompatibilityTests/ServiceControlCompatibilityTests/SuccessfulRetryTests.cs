@@ -1,6 +1,5 @@
 ﻿namespace ServiceControlCompatibilityTests
 {
-    using Autofac;
     using NServiceBus;
     using NUnit.Framework;
     using System;
@@ -10,31 +9,29 @@
     class SuccessfulRetryTests : SqlScTest
     {
         [TestCaseSource(nameof(AllTransports))]
-        public async Task Can_successfully_retry_a_failed_message(Type transportDetailType)
+        public Task Can_successfully_retry_a_failed_message(Type transportDetailType)
         {
-            var transportDetails = StartUp(transportDetailType);
-            await RunTest(transportDetails);
+            var endpointFactory = StartUp(transportDetailType);
+            return RunTest(endpointFactory);
         }
 
-        async Task RunTest(ITransportDetails transportDetails)
+        async Task RunTest(IEndpointFactory endpointFactory)
         {
-            var handlerInstance = new TestMessageHandler();
-            var builder = new ContainerBuilder();
-            builder.RegisterInstance(handlerInstance);
-            var container = builder.Build();
+            var failingMessageId = Guid.NewGuid().ToString();
+            var testContext = new TestContext();
 
-            var endpointA = await CreateSqlEndpoint("EndpointA", transportDetails, container);
-            await CreateSqlEndpoint("EndpointB", transportDetails, container);
+            var sender = await endpointFactory.CreateEndpoint("Sender");
+            var processor = await endpointFactory.CreateEndpoint("Processor", new EndpointDetails().With<TestMessageHandler>().With(testContext));
 
-            handlerInstance.ShouldFail = true;
-            endpointA.Send("EndpointB", new TestMessage());
+            testContext.ShouldFail = true;
+            await sender.Send(processor, new TestMessage(), failingMessageId);
 
-            var failedMessage = await ServiceControl.WaitForNewFailingMessages("EndpointA");
+            var failedMessage = await ServiceControl.WaitForFailedMessage(failingMessageId);
 
-            handlerInstance.ShouldFail = false;
+            testContext.ShouldFail = false;
             await ServiceControl.RetryMessageId(failedMessage.Id);
 
-            var handled = handlerInstance.WaitForSuccessfulMessage().Wait(60000); // Is this a reasonable time to wait?
+            var handled = await testContext.WaitForDone();
 
             Assert.IsTrue(handled, "Did not process the retry successfully within the time limit");
         }
@@ -46,29 +43,27 @@
 
     class TestMessageHandler : IHandleMessages<TestMessage>
     {
-        TaskCompletionSource<bool> successfulMessageSource;
+        readonly TestContext testContext;
 
-        public TestMessageHandler()
+        public TestMessageHandler(TestContext testContext)
         {
-            successfulMessageSource = new TaskCompletionSource<bool>();
+            this.testContext = testContext;
         }
-
-        public bool ShouldFail { get; set; }
 
         public Task Handle(TestMessage message, IMessageHandlerContext context)
         {
-            if (ShouldFail)
+            if (testContext.ShouldFail)
             {
                 throw new ApplicationException("Failing...");
             }
 
-            successfulMessageSource.SetResult(true);
+            testContext.Done(true);
             return Task.FromResult(0);
         }
+    }
 
-        public Task WaitForSuccessfulMessage()
-        {
-            return successfulMessageSource.Task;
-        }
+    class TestContext : TestContextBase
+    {
+        public bool ShouldFail { get; set; }
     }
 }

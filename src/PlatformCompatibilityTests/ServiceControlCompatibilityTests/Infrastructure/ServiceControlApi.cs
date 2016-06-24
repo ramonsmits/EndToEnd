@@ -23,6 +23,18 @@
             return Get<object>("").Result != null;
         }
 
+        public async Task<FailedMessage> WaitForFailedMessage(string failedMessageId)
+        {
+            while (true)
+            {
+                var errors = await GetAllErrors().ConfigureAwait(false);
+                var failedMessage = errors.SingleOrDefault(x => x.MessageId == failedMessageId);
+                if (failedMessage != null)
+                    return failedMessage;
+                await Task.Delay(200);
+            }
+        }
+
         public async Task<FailedMessage> WaitForNewFailingMessages(string endpointName)
         {
             // NB: Not threadsafe! If some other process is interfering, this code is completely broken.
@@ -53,6 +65,11 @@
         public Task<T> GetErrorsForEndpoint<T>(string endpointName) where T : class
         {
             return Get<T>($"/endpoints/{endpointName}/errors");
+        }
+
+        public Task<IList<FailedMessage>> GetAllErrors()
+        {
+            return Get<IList<FailedMessage>>("/errors");
         }
 
         public Task<T> Post<T>(string url, object parameters) where T : class

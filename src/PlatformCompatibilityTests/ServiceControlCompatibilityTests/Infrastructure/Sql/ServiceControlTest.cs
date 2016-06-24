@@ -5,11 +5,6 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Threading.Tasks;
-    using Autofac;
-    using Infrastructure;
-    using NServiceBus;
-    using NServiceBus.Features;
 
     abstract class SqlScTest
     {
@@ -18,32 +13,15 @@
             { typeof(SqlTransportDetails), () => new SqlTransportDetails("Data Source=.\\SQLEXPRESS;Initial Catalog=nservicebus;Integrated Security=True") }
         };
 
-        protected ITransportDetails StartUp(Type transportDetailsType)
+        protected IEndpointFactory StartUp(Type transportDetailsType)
         {
             Console.WriteLine($"Creating test for {transportDetailsType.Name}");
             var transportDetails = ActivateInstanceOfTransportDetail(transportDetailsType);
             serviceControl =  StartServiceControl(transportDetails);
 
-            return transportDetails;
-        }
+            var endpointFactory = new EndpointFactory(transportDetails);
 
-        protected async Task<EndpointProxy> CreateSqlEndpoint(string endpointName, ITransportDetails transportDetails, IContainer container)
-        {
-            var config = new EndpointConfiguration(endpointName);
-            config.UsePersistence<InMemoryPersistence>();
-            config.EnableInstallers();
-            config.PurgeOnStartup(true);
-            config.DisableFeature<SecondLevelRetries>();
-            config.DisableFeature<FirstLevelRetries>();
-
-            config.UseContainer<AutofacBuilder>(c => c.ExistingLifetimeScope(container));
-
-            config.SendFailedMessagesTo("error");
-            config.AuditProcessedMessagesTo("audit");
-
-            transportDetails.ConfigureEndpoint(config);
-
-            return new EndpointProxy(await Endpoint.Create(config), container);
+            return endpointFactory;
         }
 
         [TearDown]
@@ -74,7 +52,7 @@
             Console.WriteLine($"Creating SC Factory at {serviceControlPath}");
             var factory = new ServiceControlFactory(serviceControlPath);
 
-            return factory.Start(transport, TestContext.CurrentContext.Test.Name);
+            return factory.Start(transport, NUnit.Framework.TestContext.CurrentContext.Test.Name);
         }
 
         protected static Type[] AllTransports()
