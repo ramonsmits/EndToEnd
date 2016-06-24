@@ -10,7 +10,8 @@
     {
         Dictionary<Type, Func<ITransportDetails>> transportDetailActivations = new Dictionary<Type, Func<ITransportDetails>>
         {
-            { typeof(SqlTransportDetails), () => new SqlTransportDetails("Data Source=.\\SQLEXPRESS;Initial Catalog=nservicebus;Integrated Security=True") }
+            { typeof(SqlTransportDetails), () => new SqlTransportDetails("Data Source=.\\SQLEXPRESS;Initial Catalog=nservicebus;Integrated Security=True") },
+            { typeof(MsmqTransportDetails), () => new MsmqTransportDetails() },
         };
 
         protected IEndpointFactory StartUp(Type transportDetailsType)

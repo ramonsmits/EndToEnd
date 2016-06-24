@@ -30,31 +30,12 @@
                 var errors = await GetAllErrors().ConfigureAwait(false);
                 var failedMessage = errors.SingleOrDefault(x => x.MessageId == failedMessageId);
                 if (failedMessage != null)
+                {
                     return failedMessage;
+                }
+
                 await Task.Delay(200);
             }
-        }
-
-        public async Task<FailedMessage> WaitForNewFailingMessages(string endpointName)
-        {
-            // NB: Not threadsafe! If some other process is interfering, this code is completely broken.
-            // Perhaps we should use a message mutator to hardcode the message id we're looking for instead?
-            var startMessages = await GetErrorsForEndpoint<IList<FailedMessage>>(endpointName).ConfigureAwait(false);
-            var startCount = startMessages.Count;
-
-            IList<FailedMessage> currentMessages;
-            int newCount;
-
-            do
-            {
-                Thread.Sleep(200);
-                currentMessages = await GetErrorsForEndpoint<IList<FailedMessage>>(endpointName).ConfigureAwait(false);
-                newCount = currentMessages.Count;
-            } while (newCount <= startCount);
-
-            var newFailedMessage = currentMessages.FirstOrDefault(m => !startMessages.Select(sm => sm.Id).Contains(m.Id));
-
-            return newFailedMessage;
         }
 
         internal Task RetryMessageId(string messageid)
