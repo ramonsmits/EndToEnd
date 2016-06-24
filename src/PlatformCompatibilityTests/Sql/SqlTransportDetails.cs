@@ -3,9 +3,7 @@ using NServiceBus;
 
 namespace ServiceControlCompatibilityTests
 {
-    // Todo: Potentially move this out to a separate project
-    // so we don't take a hard dependency on NServiceBus.SqlServer
-    class SqlTransportDetails : ITransportDetails
+    public class SqlTransportDetails : ITransportDetails
     {
         const string TransportTypeName = "NServiceBus.SqlServerTransport, NServiceBus.Transports.SQLServer";
 

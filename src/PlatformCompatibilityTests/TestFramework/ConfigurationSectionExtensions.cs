@@ -2,7 +2,7 @@
 {
     using System.Configuration;
 
-    static class ConfigurationSectionExtensions
+    public static class ConfigurationSectionExtensions
     {
         public static void Set(this ConnectionStringSettingsCollection collection, string key, string value)
         {
