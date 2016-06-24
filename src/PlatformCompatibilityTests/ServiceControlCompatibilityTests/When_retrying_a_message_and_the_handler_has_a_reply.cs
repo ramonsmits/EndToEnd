@@ -17,20 +17,17 @@ namespace ServiceControlCompatibilityTests
 
         async Task RunReplyTest(IEndpointFactory endpointFactory)
         {
-            var failingMessageId = Guid.NewGuid().ToString();
             var testContext = new TestContext();
 
-            var sender = await endpointFactory.CreateEndpoint("Sender", new EndpointDetails().With<TestResponseHandler>().With(testContext));
-            var responder = await endpointFactory.CreateEndpoint("Responder", new EndpointDetails().With<TestRequestHandler>().With(testContext));
+            var sender = await endpointFactory.CreateEndpoint(new EndpointDetails("Sender").With<TestResponseHandler>().With(testContext));
+            var responder = await endpointFactory.CreateEndpoint(new EndpointDetails("Responder").With<TestRequestHandler>().With(testContext));
 
             testContext.ShouldFail = true;
-            await sender.Send(responder, new TestRequest(), failingMessageId);
-
+            var failingMessageId = await sender.Send(responder, new TestRequest());
             var failedMessage = await ServiceControl.WaitForFailedMessage(failingMessageId);
 
             testContext.ShouldFail = false;
             await ServiceControl.RetryMessageId(failedMessage.Id);
-
             var handled = await testContext.WaitForDone();
 
             Assert.IsTrue(handled, "Did not process the retry successfully within the time limit");

@@ -7,11 +7,17 @@
     interface IEndpointDetails
     {
         IContainer CreateContainer();
+        string Name { get; }
     }
 
     class EndpointDetails : IEndpointDetails
     {
         IList<Action<ContainerBuilder>> additions = new List<Action<ContainerBuilder>>();
+
+        public EndpointDetails(string name)
+        {
+            Name = name;
+        }
 
         public EndpointDetails With<T>(T instance) where T : class
         {
@@ -36,5 +42,7 @@
 
             return builder.Build();
         }
+
+        public string Name { get; }
     }
 }

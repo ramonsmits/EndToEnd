@@ -1,5 +1,6 @@
 ﻿namespace ServiceControlCompatibilityTests.Infrastructure
 {
+    using System;
     using System.Threading.Tasks;
     using NServiceBus;
 
@@ -14,15 +15,17 @@
             this.name = name;
         }
 
-        public Task Send(string destination, object message, string messageId = null)
+        public async Task<string> Send(string destination, object message)
         {
             var sendOptions = new SendOptions();
+
+            var messageId = Guid.NewGuid().ToString();
             sendOptions.SetDestination(destination);
-            if (messageId != null)
-            {
-                sendOptions.SetMessageId(messageId);
-            }
-            return endpoint.Send(message, sendOptions);
+            sendOptions.SetMessageId(messageId);
+
+            await endpoint.Send(message, sendOptions).ConfigureAwait(false);
+
+            return messageId;
         }
 
         public static implicit operator string(EndpointProxy p)

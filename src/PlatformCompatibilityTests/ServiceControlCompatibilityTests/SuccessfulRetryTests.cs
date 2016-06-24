@@ -17,20 +17,17 @@
 
         async Task RunTest(IEndpointFactory endpointFactory)
         {
-            var failingMessageId = Guid.NewGuid().ToString();
             var testContext = new TestContext();
 
             var sender = await endpointFactory.CreateEndpoint("Sender");
-            var processor = await endpointFactory.CreateEndpoint("Processor", new EndpointDetails().With<TestMessageHandler>().With(testContext));
+            var processor = await endpointFactory.CreateEndpoint(new EndpointDetails("Processor").With<TestMessageHandler>().With(testContext));
 
             testContext.ShouldFail = true;
-            await sender.Send(processor, new TestMessage(), failingMessageId);
-
+            var failingMessageId = await sender.Send(processor, new TestMessage());
             var failedMessage = await ServiceControl.WaitForFailedMessage(failingMessageId);
 
             testContext.ShouldFail = false;
             await ServiceControl.RetryMessageId(failedMessage.Id);
-
             var handled = await testContext.WaitForDone();
 
             Assert.IsTrue(handled, "Did not process the retry successfully within the time limit");
