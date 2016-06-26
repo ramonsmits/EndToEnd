@@ -5,13 +5,14 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-
+    using System.Reflection;
     abstract class SqlScTest
     {
         Dictionary<Type, Func<ITransportDetails>> transportDetailActivations = new Dictionary<Type, Func<ITransportDetails>>
         {
             { typeof(SqlTransportDetails), () => new SqlTransportDetails("Data Source=.\\SQLEXPRESS;Initial Catalog=nservicebus;Integrated Security=True") },
             { typeof(MsmqTransportDetails), () => new MsmqTransportDetails() },
+            { typeof(RabbitMQTransportDetails), () => new RabbitMQTransportDetails("host=localhost") },
         };
 
         protected IEndpointFactory StartUp(Type transportDetailsType)
@@ -58,6 +59,12 @@
 
         protected static Type[] AllTransports()
         {
+            var assemblyToLoad = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
+            foreach (var path in assemblyToLoad)
+            {
+                AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(path));
+            }
+
             var transports = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(assembly => assembly.GetTypes())
                 .Where(type => type.GetInterfaces().Any(i => i == (typeof(ITransportDetails))));

@@ -89,6 +89,10 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RabbitMQ\RabbitMQ.csproj">
+      <Project>{955a53b4-5fc6-4b43-a9f3-97d2331af374}</Project>
+      <Name>RabbitMQ</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Sql\Sql.csproj">
       <Project>{f829139a-39fb-4511-9131-dce54b891098}</Project>
       <Name>Sql</Name>
