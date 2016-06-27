@@ -24,7 +24,6 @@ namespace ServiceControlCompatibilityTests
             var config = new EndpointConfiguration(endpointDetails.Name);
             config.UsePersistence<InMemoryPersistence>();
             config.EnableInstallers();
-            config.PurgeOnStartup(true);
             config.DisableFeature<SecondLevelRetries>();
             config.DisableFeature<FirstLevelRetries>();
 

@@ -13,6 +13,8 @@
             { typeof(SqlTransportDetails), () => new SqlTransportDetails("Data Source=.\\SQLEXPRESS;Initial Catalog=nservicebus;Integrated Security=True") },
             { typeof(MsmqTransportDetails), () => new MsmqTransportDetails() },
             { typeof(RabbitMQTransportDetails), () => new RabbitMQTransportDetails("host=localhost") },
+            { typeof(ASBEndpointTopologyTransportDetails), () => new ASBEndpointTopologyTransportDetails(Environment.GetEnvironmentVariable("AzureServiceBus.ConnectionString")) },
+            { typeof(ASBForwardingTopologyTransportDetails), () => new ASBForwardingTopologyTransportDetails(Environment.GetEnvironmentVariable("AzureServiceBus.ConnectionString")) },
         };
 
         protected IEndpointFactory StartUp(Type transportDetailsType)

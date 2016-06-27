@@ -1,18 +1,19 @@
 ﻿using System.Configuration;
 using NServiceBus;
+using NServiceBus.AzureServiceBus;
 
 namespace ServiceControlCompatibilityTests
 {
-    public class SqlTransportDetails : ITransportDetails
+    public class ASBForwardingTopologyTransportDetails : ITransportDetails
     {
-        const string TransportTypeName = "NServiceBus.SqlServerTransport, NServiceBus.Transports.SQLServer";
+        const string TransportTypeName = "NServiceBus.AzureServiceBusTransport, NServiceBus.Azure.Transports.WindowsAzureServiceBus";
 
-        public SqlTransportDetails(string connectionString)
+        public ASBForwardingTopologyTransportDetails(string connectionString)
         {
             this.connectionString = connectionString;
         }
 
-        public string TransportName => "SQLServer";
+        public string TransportName => "AzureServiceBus";
 
         public void ApplyTo(Configuration configuration)
         {
@@ -23,10 +24,9 @@ namespace ServiceControlCompatibilityTests
 
         public void ConfigureEndpoint(EndpointConfiguration endpointConfig)
         {
-            endpointConfig.UseTransport<SqlServerTransport>()
-                .ConnectionString(connectionString);
-
-            endpointConfig.PurgeOnStartup(true);
+            endpointConfig.UseTransport<AzureServiceBusTransport>()
+                .ConnectionString(connectionString)
+                .UseTopology<ForwardingTopology>();
         }
 
         string connectionString;

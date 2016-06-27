@@ -25,6 +25,8 @@ namespace ServiceControlCompatibilityTests
         {
             endpointConfig.UseTransport<RabbitMQTransport>()
                 .ConnectionString(connectionString);
+
+            endpointConfig.PurgeOnStartup(true);
         }
 
         string connectionString;

@@ -19,6 +19,7 @@ namespace ServiceControlCompatibilityTests
 
         public void ConfigureEndpoint(EndpointConfiguration endpointConfig)
         {
+            endpointConfig.PurgeOnStartup(true);
         }
     }
 }
