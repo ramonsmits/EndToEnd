@@ -93,6 +93,10 @@
       <Project>{056606f2-e0ec-4333-b3d1-1d180b1b74ae}</Project>
       <Name>ASB</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ASQ\ASQ.csproj">
+      <Project>{e094d6eb-c65a-45b6-a328-6e2bce2ea0db}</Project>
+      <Name>ASQ</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RabbitMQ\RabbitMQ.csproj">
       <Project>{955a53b4-5fc6-4b43-a9f3-97d2331af374}</Project>
       <Name>RabbitMQ</Name>

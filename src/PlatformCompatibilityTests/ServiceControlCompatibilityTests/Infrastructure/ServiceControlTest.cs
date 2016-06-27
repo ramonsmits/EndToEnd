@@ -15,6 +15,7 @@
             { typeof(RabbitMQTransportDetails), () => new RabbitMQTransportDetails("host=localhost") },
             { typeof(ASBEndpointTopologyTransportDetails), () => new ASBEndpointTopologyTransportDetails(Environment.GetEnvironmentVariable("AzureServiceBus.ConnectionString")) },
             { typeof(ASBForwardingTopologyTransportDetails), () => new ASBForwardingTopologyTransportDetails(Environment.GetEnvironmentVariable("AzureServiceBus.ConnectionString")) },
+            { typeof(ASQTransportDetails), () => new ASQTransportDetails(Environment.GetEnvironmentVariable("AzureStorageQueueTransport.ConnectionString")) },
         };
 
         protected IEndpointFactory StartUp(Type transportDetailsType)
