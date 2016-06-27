@@ -29,7 +29,7 @@
                 .UseTopology<EndpointOrientedTopology>()
                 .RegisterPublisherForType("source", typeof(TestEvent))
                 .ConnectionString(AzureServiceBusConnectionStringBuilder.Build)
-                .Sanitization().UseStrategy<EndpointOrientedTopologySanitization>();
+                .Sanitization().UseStrategy<ValidateAndHashIfNeeded>();
 
             // TODO: remove when core v6 & asb V7 package are updated
             endpointConfiguration.UseSerialization<JsonSerializer>(); 
