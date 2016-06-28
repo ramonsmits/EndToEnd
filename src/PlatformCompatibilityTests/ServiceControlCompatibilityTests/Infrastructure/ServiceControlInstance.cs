@@ -19,6 +19,8 @@
         {
             Console.WriteLine("Starting ServiceControl");
 
+            RunServiceControlInstallers();
+
             var psi = new ProcessStartInfo
             {
                 UseShellExecute = false,
@@ -50,6 +52,21 @@
             }
 
             Console.WriteLine("Service Control successfully started");
+        }
+
+        private void RunServiceControlInstallers()
+        {
+            var psi = new ProcessStartInfo
+            {
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WorkingDirectory = installFolder,
+                FileName = Path.Combine(installFolder, "ServiceControl.exe"),
+                Arguments = "-s"
+            };
+
+            process = Process.Start(psi);
+            process.WaitForExit();
         }
 
         public void Stop()
