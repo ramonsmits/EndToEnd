@@ -13,11 +13,15 @@
             { typeof(SqlTransportDetails), () => new SqlTransportDetails("Data Source=.\\SQLEXPRESS;Initial Catalog=nservicebus;Integrated Security=True") }
         };
 
-        protected void StartUp(Type transportDetailsType)
+        protected IEndpointFactory StartUp(Type transportDetailsType)
         {
             Console.WriteLine($"Creating test for {transportDetailsType.Name}");
             var transportDetails = ActivateInstanceOfTransportDetail(transportDetailsType);
             serviceControl =  StartServiceControl(transportDetails);
+
+            var endpointFactory = new EndpointFactory(transportDetails);
+
+            return endpointFactory;
         }
 
         [TearDown]
@@ -48,7 +52,7 @@
             Console.WriteLine($"Creating SC Factory at {serviceControlPath}");
             var factory = new ServiceControlFactory(serviceControlPath);
 
-            return factory.Start(transport, TestContext.CurrentContext.Test.Name);
+            return factory.Start(transport, NUnit.Framework.TestContext.CurrentContext.Test.Name);
         }
 
         protected static Type[] AllTransports()

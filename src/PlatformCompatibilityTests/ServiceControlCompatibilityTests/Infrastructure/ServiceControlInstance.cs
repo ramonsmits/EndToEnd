@@ -22,12 +22,7 @@
             var psi = new ProcessStartInfo
             {
                 UseShellExecute = false,
-                RedirectStandardError = true,
-                RedirectStandardInput = true,
-                RedirectStandardOutput = true,
                 CreateNoWindow = true,
-                ErrorDialog = false,
-                WindowStyle = ProcessWindowStyle.Hidden,
                 WorkingDirectory = installFolder,
                 FileName = Path.Combine(installFolder, "ServiceControl.exe"),
                 Arguments = "-p"
@@ -39,7 +34,6 @@
             {
                 throw new Exception("The process is null which means it hasn't actually started");
             }
-
 
             // TODO: This should probably by async and eventually give up
             var retryCount = 0;

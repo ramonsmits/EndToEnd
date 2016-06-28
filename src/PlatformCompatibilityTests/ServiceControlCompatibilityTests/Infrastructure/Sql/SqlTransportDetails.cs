@@ -1,8 +1,10 @@
 ﻿using System.Configuration;
-using System.Data.SqlClient;
+using NServiceBus;
 
 namespace ServiceControlCompatibilityTests
 {
+    // Todo: Potentially move this out to a separate project
+    // so we don't take a hard dependency on NServiceBus.SqlServer
     class SqlTransportDetails : ITransportDetails
     {
         const string TransportTypeName = "NServiceBus.SqlServerTransport, NServiceBus.Transports.SQLServer";
@@ -19,6 +21,12 @@ namespace ServiceControlCompatibilityTests
             configuration.ConnectionStrings.ConnectionStrings.Set("NServiceBus/Transport", connectionString);
             var settings = configuration.AppSettings.Settings;
             settings.Set(SettingsList.TransportType, TransportTypeName);
+        }
+
+        public void ConfigureEndpoint(EndpointConfiguration endpointConfig)
+        {
+            endpointConfig.UseTransport<SqlServerTransport>()
+                .ConnectionString(connectionString);
         }
 
         string connectionString;
