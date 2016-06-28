@@ -19,6 +19,8 @@ namespace ServiceControlCompatibilityTests
 
         public void ConfigureEndpoint(EndpointConfiguration endpointConfig)
         {
+            endpointConfig.UseTransport<MsmqTransport>();
+
             endpointConfig.PurgeOnStartup(true);
         }
     }

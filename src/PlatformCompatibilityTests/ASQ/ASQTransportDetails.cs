@@ -9,7 +9,6 @@ namespace ServiceControlCompatibilityTests
 
         public ASQTransportDetails(string connectionString)
         {
-            connectionString = "UseDevelopmentStorage=true";
             this.connectionString = connectionString;
         }
 
