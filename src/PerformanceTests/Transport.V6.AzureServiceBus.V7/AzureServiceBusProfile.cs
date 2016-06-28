@@ -12,6 +12,6 @@ class AzureServiceBusProfile : IProfile
             .UseTransport<AzureServiceBusTransport>()
             .UseTopology<ForwardingTopology>()
             .ConnectionString(connectionstring)
-            .Sanitization().UseStrategy<ValidateAndHashIfNeeded>();
+            .Sanitization().UseStrategy<V6Sanitization>();
     }
 }

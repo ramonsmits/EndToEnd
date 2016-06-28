@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AzureServiceBusProfile.cs" />
+    <Compile Include="V6Sanitization.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
