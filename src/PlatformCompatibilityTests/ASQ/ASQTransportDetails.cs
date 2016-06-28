@@ -3,18 +3,16 @@ using NServiceBus;
 
 namespace ServiceControlCompatibilityTests
 {
-    // Todo: Potentially move this out to a separate project
-    // so we don't take a hard dependency on NServiceBus.SqlServer
-    class SqlTransportDetails : ITransportDetails
+    public class ASQTransportDetails : ITransportDetails
     {
-        const string TransportTypeName = "NServiceBus.SqlServerTransport, NServiceBus.Transports.SQLServer";
+        const string TransportTypeName = "NServiceBus.AzureStorageQueueTransport, NServiceBus.Azure.Transports.WindowsAzureStorageQueues";
 
-        public SqlTransportDetails(string connectionString)
+        public ASQTransportDetails(string connectionString)
         {
             this.connectionString = connectionString;
         }
 
-        public string TransportName => "SQLServer";
+        public string TransportName => "AzureStorageQueue";
 
         public void ApplyTo(Configuration configuration)
         {
@@ -25,8 +23,10 @@ namespace ServiceControlCompatibilityTests
 
         public void ConfigureEndpoint(EndpointConfiguration endpointConfig)
         {
-            endpointConfig.UseTransport<SqlServerTransport>()
+            endpointConfig.UseTransport<AzureStorageQueueTransport>()
                 .ConnectionString(connectionString);
+
+            endpointConfig.PurgeOnStartup(true);
         }
 
         string connectionString;

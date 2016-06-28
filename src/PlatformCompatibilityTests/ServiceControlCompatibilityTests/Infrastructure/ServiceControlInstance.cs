@@ -37,15 +37,16 @@
 
             // TODO: This should probably by async and eventually give up
             var retryCount = 0;
-            while (!Api.CheckIsAvailable() && retryCount++ < 20)
+            var maxRetries = 100;
+            while (!Api.CheckIsAvailable() && retryCount++ < maxRetries)
             {
                 Console.WriteLine("ServiceControl not available yet, waiting 200ms");
                 Thread.Sleep(TimeSpan.FromMilliseconds(200));
             }
 
-            if (retryCount >= 20)
+            if (retryCount >= maxRetries)
             {
-                throw new ApplicationException("Could not start Service Control after 20 attempts");
+                throw new ApplicationException($"Could not start Service Control after {maxRetries} attempts");
             }
 
             Console.WriteLine("Service Control successfully started");

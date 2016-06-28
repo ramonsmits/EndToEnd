@@ -9,6 +9,7 @@
     class SuccessfulRetryTests : SqlScTest
     {
         [TestCaseSource(nameof(AllTransports))]
+        [Timeout(300000)]
         public Task Can_successfully_retry_a_failed_message(Type transportDetailType)
         {
             var endpointFactory = StartUp(transportDetailType);

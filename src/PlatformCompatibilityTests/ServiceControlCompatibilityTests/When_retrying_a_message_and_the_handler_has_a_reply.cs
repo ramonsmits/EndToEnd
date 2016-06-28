@@ -9,6 +9,7 @@ namespace ServiceControlCompatibilityTests
     class When_retrying_a_message_and_the_handler_has_a_reply : SqlScTest
     {
         [TestCaseSource(nameof(AllTransports))]
+        [Timeout(300000)]
         public Task When_successfully_retry_a_failed_message_with_reply_it_gets_routed_back_to_sender(Type transportDetailsDType)
         {
             var endpointFactory = StartUp(transportDetailsDType);
