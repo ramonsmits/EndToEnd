@@ -56,7 +56,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ASBForwardingTopologyTransportDetails.cs" />
-    <Compile Include="ASBEndpointTopologyTransportDetails.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TestFramework\TestFramework.csproj">
