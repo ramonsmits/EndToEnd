@@ -8,6 +8,7 @@ partial class SagaInitiateRunner
     {
         protected override void ConfigureHowToFindSaga(SagaPropertyMapper<SagaData> mapper)
         {
+            mapper.ConfigureMapping<Command>(m => m.Identifier).ToSaga(s => s.UniqueIdentifier);
         }
 
         public void Handle(Command message)
