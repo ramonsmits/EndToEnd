@@ -56,7 +56,7 @@
             Console.WriteLine($"Creating SC Factory at {serviceControlPath}");
             var factory = new ServiceControlFactory(serviceControlPath);
 
-            return factory.Start(transport, NUnit.Framework.TestContext.CurrentContext.Test.Name);
+            return factory.Start(transport, Guid.NewGuid().ToString());
         }
 
         protected static Type[] AllTransports()
