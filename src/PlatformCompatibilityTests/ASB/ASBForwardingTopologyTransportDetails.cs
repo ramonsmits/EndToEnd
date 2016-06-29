@@ -4,7 +4,7 @@ using NServiceBus.AzureServiceBus;
 
 namespace ServiceControlCompatibilityTests
 {
-    public class ASBForwardingTopologyTransportDetails //: ITransportDetails
+    public class ASBForwardingTopologyTransportDetails : ITransportDetails
     {
         const string TransportTypeName = "NServiceBus.AzureServiceBusTransport, NServiceBus.Azure.Transports.WindowsAzureServiceBus";
 
