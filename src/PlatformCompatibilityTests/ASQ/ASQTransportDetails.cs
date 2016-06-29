@@ -3,7 +3,7 @@ using NServiceBus;
 
 namespace ServiceControlCompatibilityTests
 {
-    public class ASQTransportDetails : ITransportDetails
+    public class ASQTransportDetails //: ITransportDetails
     {
         const string TransportTypeName = "NServiceBus.AzureStorageQueueTransport, NServiceBus.Azure.Transports.WindowsAzureStorageQueues";
 
