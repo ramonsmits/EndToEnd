@@ -29,7 +29,7 @@ namespace ServiceControlCompatibilityTests
 
             testContext.ShouldFail = false;
             await ServiceControl.RetryMessageId(failedMessage.Id);
-            var handled = await testContext.WaitForDone();
+            var handled = testContext.WaitForDone().Wait(60000);
 
             Assert.IsTrue(handled, "Did not process the retry successfully within the time limit");
         }

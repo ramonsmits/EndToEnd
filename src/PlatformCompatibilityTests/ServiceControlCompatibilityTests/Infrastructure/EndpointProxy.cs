@@ -22,6 +22,7 @@
             var messageId = Guid.NewGuid().ToString();
             sendOptions.SetDestination(destination);
             sendOptions.SetMessageId(messageId);
+            sendOptions.RouteReplyTo("Sender");
 
             await endpoint.Send(message, sendOptions).ConfigureAwait(false);
 
