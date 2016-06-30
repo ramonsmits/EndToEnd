@@ -17,11 +17,13 @@
             { typeof(ASQTransportDetails), () => new ASQTransportDetails(Environment.GetEnvironmentVariable("AzureStorageQueueTransport.ConnectionString")) },
         };
 
-        protected IEndpointFactory StartUp(Type transportDetailsType)
+        protected IEndpointFactory StartUp(string testName, Type transportDetailsType)
         {
-            Console.WriteLine($"Creating test for {transportDetailsType.Name}");
+            var testId = $"{testName}_{transportDetailsType.Name.Replace("TransportDetails", "")}";
+            Console.WriteLine($"Starting test {testId}");
+            //Console.WriteLine($"Creating test for {transportDetailsType.Name}");
             var transportDetails = ActivateInstanceOfTransportDetail(transportDetailsType);
-            serviceControl =  StartServiceControl(transportDetails);
+            serviceControl = StartServiceControl(testId, transportDetails);
 
             var endpointFactory = new EndpointFactory(transportDetails);
 
@@ -42,7 +44,7 @@
             return activator?.Invoke();
         }
 
-        ServiceControlInstance StartServiceControl(ITransportDetails transport)
+        ServiceControlInstance StartServiceControl(string testId, ITransportDetails transport)
         {
             var runningInTeamCity = Environment.GetEnvironmentVariable("TEAMCITY_VERSION") != null;
             
@@ -56,7 +58,7 @@
             Console.WriteLine($"Creating SC Factory at {serviceControlPath}");
             var factory = new ServiceControlFactory(serviceControlPath);
 
-            return factory.Start(transport, Guid.NewGuid().ToString());
+            return factory.Start(transport, testId);
         }
 
         protected static Type[] AllTransports()

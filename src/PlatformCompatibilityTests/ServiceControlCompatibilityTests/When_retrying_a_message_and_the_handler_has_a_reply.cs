@@ -12,7 +12,7 @@ namespace ServiceControlCompatibilityTests
         [Timeout(300000)]
         public Task When_successfully_retry_a_failed_message_with_reply_it_gets_routed_back_to_sender(Type transportDetailsDType)
         {
-            var endpointFactory = StartUp(transportDetailsDType);
+            var endpointFactory = StartUp("Retry-with-Reply", transportDetailsDType);
             return RunReplyTest(endpointFactory);
         }
 

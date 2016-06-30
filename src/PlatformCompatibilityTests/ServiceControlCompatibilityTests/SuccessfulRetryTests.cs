@@ -12,7 +12,7 @@
         [Timeout(300000)]
         public Task Can_successfully_retry_a_failed_message(Type transportDetailType)
         {
-            var endpointFactory = StartUp(transportDetailType);
+            var endpointFactory = StartUp("Retry", transportDetailType);
             return RunTest(endpointFactory);
         }
 
