@@ -1,6 +1,5 @@
 ﻿using NServiceBus;
 using NServiceBus.AzureServiceBus;
-using NServiceBus.AzureServiceBus.Addressing;
 
 class AzureServiceBusProfile : IProfile
 {
