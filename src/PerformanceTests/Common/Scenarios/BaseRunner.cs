@@ -37,7 +37,16 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 
         InitData();
 
-        await CreateSeedData().ConfigureAwait(false);
+        await CreateOrPurgeQueues().ConfigureAwait(false); // Workaround for pubsub to self with purge on startup
+
+        var seedCreator = this as ICreateSeedData;
+        if (seedCreator != null)
+        {
+            Log.InfoFormat("Create seed data...");
+            await CreateSeedData(seedCreator).ConfigureAwait(false);
+        }
+
+        Log.InfoFormat("Create receiving endpoint...");
         await CreateEndpoint().ConfigureAwait(false);
 
         try
@@ -78,12 +87,11 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         return Task.FromResult(0);
     }
 
-    async Task CreateSeedData()
+    async Task CreateSeedData(ICreateSeedData instance)
     {
-        var seedCreator = this as ICreateSeedData;
-        if (seedCreator == null) return;
-
+        Log.Info("Creating or purging queues...");
         await CreateOrPurgeQueues().ConfigureAwait(false);
+        Log.Info("Creating send only endpoint...");
         await CreateSendOnlyEndpoint().ConfigureAwait(false);
 
         try
@@ -93,8 +101,6 @@ public abstract class BaseRunner : IConfigurationSource, IContext
             cts.CancelAfter(Settings.SeedDuration);
 
             var maxConcurrency = ConcurrencyLevelConverter.Convert(Permutation.ConcurrencyLevel);
-
-            var instance = (ICreateSeedData)this;
             var count = 0L;
             var start = Stopwatch.StartNew();
 
@@ -225,7 +231,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
             return;
         }
 
-        configuration.PurgeOnStartup(!IsSeedingData && IsPurgingSupported);
+        //configuration.PurgeOnStartup(!IsSeedingData && IsPurgingSupported);
 
         var instance = Endpoint.Start(configuration).ConfigureAwait(false).GetAwaiter().GetResult();
         Session = new Session(instance);
