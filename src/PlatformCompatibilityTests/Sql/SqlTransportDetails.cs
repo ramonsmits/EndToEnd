@@ -3,6 +3,8 @@ using NServiceBus;
 
 namespace ServiceControlCompatibilityTests
 {
+    using System.Threading.Tasks;
+
     public class SqlTransportDetails : ITransportDetails
     {
         const string TransportTypeName = "NServiceBus.SqlServerTransport, NServiceBus.Transports.SQLServer";
@@ -14,14 +16,19 @@ namespace ServiceControlCompatibilityTests
 
         public string TransportName => "SQLServer";
 
-        public void ApplyTo(Configuration configuration)
+        public virtual Task Initialize()
+        {
+            return Task.FromResult(0);
+        }
+
+        public virtual void ApplyTo(Configuration configuration)
         {
             configuration.ConnectionStrings.ConnectionStrings.Set("NServiceBus/Transport", connectionString);
             var settings = configuration.AppSettings.Settings;
             settings.Set(SettingsList.TransportType, TransportTypeName);
         }
 
-        public void ConfigureEndpoint(EndpointConfiguration endpointConfig)
+        public virtual void ConfigureEndpoint(string endpointName, EndpointConfiguration endpointConfig)
         {
             endpointConfig.UseTransport<SqlServerTransport>()
                 .ConnectionString(connectionString);
@@ -29,6 +36,6 @@ namespace ServiceControlCompatibilityTests
             endpointConfig.PurgeOnStartup(true);
         }
 
-        string connectionString;
+        protected string connectionString;
     }
 }

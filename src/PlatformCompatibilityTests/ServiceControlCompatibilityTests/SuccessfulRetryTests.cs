@@ -10,18 +10,22 @@
     {
         [TestCaseSource(nameof(AllTransports))]
         [Timeout(300000)]
-        public Task Can_successfully_retry_a_failed_message(Type transportDetailType)
+        public async Task Can_successfully_retry_a_failed_message(Type transportDetailType)
         {
-            var endpointFactory = StartUp("Retry", transportDetailType);
-            return RunTest(endpointFactory);
+            var endpointFactory = await StartUp("Retry", transportDetailType, map =>
+            {
+                map[SenderEndpointName] = ServerA;
+                map[ProcessorEndpointName] = ServerB;
+            });
+            await RunTest(endpointFactory);
         }
 
         async Task RunTest(IEndpointFactory endpointFactory)
         {
             var testContext = new TestContext();
 
-            var sender = await endpointFactory.CreateEndpoint("Sender");
-            var processor = await endpointFactory.CreateEndpoint(new EndpointDetails("Processor").With<TestMessageHandler>().With(testContext));
+            var sender = await endpointFactory.CreateEndpoint(SenderEndpointName);
+            var processor = await endpointFactory.CreateEndpoint(new EndpointDetails(ProcessorEndpointName).With<TestMessageHandler>().With(testContext));
 
             testContext.ShouldFail = true;
             var failingMessageId = await sender.Send(processor, new TestMessage());
@@ -33,6 +37,9 @@
 
             Assert.IsTrue(handled, "Did not process the retry successfully within the time limit");
         }
+
+        const string SenderEndpointName = "Sender";
+        const string ProcessorEndpointName = "Processor";
     }
 
     class TestMessage : ICommand

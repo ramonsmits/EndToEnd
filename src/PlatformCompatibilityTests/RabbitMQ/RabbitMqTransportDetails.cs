@@ -3,6 +3,8 @@ using NServiceBus;
 
 namespace ServiceControlCompatibilityTests
 {
+    using System.Threading.Tasks;
+
     public class RabbitMQTransportDetails : ITransportDetails
     {
         const string TransportTypeName = "NServiceBus.RabbitMQTransport, NServiceBus.Transports.RabbitMQ";
@@ -14,6 +16,11 @@ namespace ServiceControlCompatibilityTests
 
         public string TransportName => "RabbitMQ";
 
+        public Task Initialize()
+        {
+            return Task.FromResult(0);
+        }
+
         public void ApplyTo(Configuration configuration)
         {
             configuration.ConnectionStrings.ConnectionStrings.Set("NServiceBus/Transport", connectionString);
@@ -21,7 +28,7 @@ namespace ServiceControlCompatibilityTests
             settings.Set(SettingsList.TransportType, TransportTypeName);
         }
 
-        public void ConfigureEndpoint(EndpointConfiguration endpointConfig)
+        public void ConfigureEndpoint(string endpointName, EndpointConfiguration endpointConfig)
         {
             endpointConfig.UseTransport<RabbitMQTransport>()
                 .ConnectionString(connectionString);
