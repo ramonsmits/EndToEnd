@@ -53,7 +53,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RabbitMQTransportDetails.cs" />
+    <Compile Include="RabbitMQConventionalRoutingTopologyTransportDetails.cs" />
+    <Compile Include="RabbitMQDirectRoutingTopologyTransportDetails.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TestFramework\TestFramework.csproj">

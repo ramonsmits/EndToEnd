@@ -1,15 +1,14 @@
-﻿using System.Configuration;
-using NServiceBus;
-
-namespace ServiceControlCompatibilityTests
+﻿namespace ServiceControlCompatibilityTests
 {
+    using System.Configuration;
     using System.Threading.Tasks;
+    using NServiceBus;
 
-    public class RabbitMQTransportDetails : ITransportDetails
+    public class RabbitMQDirectRoutingTopologyTransportDetails : ITransportDetails
     {
         const string TransportTypeName = "NServiceBus.RabbitMQTransport, NServiceBus.Transports.RabbitMQ";
 
-        public RabbitMQTransportDetails(string connectionString)
+        public RabbitMQDirectRoutingTopologyTransportDetails(string connectionString)
         {
             this.connectionString = connectionString;
         }
@@ -31,7 +30,9 @@ namespace ServiceControlCompatibilityTests
         public void ConfigureEndpoint(string endpointName, EndpointConfiguration endpointConfig)
         {
             endpointConfig.UseTransport<RabbitMQTransport>()
-                .ConnectionString(connectionString);
+                .UseDirectRoutingTopology()
+                .ConnectionString(connectionString)
+                ;
 
             endpointConfig.PurgeOnStartup(true);
         }
