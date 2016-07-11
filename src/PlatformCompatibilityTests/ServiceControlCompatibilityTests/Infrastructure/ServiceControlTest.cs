@@ -14,7 +14,8 @@
         {
             { typeof(SqlTransportDetails), () => new SqlTransportDetails("Data Source=.\\SQLEXPRESS;Initial Catalog=nservicebus;Integrated Security=True") },
             { typeof(MsmqTransportDetails), () => new MsmqTransportDetails() },
-            { typeof(RabbitMQTransportDetails), () => new RabbitMQTransportDetails("host=localhost") },
+            { typeof(RabbitMQConventionalRoutingTopologyTransportDetails), () => new RabbitMQConventionalRoutingTopologyTransportDetails("host=localhost") },
+            { typeof(RabbitMQDirectRoutingTopologyTransportDetails), () => new RabbitMQDirectRoutingTopologyTransportDetails("host=localhost") },
             { typeof(ASBForwardingTopologyTransportDetails), () => new ASBForwardingTopologyTransportDetails(Environment.GetEnvironmentVariable("AzureServiceBus.ConnectionString")) },
             { typeof(ASQTransportDetails), () => new ASQTransportDetails(Environment.GetEnvironmentVariable("AzureStorageQueueTransport.ConnectionString")) },
             {
