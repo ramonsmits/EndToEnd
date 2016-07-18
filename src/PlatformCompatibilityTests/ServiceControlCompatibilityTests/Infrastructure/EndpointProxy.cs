@@ -29,6 +29,11 @@
             return messageId;
         }
 
+        public override string ToString()
+        {
+            return name;
+        }
+
         public static implicit operator string(EndpointProxy p)
         {
             return p.name;

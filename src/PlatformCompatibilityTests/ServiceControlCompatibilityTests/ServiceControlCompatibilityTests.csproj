@@ -75,7 +75,7 @@
     <Compile Include="Infrastructure\ServiceControlTest.cs" />
     <Compile Include="Infrastructure\TestContextBase.cs" />
     <Compile Include="Infrastructure\UnderscoreMappingResolver.cs" />
-    <Compile Include="SuccessfulRetryTests.cs" />
+    <Compile Include="When_Retrying_Failed_Message.cs" />
     <Compile Include="When_retrying_a_message_and_the_handler_has_a_reply.cs" />
   </ItemGroup>
   <ItemGroup>

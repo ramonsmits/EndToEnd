@@ -6,11 +6,11 @@
     using System.Threading.Tasks;
 
     [TestFixture]
-    class SuccessfulRetryTests : SqlScTest
+    class When_retrying_failed_message : SqlScTest
     {
         [TestCaseSource(nameof(AllTransports))]
         [Timeout(300000)]
-        public async Task Can_successfully_retry_a_failed_message(Type transportDetailType)
+        public async Task Gets_routed_back_to_Processing_Endpoint(Type transportDetailType)
         {
             var endpointFactory = await StartUp("Retry", transportDetailType, map =>
             {
@@ -25,14 +25,23 @@
             var testContext = new TestContext();
 
             var sender = await endpointFactory.CreateEndpoint(SenderEndpointName);
+            Console.WriteLine($"Started {sender}");
             var processor = await endpointFactory.CreateEndpoint(new EndpointDetails(ProcessorEndpointName).With<TestMessageHandler>().With(testContext));
+            Console.WriteLine($"Started {processor}");
 
+
+            Console.WriteLine($"Sending test message from {sender} to {processor} ... should fail.");
             testContext.ShouldFail = true;
             var failingMessageId = await sender.Send(processor, new TestMessage());
+
+            Console.WriteLine($"Waiting for a message with id {failingMessageId} to show up in ServiceControl");
             var failedMessage = await ServiceControl.WaitForFailedMessage(failingMessageId);
 
+            Console.WriteLine($"Found it, retrying now. Should succeed this time");
             testContext.ShouldFail = false;
             await ServiceControl.RetryMessageId(failedMessage.Id);
+
+            Console.WriteLine("And now we wait to see if it worked");
             var handled = await testContext.WaitForDone();
 
             Assert.IsTrue(handled, "Did not process the retry successfully within the time limit");

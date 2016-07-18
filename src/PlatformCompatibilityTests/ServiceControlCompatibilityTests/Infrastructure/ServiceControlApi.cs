@@ -8,7 +8,6 @@
     using Newtonsoft.Json.Converters;
     using System.Threading.Tasks;
     using System.Collections.Generic;
-    using System.Threading;
     using System.Linq;
 
     public class ServiceControlApi
@@ -27,12 +26,15 @@
         {
             while (true)
             {
+                Console.WriteLine($"Getting all errors from ServiceControl to look for {failedMessageId}");
                 var errors = await GetAllErrors().ConfigureAwait(false);
+                Console.WriteLine($"Found {errors.Count}: {string.Join(", ", errors.Select(x => x.MessageId))}");
                 var failedMessage = errors.SingleOrDefault(x => x.MessageId == failedMessageId);
                 if (failedMessage != null)
                 {
                     return failedMessage;
                 }
+                Console.WriteLine("Didn't find it. Will look again soon");
 
                 await Task.Delay(200);
             }
