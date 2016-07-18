@@ -1,5 +1,6 @@
 namespace ServiceControlCompatibilityTests
 {
+    using System.Linq;
     using System.Threading.Tasks;
     using Infrastructure;
     using NServiceBus;
@@ -26,7 +27,8 @@ namespace ServiceControlCompatibilityTests
             config.EnableInstallers();
             config.DisableFeature<SecondLevelRetries>();
             config.DisableFeature<FirstLevelRetries>();
-
+            config.ExcludeTypes(typeof(EndpointFactory).Assembly.GetExportedTypes().Except(endpointDetails.GetTypes()).ToArray());
+          
             var container = endpointDetails.CreateContainer();
             config.UseContainer<AutofacBuilder>(c => c.ExistingLifetimeScope(container));
 
