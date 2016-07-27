@@ -167,12 +167,15 @@ Although it sounds obvious when reading make sure that:
 
 * No virusscanner is active, (temporarily) disable Windows Defender real-time protection
 * Store your databases, queues and swap files on fast storage like an SSD
-* You run resource hogging applications like Zoom and Chrome
-* Set Processor Scheduling to *Background services*
-* Make sure your drives have enough space
-* Have *Write-through* caching enabled on your drive, also on an SSD drive but don't test with *Write-back* caching to prevent data loss
+* You close resource hogging applications like Zoom and Chrome
+* Set Processor Scheduling to *Background services* instead of Programs
+* Make sure your drives have enough free space
+* Have *Write-through* caching enabled on your drive, also on SSD drives but don't test with *Write-back* caching to prevent data loss
 * Choose an Azure data center that is close to you by using a service like http://www.azurespeed.com/ as less latency improves performance for cloud based storage or queues dramatically
 * Make sure you have a decent uplink. To push 2,000 messages per second to Azure requires a 40mbps uplink (2,000 * 2KB = 4MB/s ~ 40mbps with overhead) and its likely that you don't have that based on https://github.com/Particular/PlatformDevelopment/blob/master/hardware-register.md
+
+
+Always try to understand why you are getting a specific result based on the CPU, RAM, disk and network resources used.
 
 
 # Future work
