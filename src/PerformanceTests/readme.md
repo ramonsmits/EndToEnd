@@ -22,7 +22,7 @@ All of these can be run locally except for Azure Service Bus. Azure Storage Queu
 
 # Connection strings
 
-All of these need a correct connection string. There is a connection string template file `.connectionstrings.config.template` at the location of the `readme.me`. This already contains a few connection strings to access all services locally expect for Azure Service Bus.
+All of these need a correct connection string. There is a connection string template file `.connectionstrings.config.template` at the location of the `readme.md`. This already contains a few connection strings to access all services locally expect for Azure Service Bus.
 
 This template file is copied to two projects during the pre build when they do not exist yet. These files are NOT stored in the repository and are ignored. You can safely edit these and store your own connection strings.
 
@@ -159,6 +159,20 @@ Changing anything on the VM’s requires:
 * Update TC script with new image name
  
 You can test the TC build configurations and pause them to prevent the next configuration to be executed.
+
+
+# Improving performance
+
+Although it sounds obvious when reading make sure that:
+
+* No virusscanner is active, (temporarily) disable Windows Defender real-time protection
+* Store your databases, queues and swap files on fast storage like an SSD
+* You run resource hogging applications like Zoom and Chrome
+* Set Processor Scheduling to *Background services*
+* Make sure your drives have enough space
+* Have *Write-through* caching enabled on your drive, also on an SSD drive but don't test with *Write-back* caching to prevent data loss
+* Choose an Azure data center that is close to you by using a service like http://www.azurespeed.com/ as less latency improves performance for cloud based storage or queues dramatically
+* Make sure you have a decent uplink. To push 2,000 messages per second to Azure requires a 40mbps uplink (2,000 * 2KB = 4MB/s ~ 40mbps with overhead) and its likely that you don't have that based on https://github.com/Particular/PlatformDevelopment/blob/master/hardware-register.md
 
 
 # Future work
