@@ -173,10 +173,24 @@ Although it sounds obvious when reading make sure that:
 * Have *Write-through* caching enabled on your drive, also on SSD drives but don't test with *Write-back* caching to prevent data loss
 * Choose an Azure data center that is close to you by using a service like http://www.azurespeed.com/ as less latency improves performance for cloud based storage or queues dramatically
 * Make sure you have a decent uplink. To push 2,000 messages per second to Azure requires a 40mbps uplink (2,000 * 2KB = 4MB/s ~ 40mbps with overhead) and its likely that you don't have that based on https://github.com/Particular/PlatformDevelopment/blob/master/hardware-register.md
-
+* Have Windows Power Options set to *High Performance* instead of Belanced which doesn't downstep the CPU / RAM clocks
 
 Always try to understand why you are getting a specific result based on the CPU, RAM, disk and network resources used.
 
+
+# Tools
+
+Benchmark your internet connection. Select a location where the data center is located:
+- http://www.speedtest.net/
+
+Benchmark your storage. Press CTRL+Q and select queues 512 and threads 64 and export the IOPS results to text via CTRL+S:
+- http://crystalmark.info/software/CrystalDiskMark/index-e.html
+
+Benchmark your CPU:
+- http://www.maxon.net/en/produkte/cinebench/
+
+Check your CPU and RAM clock speeds:
+- http://www.cpuid.com/softwares/cpu-z.html
 
 # Future work
 
