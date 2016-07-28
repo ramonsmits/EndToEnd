@@ -62,7 +62,7 @@ public class Statistics : IDisposable
 
     public static IDisposable Initialize(Permutation permutation)
     {
-        if(instance!=null) throw new InvalidOperationException("Instance already active");
+        if (instance != null) throw new InvalidOperationException("Instance already active");
         return instance = new Statistics(permutation);
     }
 
@@ -95,8 +95,10 @@ public class Statistics : IDisposable
 
     public void Dump()
     {
-        var durationSeconds = (Last - Warmup).TotalSeconds;
+        var duration = Last - Warmup;
+        var durationSeconds = Math.Max(-1, duration.TotalSeconds);
 
+        LogStats("ReceiveFirstLastDuration", durationSeconds, "s");
         LogStats("NumberOfMessages", NumberOfMessages, "#");
 
         var throughput = NumberOfMessages / durationSeconds;
