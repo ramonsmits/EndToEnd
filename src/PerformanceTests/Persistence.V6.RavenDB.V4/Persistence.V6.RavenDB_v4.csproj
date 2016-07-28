@@ -71,7 +71,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RavenDBPersistenceExtensions.cs" />
     <Compile Include="RavenDBProfile.cs" />
   </ItemGroup>
   <ItemGroup>
