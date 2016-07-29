@@ -9,15 +9,14 @@ using Tests.Permutations;
 [Serializable]
 public class Statistics : IDisposable
 {
-    public DateTime? First;
-    public DateTime Last;
-    public readonly DateTime ApplicationStart = DateTime.UtcNow;
-    public DateTime StartTime;
-    public DateTime Warmup;
-    public long NumberOfMessages;
-    public long NumberOfRetries;
-    public TimeSpan SendTimeNoTx = TimeSpan.Zero;
-    public TimeSpan SendTimeWithTx = TimeSpan.Zero;
+    long First;
+    long Last;
+    readonly long ApplicationStart = GetTimestamp();
+    long Warmup;
+    long NumberOfMessages;
+    long NumberOfRetries;
+    TimeSpan SendTimeNoTx = TimeSpan.Zero;
+    TimeSpan SendTimeWithTx = TimeSpan.Zero;
 
     Process process;
     PerformanceCounter privateBytesCounter;
@@ -77,13 +76,22 @@ public class Statistics : IDisposable
             TimeSpan.FromSeconds(1),
             TimeSpan.FromSeconds(1));
 
-        StartTime = DateTime.UtcNow;
         ConfigureSplunk();
+    }
+
+    static long GetTimestamp()
+    {
+        return Stopwatch.GetTimestamp();
+    }
+
+    double ToSeconds(long start, long end)
+    {
+        return (end - start) / (double)Stopwatch.Frequency;
     }
 
     public void Reset(string testName)
     {
-        Warmup = DateTime.UtcNow;
+        Warmup = GetTimestamp();
         Interlocked.Exchange(ref NumberOfMessages, 0);
         Interlocked.Exchange(ref NumberOfRetries, 0);
         SendTimeNoTx = TimeSpan.Zero;
@@ -95,8 +103,7 @@ public class Statistics : IDisposable
 
     public void Dump()
     {
-        var duration = Last - Warmup;
-        var durationSeconds = Math.Max(-1, duration.TotalSeconds);
+        var durationSeconds = Math.Max(-1, ToSeconds(Warmup, Last));
 
         LogStats("ReceiveFirstLastDuration", durationSeconds, "s");
         LogStats("NumberOfMessages", NumberOfMessages, "#");
@@ -107,7 +114,7 @@ public class Statistics : IDisposable
 
         LogStats("NumberOfRetries", NumberOfRetries, "#");
 
-        var ttfm = (First - ApplicationStart)?.TotalSeconds ?? -1;
+        var ttfm = Math.Max(-1, ToSeconds(ApplicationStart, First));
 
         LogStats("TimeToFirstMessage", ttfm, "s");
 
@@ -140,5 +147,29 @@ public class Statistics : IDisposable
     static string GetSessionId()
     {
         return Environment.GetCommandLineArgs().Where(arg => arg.StartsWith("--sessionId")).Select(arg => arg.Substring("--sessionId".Length + 1)).First();
+    }
+
+    public void UpdateFirst()
+    {
+        if (First == 0)
+        {
+            First = GetTimestamp();
+        }
+    }
+
+    public void UpdateLast()
+    {
+        Last = GetTimestamp();
+    }
+
+
+    public void IncMessages()
+    {
+        Interlocked.Increment(ref NumberOfMessages);
+    }
+
+    public void IncRetries()
+    {
+        Interlocked.Increment(ref NumberOfRetries);
     }
 }
