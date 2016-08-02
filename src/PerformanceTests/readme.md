@@ -1,5 +1,27 @@
 [Buildserver](https://builds.particular.net/project.html?projectId=PerfTests&tab=projectOverview) | [Splunk dashboard](http://deploy.particular.net:8000/en-US/app/search/latest_test_run_results) | [Quick Overview sheet](https://docs.google.com/spreadsheets/d/1SA2aSjPx8HL_m2ct9eWrl3_zmWqxGtMnoooeKK_PzM0/edit#gid=0)
 
+Table of contents
+
+- [Prerequisites for running tests](#prerequisites-for-running-tests)
+- [Dependencies](#dependencies
+- [Prerequisites for running tests](#connection-strings)
+- [Run it locally](#run-it-locally)
+- [Howto prevent 'XXX Has stopped working' dialog](#howto-prevent-xxx-has-stopped-working-dialog)
+- [Run Visual Studio as administrator to save disk space](#run-visual-studio-as-administrator-to-save-disk-space)
+- [Adding a new scenario](#adding-a-new-scenario)
+- [Order of execution](#order-of-execution)
+- [Settings](#settings)
+- [Corflags.exe](#corflagsexe)
+- [How it all works](#how-it-all-works)
+- [How to start a run on the Azure test environment](#how-to-start-a-run-on-the-azure-test-environment)
+- [Updating the results](#updating-the-results)
+- [Viewing latest results](#viewing-latest-results)
+- [Updating virtual machines](#updating-virtual-machines)
+- [Improving performance](#improving-performance)
+- [Tools](#tools)
+
+
+
 # Prerequisites for running tests
 
 - Making sure that connection string to MS SQL DB is correct
