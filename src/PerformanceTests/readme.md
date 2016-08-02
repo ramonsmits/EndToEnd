@@ -1,5 +1,4 @@
-Performance Tests
-===============
+[Buildserver](https://builds.particular.net/project.html?projectId=PerfTests&tab=projectOverview) | [Splunk dashboard](http://deploy.particular.net:8000/en-US/app/search/latest_test_run_results) | [Quick Overview sheet](https://docs.google.com/spreadsheets/d/1SA2aSjPx8HL_m2ct9eWrl3_zmWqxGtMnoooeKK_PzM0/edit#gid=0)
 
 # Prerequisites for running tests
 
@@ -105,6 +104,15 @@ You will have to edit this location in post build events of the NServiceBus5 and
 * The generated permutation is invoked.
 * The test waits until the run is finished or crashed but kills it if it takes too long.
 * The results from the test run is published to a Splunk server for analysis
+
+# How to start a run on the Azure test environment
+
+To start a run on the Azure VM configuration you need to go the the project on the build server and select Run  
+
+* https://builds.particular.net/project.html?projectId=PerfTests&tab=projectOverview
+
+This will prepare the environment and run the tests. Currently this takes about 4.5 hours to complete.
+
 
 # Updating the results
 
