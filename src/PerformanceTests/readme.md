@@ -3,7 +3,7 @@
 Table of contents
 
 - [Prerequisites for running tests](#prerequisites-for-running-tests)
-- [Dependencies](#dependencies
+- [Dependencies](#dependencies)
 - [Prerequisites for running tests](#connection-strings)
 - [Run it locally](#run-it-locally)
 - [Howto prevent 'XXX Has stopped working' dialog](#howto-prevent-xxx-has-stopped-working-dialog)
