@@ -7,6 +7,6 @@ class ConcurrencyProfile : IProfile, INeedPermutation
 
     public void Configure(EndpointConfiguration cfg)
     {
-        cfg.LimitMessageProcessingConcurrencyTo(1);//ConcurrencyLevelConverter.Convert(Permutation.ConcurrencyLevel));
+        cfg.LimitMessageProcessingConcurrencyTo(ConcurrencyLevelConverter.Convert(Permutation.ConcurrencyLevel));
     }
 }
