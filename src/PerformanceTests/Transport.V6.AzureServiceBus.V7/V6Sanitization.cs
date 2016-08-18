@@ -2,8 +2,8 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using NServiceBus.AzureServiceBus;
-using NServiceBus.AzureServiceBus.Addressing;
+using NServiceBus;
+using NServiceBus.Transport.AzureServiceBus;
 
 class V6Sanitization : ISanitizationStrategy
 {
