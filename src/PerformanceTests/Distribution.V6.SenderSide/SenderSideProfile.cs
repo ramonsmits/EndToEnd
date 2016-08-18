@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using NServiceBus;
+using NServiceBus.Configuration.AdvanceExtensibility;
+using NServiceBus.Features;
 using NServiceBus.Routing;
 using Variables;
 
@@ -15,12 +18,33 @@ class SenderSideProfile : IProfile, INeedContext
 
         var senderSideArgs = ConfigurationHelper.FetchSetting("SenderSide");
 
-        if(string.IsNullOrWhiteSpace(senderSideArgs)) throw new InvalidOperationException("Setting `SenderSide` not resolved.");
+        if (string.IsNullOrWhiteSpace(senderSideArgs)) throw new InvalidOperationException("Setting `SenderSide` not resolved.");
 
         var machines = senderSideArgs.Split('|');
-        var routing = cfg.UnicastRouting();
-        var endpoint = new EndpointName(Context.EndpointName);
-        var instances = machines.Select(x => new EndpointInstance(endpoint).AtMachine(x)).ToArray();
-        routing.Mapping.Physical.Add(instances);
+
+        /*
+        // Undocumented alternative
+        var instances = machines.Select(x => new EndpointInstance(Context.EndpointName).AtMachine(x)).ToArray();
+        cfg.GetSettings().GetOrCreate<EndpointInstances>().Add(instances);
+        */
+
+        cfg.RegisterComponents(x => x.RegisterSingleton(new StaticEndpointMapping { EndpointName = Context.EndpointName, Machines = machines }));
+    }
+
+    class StaticEndpointMapping : Feature
+    {
+        public string EndpointName;
+        public string[] Machines;
+
+        protected override void Setup(FeatureConfigurationContext context)
+        {
+            if (EndpointName == null || Machines == null) throw new InvalidOperationException("Fields not initialized.");
+
+            var instances = Machines.Select(x => new EndpointInstance(EndpointName).AtMachine(x)).ToArray();
+
+            var endpointInstances = context.EndpointInstances();
+            endpointInstances.Add(instances);
+        }
     }
 }
+
