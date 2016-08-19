@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using NServiceBus;
-using NServiceBus.Configuration.AdvanceExtensibility;
 using NServiceBus.Features;
 using NServiceBus.Routing;
 using Variables;
