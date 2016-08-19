@@ -1,5 +1,4 @@
 ﻿using NServiceBus;
-using NServiceBus.AzureServiceBus;
 
 class AzureServiceBusProfile : IProfile
 {
@@ -11,6 +10,6 @@ class AzureServiceBusProfile : IProfile
             .UseTransport<AzureServiceBusTransport>()
             .UseTopology<ForwardingTopology>()
             .ConnectionString(connectionstring)
-            .Sanitization().UseStrategy<V6Sanitization>();
+            .Sanitization().UseStrategy<ValidateAndHashIfNeeded>();
     }
 }
