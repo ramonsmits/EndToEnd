@@ -4,6 +4,7 @@ namespace Host
     using System.Globalization;
     using System.Linq;
     using System.Net;
+    using Microsoft.Win32;
     using NServiceBus;
     using NServiceBus.Logging;
     using Tests.Permutations;
@@ -26,6 +27,13 @@ namespace Host
 
             AppDomain.CurrentDomain.FirstChanceException += (o, ea) => { Log.Debug("FirstChanceException", ea.Exception); };
             AppDomain.CurrentDomain.UnhandledException += (o, ea) => { Log.Error("UnhandledException", ea.ExceptionObject as Exception); };
+
+            var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows Defender\Real-Time Protection");
+
+            if (0 == (int) key.GetValue("DisableRealtimeMonitoring", 1))
+            {
+                Log.Warn("Windows Defender is running, consider disabling real-time protection!");
+            }
 
             try
             {
