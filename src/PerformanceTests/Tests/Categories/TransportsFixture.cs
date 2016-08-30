@@ -34,6 +34,7 @@ namespace Categories
                 Transports = (Transport[])Enum.GetValues(typeof(Transport)),
                 Serializers = new[] { Serialization.Json, },
                 OutboxModes = new[] { Outbox.Off, },
+                TransactionMode = new[] { TransactionMode.Default, }
             });
         }
     }

@@ -24,7 +24,6 @@ namespace Categories
                 Serializers = new[] { Serialization.Json, },
                 MessageSizes = (MessageSize[])Enum.GetValues(typeof(MessageSize)),
                 OutboxModes = (Outbox[])Enum.GetValues(typeof(Outbox)),
-                DTCModes = (DTC[])Enum.GetValues(typeof(DTC)),
                 AuditModes = (Audit[])Enum.GetValues(typeof(Audit)),
             });
         }

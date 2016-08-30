@@ -19,7 +19,6 @@ namespace Tests.Permutations
                 from Serializer in permutations.Serializers
                 from MessageSize in permutations.MessageSizes
                 from OutboxMode in permutations.OutboxModes
-                from DTCMode in permutations.DTCModes
                 from TransactionMode in permutations.TransactionMode
                 from AuditMode in permutations.AuditModes
                 from ConcurrencyLevel in permutations.ConcurrencyLevels
@@ -36,7 +35,6 @@ namespace Tests.Permutations
                     Serializer = Serializer,
                     MessageSize = MessageSize,
                     OutboxMode = OutboxMode,
-                    DTCMode = DTCMode,
                     TransactionMode = TransactionMode,
                     AuditMode = AuditMode,
                     ConcurrencyLevel = ConcurrencyLevel,
@@ -52,7 +50,6 @@ namespace Tests.Permutations
                      + (permutations.Serializers.Length > 1 ? Serializer + Separator : string.Empty)
                      + (permutations.MessageSizes.Length > 1 ? MessageSize + Separator : string.Empty)
                      + (permutations.OutboxModes.Length > 1 ? OutboxMode + Separator : string.Empty)
-                     + (permutations.DTCModes.Length > 1 ? DTCMode + Separator : string.Empty)
                      + (permutations.TransactionMode.Length > 1 ? TransactionMode + Separator : string.Empty)
                      + (permutations.AuditModes.Length > 1 ? AuditMode + Separator : string.Empty)
                      + (permutations.ConcurrencyLevels.Length > 1 ? ConcurrencyLevel + Separator : string.Empty)

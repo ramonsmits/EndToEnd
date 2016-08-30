@@ -3,8 +3,9 @@ namespace Variables
     public enum TransactionMode
     {
         Default,
+        Transactional,
         Receive,
-        Unreliable,
-        AtomicSends
+        None,
+        Atomic
     }
 }

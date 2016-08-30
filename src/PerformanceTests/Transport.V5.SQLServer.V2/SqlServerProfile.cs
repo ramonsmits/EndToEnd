@@ -1,6 +1,9 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using NServiceBus;
+using NServiceBus.Settings;
 using Tests.Permutations;
+using Variables;
 
 class SqlServerProfile : IProfile, ISetup, INeedPermutation
 {
@@ -12,6 +15,29 @@ class SqlServerProfile : IProfile, ISetup, INeedPermutation
             .UseTransport<SqlServerTransport>()
             .DefaultSchema("V5")
             .ConnectionString(ConfigurationHelper.GetConnectionString(Permutation.Transport.ToString()));
+
+        InitTransactionMode(busConfiguration.Transactions());
+    }
+
+    void InitTransactionMode(TransactionSettings transactionSettings)
+    {
+        switch (Permutation.TransactionMode)
+        {
+            case TransactionMode.Default:
+                return;
+            case TransactionMode.None:
+                transactionSettings.Disable();
+                return;
+            case TransactionMode.Transactional:
+                transactionSettings.EnableDistributedTransactions();
+                return;
+            case TransactionMode.Atomic:
+                transactionSettings.DisableDistributedTransactions();
+                return;
+            case TransactionMode.Receive:
+            default:
+                throw new NotSupportedException("TransactionMode: " + Permutation.TransactionMode);
+        }
     }
 
     void ISetup.Setup()
