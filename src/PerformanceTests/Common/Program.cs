@@ -56,6 +56,18 @@ namespace Host
                     Log.InfoFormat("Executing scenario: {0}", runnableTest);
                     runnableTest.Execute(permutation, endpointName)
                         .ConfigureAwait(false).GetAwaiter().GetResult();
+
+                    if (Statistics.Instance.NumberOfMessages == 0)
+                    {
+                        Log.Fatal("NumberOfMessages equals 0, expected atleast one message to be processed.");
+                        return (int) ReturnCodes.PostCheckFailed;
+                    }
+
+                    if (Statistics.Instance.NumberOfRetries > Statistics.Instance.NumberOfMessages)
+                    {
+                        Log.Fatal("NumberOfRetries is great than NumberOfMessages, too many errors occured during processing.");
+                        return (int)ReturnCodes.PostCheckFailed;
+                    }
                 }
             }
             catch (NotSupportedException nsex)
