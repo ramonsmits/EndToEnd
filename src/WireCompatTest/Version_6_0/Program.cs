@@ -27,7 +27,8 @@ class Program
         endpointConfiguration.UsePersistence<InMemoryPersistence>();
         endpointConfiguration.RijndaelEncryptionService();
         endpointConfiguration.UseDataBus<FileShareDataBus>().BasePath("..\\..\\..\\tempstorage");
-        endpointConfiguration.ScaleOut().InstanceDiscriminator("1");
+        endpointConfiguration.MakeInstanceUniquelyAddressable("1");
+
         endpointConfiguration.RegisterComponents(c => c.ConfigureComponent<EncryptionVerifier>(DependencyLifecycle.SingleInstance));
         endpointConfiguration.EnableInstallers();
 
