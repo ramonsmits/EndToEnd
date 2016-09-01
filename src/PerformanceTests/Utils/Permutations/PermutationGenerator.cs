@@ -11,7 +11,6 @@ namespace Tests.Permutations
         {
             var items =
                 from Version in permutations.Versions
-                from IOPS in permutations.IOPS
                 from Platform in permutations.Platforms
                 from GarbageCollector in permutations.GarbageCollectors
                 from Transport in permutations.Transports
@@ -27,7 +26,6 @@ namespace Tests.Permutations
                 select new Permutation
                 {
                     Version = Version,
-                    IOPS = IOPS,
                     Platform = Platform,
                     GarbageCollector = GarbageCollector,
                     Transport = Transport,
@@ -42,7 +40,6 @@ namespace Tests.Permutations
 
                     Code = string.Empty
                      + (permutations.Versions.Length > 1 ? Version + Separator : string.Empty)
-                     + (permutations.IOPS.Length > 1 ? IOPS + Separator : string.Empty)
                      + (permutations.Platforms.Length > 1 ? Platform + Separator : string.Empty)
                      + (permutations.GarbageCollectors.Length > 1 ? GarbageCollector + Separator : string.Empty)
                      + (permutations.Transports.Length > 1 ? Transport + Separator : string.Empty)
