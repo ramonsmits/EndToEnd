@@ -28,12 +28,7 @@ namespace Host
             AppDomain.CurrentDomain.FirstChanceException += (o, ea) => { Log.Debug("FirstChanceException", ea.Exception); };
             AppDomain.CurrentDomain.UnhandledException += (o, ea) => { Log.Error("UnhandledException", ea.ExceptionObject as Exception); };
 
-            var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows Defender\Real-Time Protection");
-
-            if (0 == (int) key.GetValue("DisableRealtimeMonitoring", 1))
-            {
-                Log.Warn("Windows Defender is running, consider disabling real-time protection!");
-            }
+            CheckIfWindowsDefenderIsRunning();
 
             try
             {
@@ -57,17 +52,7 @@ namespace Host
                     runnableTest.Execute(permutation, endpointName)
                         .ConfigureAwait(false).GetAwaiter().GetResult();
 
-                    if (Statistics.Instance.NumberOfMessages == 0)
-                    {
-                        Log.Fatal("NumberOfMessages equals 0, expected atleast one message to be processed.");
-                        return (int) ReturnCodes.PostCheckFailed;
-                    }
-
-                    if (Statistics.Instance.NumberOfRetries > Statistics.Instance.NumberOfMessages)
-                    {
-                        Log.Fatal("NumberOfRetries is great than NumberOfMessages, too many errors occured during processing.");
-                        return (int)ReturnCodes.PostCheckFailed;
-                    }
+                    if (PostCheckFailed()) return (int)ReturnCodes.PostCheckFailed;
                 }
             }
             catch (NotSupportedException nsex)
@@ -82,6 +67,16 @@ namespace Host
                 throw;
             }
             return (int)ReturnCodes.OK;
+        }
+
+        static void CheckIfWindowsDefenderIsRunning()
+        {
+            var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows Defender\Real-Time Protection");
+
+            if (0 == (int)key.GetValue("DisableRealtimeMonitoring", 1))
+            {
+                Log.Warn("Windows Defender is running, consider disabling real-time protection!");
+            }
         }
 
         static void InvokeSetupImplementations(Permutation permutation)
@@ -125,6 +120,23 @@ namespace Host
             {
                 Log.WarnFormat("ServicePointManager.UseNagleAlgorithm is set to True, consider setting this value to False to decrease Latency.");
             }
+        }
+
+        static bool PostCheckFailed()
+        {
+            if (Statistics.Instance.NumberOfMessages == 0)
+            {
+                Log.Fatal("NumberOfMessages equals 0, expected atleast one message to be processed.");
+                return true;
+            }
+
+            if (Statistics.Instance.NumberOfRetries > Statistics.Instance.NumberOfMessages)
+            {
+                Log.Fatal("NumberOfRetries is great than NumberOfMessages, too many errors occured during processing.");
+                return true;
+            }
+
+            return false;
         }
     }
 }
