@@ -90,6 +90,7 @@
     <Compile Include="Permutations\PermutationGenerator.cs" />
     <Compile Include="Permutations\PermutationParser.cs" />
     <Compile Include="Permutations\Permutations.cs" />
+    <Compile Include="Powerplan.cs" />
     <Compile Include="QueueUtils.cs" />
     <Compile Include="ResourceHelper.cs" />
     <Compile Include="ReturnCodes.cs" />
