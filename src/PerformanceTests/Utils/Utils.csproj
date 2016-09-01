@@ -90,6 +90,7 @@
     <Compile Include="Permutations\PermutationGenerator.cs" />
     <Compile Include="Permutations\PermutationParser.cs" />
     <Compile Include="Permutations\Permutations.cs" />
+    <Compile Include="Powerplan.cs" />
     <Compile Include="QueueUtils.cs" />
     <Compile Include="ResourceHelper.cs" />
     <Compile Include="ReturnCodes.cs" />
@@ -102,9 +103,7 @@
     <Compile Include="TwoPhaseCommitEnlistment.cs" />
     <Compile Include="Variables\Audit.cs" />
     <Compile Include="Variables\ConcurrencyLevel.cs" />
-    <Compile Include="Variables\DTC.cs" />
     <Compile Include="Variables\GarbageCollector.cs" />
-    <Compile Include="Variables\IOPS.cs" />
     <Compile Include="Variables\MessageSize.cs" />
     <Compile Include="Variables\NServiceBusVersion.cs" />
     <Compile Include="Variables\Outbox.cs" />

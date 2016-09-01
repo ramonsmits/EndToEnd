@@ -6,16 +6,14 @@ namespace Tests.Permutations
     {
         public string Category { get; set; }
         public string Description { get; set; }
-        public string Id => GenerateId();
+        public string Id => GenerateSplunkId();
         public string Exe { get; set; }
-        public string Code {get; set;}
+        public string Code { get; set; }
         public string Fixture { get; set; }
 
         public string[] Tests;
 
         public Audit AuditMode; //0
-        public DTC DTCMode; //1
-        public IOPS IOPS;//2
         public MessageSize MessageSize;//3
         public NServiceBusVersion Version;//4
         public Outbox OutboxMode;//5
@@ -28,11 +26,11 @@ namespace Tests.Permutations
         public ConcurrencyLevel ConcurrencyLevel;//12
         public ScaleOut ScaleOut = ScaleOut.NoScaleOut;//13
 
-        string GenerateId()
+        string GenerateSplunkId()
         {
             return string.Join(";",
                 Version.GetEnumDescription(),
-                IOPS.GetEnumDescription(),
+                "Default",
                 Platform.GetEnumDescription(),
                 GarbageCollector.GetEnumDescription(),
                 Transport.GetEnumDescription(),
@@ -40,7 +38,7 @@ namespace Tests.Permutations
                 Serializer.GetEnumDescription(),
                 MessageSize.GetEnumDescription(),
                 OutboxMode.GetEnumDescription(),
-                DTCMode.GetEnumDescription(),
+                TransactionMode == TransactionMode.Transactional ? "On" : "Off",
                 TransactionMode.GetEnumDescription(),
                 AuditMode.GetEnumDescription(),
                 ConcurrencyLevel.GetEnumDescription(),

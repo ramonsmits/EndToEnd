@@ -4,6 +4,8 @@ namespace Host
     using System.Globalization;
     using System.Linq;
     using System.Net;
+    using System.Threading;
+    using Microsoft.Win32;
     using NServiceBus;
     using NServiceBus.Logging;
     using Tests.Permutations;
@@ -27,6 +29,9 @@ namespace Host
             AppDomain.CurrentDomain.FirstChanceException += (o, ea) => { Log.Debug("FirstChanceException", ea.Exception); };
             AppDomain.CurrentDomain.UnhandledException += (o, ea) => { Log.Error("UnhandledException", ea.ExceptionObject as Exception); };
 
+            CheckPowerPlan();
+            CheckIfWindowsDefenderIsRunning();
+
             try
             {
                 var permutation = PermutationParser.FromCommandlineArgs();
@@ -48,6 +53,8 @@ namespace Host
                     Log.InfoFormat("Executing scenario: {0}", runnableTest);
                     runnableTest.Execute(permutation, endpointName)
                         .ConfigureAwait(false).GetAwaiter().GetResult();
+
+                    if (PostCheckFailed()) return (int)ReturnCodes.PostCheckFailed;
                 }
             }
             catch (NotSupportedException nsex)
@@ -62,6 +69,17 @@ namespace Host
                 throw;
             }
             return (int)ReturnCodes.OK;
+        }
+
+        static void CheckIfWindowsDefenderIsRunning()
+        {
+            var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows Defender\Real-Time Protection");
+
+            if (0 == (int)key.GetValue("DisableRealtimeMonitoring", 1))
+            {
+                Log.Warn("Windows Defender is running, consider disabling real-time protection!");
+                Thread.Sleep(3000);
+            }
         }
 
         static void InvokeSetupImplementations(Permutation permutation)
@@ -104,6 +122,37 @@ namespace Host
             if (ServicePointManager.UseNagleAlgorithm)
             {
                 Log.WarnFormat("ServicePointManager.UseNagleAlgorithm is set to True, consider setting this value to False to decrease Latency.");
+            }
+        }
+
+        static bool PostCheckFailed()
+        {
+            if (Statistics.Instance.NumberOfMessages == 0)
+            {
+                Log.Fatal("NumberOfMessages equals 0, expected atleast one message to be processed.");
+                return true;
+            }
+
+            if (Statistics.Instance.NumberOfRetries > Statistics.Instance.NumberOfMessages)
+            {
+                Log.Fatal("NumberOfRetries is great than NumberOfMessages, too many errors occured during processing.");
+                return true;
+            }
+
+            return false;
+        }
+
+        static void CheckPowerPlan()
+        {
+            var highperformance = new Guid("8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c");
+            var id = Powerplan.GetActive();
+
+            Log.InfoFormat("Powerplan: {0}", id);
+
+            if (id != highperformance)
+            {
+                Log.WarnFormat("Power option not set to High Performance, consider setting it to high performance!");
+                Thread.Sleep(3000);
             }
         }
     }

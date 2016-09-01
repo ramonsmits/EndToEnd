@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Categories\AzureFixture.cs" />
+    <Compile Include="Categories\RavenDBFixture.cs" />
     <Compile Include="Categories\SerializerFixture.cs" />
     <Compile Include="Categories\SendThroughputFixture.cs" />
     <Compile Include="Categories\DistributorFixture.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Categories\PersistersFixture.cs" />
     <Compile Include="Categories\SqlTransportFixture.cs" />
     <Compile Include="Categories\TestSessionInitializer.cs" />
+    <Compile Include="Categories\TransactionModesFixture.cs" />
     <Compile Include="Categories\TransportsFixture.cs" />
     <Compile Include="Categories\ResourceUtilizationFixture.cs" />
     <Compile Include="Categories\SenderSideFixture.cs" />

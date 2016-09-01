@@ -44,22 +44,22 @@ namespace Tests.Permutations
         {
             var values = data.SplitValues();
 
+            var position = 0;
+
             return new Permutation
             {
-                AuditMode = values.Parse<Audit>(0),
-                DTCMode = values.Parse<DTC>(1),
-                IOPS = values.Parse<IOPS>(2),
-                MessageSize = values.Parse<MessageSize>(3),
-                Version = values.Parse<NServiceBusVersion>(4),
-                OutboxMode = values.Parse<Outbox>(5),
-                Persister = values.Parse<Persistence>(6),
-                Platform = values.Parse<Platform>(7),
-                Serializer = values.Parse<Serialization>(8),
-                Transport = values.Parse<Transport>(9),
-                GarbageCollector = values.Parse<GarbageCollector>(10),
-                TransactionMode = values.Parse<TransactionMode>(11),
-                ConcurrencyLevel = values.Parse<ConcurrencyLevel>(12),
-                ScaleOut = values.Parse<ScaleOut>(13),
+                AuditMode = values.Parse<Audit>(position++),
+                MessageSize = values.Parse<MessageSize>(position++),
+                Version = values.Parse<NServiceBusVersion>(position++),
+                OutboxMode = values.Parse<Outbox>(position++),
+                Persister = values.Parse<Persistence>(position++),
+                Platform = values.Parse<Platform>(position++),
+                Serializer = values.Parse<Serialization>(position++),
+                Transport = values.Parse<Transport>(position++),
+                GarbageCollector = values.Parse<GarbageCollector>(position++),
+                TransactionMode = values.Parse<TransactionMode>(position++),
+                ConcurrencyLevel = values.Parse<ConcurrencyLevel>(position++),
+                ScaleOut = values.Parse<ScaleOut>(position++),
             };
         }
 
@@ -77,12 +77,12 @@ namespace Tests.Permutations
 
         public static string ToString(Permutation p)
         {
-            return $"{p.AuditMode};{p.DTCMode};{p.IOPS};{p.MessageSize};{p.Version};{p.OutboxMode};{p.Persister};{p.Platform};{p.Serializer};{p.Transport};{p.GarbageCollector};{p.TransactionMode};{p.ConcurrencyLevel};{p.ScaleOut}";
+            return $"{p.AuditMode};{p.MessageSize};{p.Version};{p.OutboxMode};{p.Persister};{p.Platform};{p.Serializer};{p.Transport};{p.GarbageCollector};{p.TransactionMode};{p.ConcurrencyLevel};{p.ScaleOut}";
         }
 
         public static string ToFriendlyString(Permutation p)
         {
-            return $"{p.AuditMode.GetEnumDescription()};{p.DTCMode.GetEnumDescription()};{p.IOPS.GetEnumDescription()};{p.MessageSize.GetEnumDescription()};{p.Version.GetEnumDescription()};{p.OutboxMode.GetEnumDescription()};{p.Persister.GetEnumDescription()};{p.Platform.GetEnumDescription()};{p.Serializer.GetEnumDescription()};{p.Transport.GetEnumDescription()};{p.GarbageCollector.GetEnumDescription()};{p.TransactionMode.GetEnumDescription()};{p.ConcurrencyLevel.GetEnumDescription()};{p.ScaleOut.GetEnumDescription()}";
+            return $"{p.AuditMode.GetEnumDescription()};{p.MessageSize.GetEnumDescription()};{p.Version.GetEnumDescription()};{p.OutboxMode.GetEnumDescription()};{p.Persister.GetEnumDescription()};{p.Platform.GetEnumDescription()};{p.Serializer.GetEnumDescription()};{p.Transport.GetEnumDescription()};{p.GarbageCollector.GetEnumDescription()};{p.TransactionMode.GetEnumDescription()};{p.ConcurrencyLevel.GetEnumDescription()};{p.ScaleOut.GetEnumDescription()}";
         }
     }
 }

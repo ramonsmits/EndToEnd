@@ -16,8 +16,14 @@ class MsmqProfile : IProfile, INeedPermutation
         var transport = endpointConfiguration.UseTransport<MsmqTransport>();
         transport.ConnectionString(ConfigurationHelper.GetConnectionString("MSMQ"));
 
-        if (Permutation.DTCMode == DTC.Off)
-            transport.Transactions(TransportTransactionMode.ReceiveOnly | TransportTransactionMode.SendsAtomicWithReceive);
+        if (Permutation.TransactionMode != TransactionMode.Default
+            && Permutation.TransactionMode != TransactionMode.None
+            && Permutation.TransactionMode != TransactionMode.Receive
+            && Permutation.TransactionMode != TransactionMode.Atomic
+            && Permutation.TransactionMode != TransactionMode.Transactional
+            ) throw new NotSupportedException("TransactionMode: " + Permutation.TransactionMode);
+
+        if (Permutation.TransactionMode != TransactionMode.Default) transport.Transactions(Permutation.GetTransactionMode());
 
         RunInspections();
     }

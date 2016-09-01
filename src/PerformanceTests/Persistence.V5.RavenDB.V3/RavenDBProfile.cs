@@ -5,11 +5,12 @@ using System.Text;
 using NServiceBus;
 using NServiceBus.Logging;
 using NServiceBus.Persistence;
+using Raven.Abstractions.Connection;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Document.DTC;
 
-class RavenDBProfile : IProfile, INeedContext
+class RavenDBProfile : IProfile, INeedContext, ISetup
 {
     ILog Log = LogManager.GetLogger(nameof(RavenDBProfile));
 
@@ -57,6 +58,25 @@ class RavenDBProfile : IProfile, INeedContext
             var hashBytes = provider.ComputeHash(inputBytes);
             // generate a guid from the hash:
             return new Guid(hashBytes);
+        }
+    }
+
+    public void Setup()
+    {
+        try
+        {
+            using (var store = new DocumentStore()
+            {
+                ConnectionStringName = "RavenDB"
+            })
+            {
+                store.Initialize();
+                store.DatabaseCommands.GlobalAdmin.DeleteDatabase("PerformanceTest", true);
+            }
+        }
+        catch (ErrorResponseException)
+        {
+            Log.Info("Database does not exists, ignoring...");
         }
     }
 }
