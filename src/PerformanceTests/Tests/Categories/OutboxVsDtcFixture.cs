@@ -24,8 +24,8 @@ namespace Categories
                 Serializers = new[] { Serialization.Json, },
                 MessageSizes = (MessageSize[])Enum.GetValues(typeof(MessageSize)),
                 OutboxModes = (Outbox[])Enum.GetValues(typeof(Outbox)),
-                TransactionMode = new[] {TransactionMode.Transactional, TransactionMode.Receive, }
-            });
+                TransactionMode = new[] { TransactionMode.Transactional, TransactionMode.Atomic, }
+            }, p => p.OutboxMode == Outbox.Off && p.TransactionMode == TransactionMode.Transactional || p.OutboxMode == Outbox.On && p.TransactionMode != TransactionMode.Transactional);
         }
     }
 }

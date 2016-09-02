@@ -1,5 +1,6 @@
 namespace Tests.Permutations
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -7,7 +8,7 @@ namespace Tests.Permutations
     {
         static readonly string Separator = "~";
 
-        public static IEnumerable<Permutation> Generate(Permutations permutations)
+        public static IEnumerable<Permutation> Generate(Permutations permutations, Func<Permutation, bool> filter = null)
         {
             var items =
                 from Version in permutations.Versions
@@ -52,6 +53,9 @@ namespace Tests.Permutations
                      + (permutations.ConcurrencyLevels.Length > 1 ? ConcurrencyLevel + Separator : string.Empty)
                      + (permutations.ScaleOuts.Length > 1 ? ScaleOut + Separator : string.Empty)
                 };
+
+            if (filter != null) items = items.Where(filter);
+
             return items
                 .OrderBy(x => x.Code);
         }
