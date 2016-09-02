@@ -26,9 +26,7 @@ namespace Host
 
             DebugAttacher.AttachDebuggerToVisualStudioProcessFromCommandLineParameter();
 
-            AppDomain.CurrentDomain.FirstChanceException += (o, ea) => { Log.Debug("FirstChanceException", ea.Exception); };
-            AppDomain.CurrentDomain.UnhandledException += (o, ea) => { Log.Error("UnhandledException", ea.ExceptionObject as Exception); };
-
+            InitAppDomainEventLogging();
             CheckPowerPlan();
             CheckIfWindowsDefenderIsRunning();
 
@@ -161,6 +159,20 @@ namespace Host
             {
                 Log.Debug("Powerplan check failed, ignoring", ex);
             }
+        }
+
+        static void InitAppDomainEventLogging()
+        {
+            var firstChanceLog = LogManager.GetLogger("FirstChanceException");
+            var unhandledLog = LogManager.GetLogger("UnhandledException");
+            var domain = AppDomain.CurrentDomain;
+
+            domain.FirstChanceException += (o, ea) => { firstChanceLog.Debug(ea.Exception.Message, ea.Exception); };
+            domain.UnhandledException += (o, ea) =>
+            {
+                var exception = ea.ExceptionObject as Exception;
+                if (exception != null) unhandledLog.Error(exception.Message, exception);
+            };
         }
     }
 }
