@@ -29,6 +29,7 @@ namespace Host
             InitAppDomainEventLogging();
             CheckPowerPlan();
             CheckIfWindowsDefenderIsRunning();
+            CheckProcessorScheduling();
 
             try
             {
@@ -173,6 +174,17 @@ namespace Host
                 var exception = ea.ExceptionObject as Exception;
                 if (exception != null) unhandledLog.Error(exception.Message, exception);
             };
+        }
+
+        static void CheckProcessorScheduling()
+        {
+            var key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\PriorityControl");
+
+            if (key == null || 24 != (int)key.GetValue("Win32PrioritySeparation", 2))
+            {
+                Log.WarnFormat("Processor scheduling is set to 'Programs', consider setting this to 'Background services'!");
+                Thread.Sleep(3000);
+            }
         }
     }
 }
