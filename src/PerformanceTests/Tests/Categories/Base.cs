@@ -62,7 +62,7 @@ namespace Categories
             Tasks(permutation);
         }
 
-        void Tasks(Permutation permutation, [CallerMemberName] string memberName = "")
+        protected void Tasks(Permutation permutation, [CallerMemberName] string memberName = "")
         {
             var fixtureType = GetType();
             var fixture = fixtureType.GetCustomAttribute<TestFixtureAttribute>();
