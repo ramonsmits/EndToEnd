@@ -23,7 +23,7 @@ partial class PublishOneOnOneRunner : BaseRunner, IConfigureUnicastBus
         var maxConcurrencyLevel = ConcurrencyLevelConverter.Convert(Permutation.ConcurrencyLevel);
         var seedSize = maxConcurrencyLevel * 2;
         Log.InfoFormat("Seeding {0} messages based on concurrency level of {1}.", seedSize, maxConcurrencyLevel);
-        await TaskHelper.ParallelFor(seedSize, () => session.Publish(new Event
+        await TaskHelper.ParallelFor(seedSize, i => session.Publish(new Event
         {
             Data = Data
         })).ConfigureAwait(false);
