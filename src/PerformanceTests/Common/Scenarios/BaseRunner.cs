@@ -29,6 +29,9 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 
     protected byte[] Data { private set; get; }
     protected bool SendOnly { get; set; }
+    protected int MaxConcurrencyLevel { private set; get; }
+
+    protected static bool Shutdown { private set; get; }
 
     public async Task Execute(Permutation permutation, string endpointName)
     {
@@ -36,6 +39,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         EndpointName = endpointName;
 
         InitData();
+        MaxConcurrencyLevel = ConcurrencyLevelConverter.Convert(Permutation.ConcurrencyLevel);
 
         await CreateOrPurgeQueues().ConfigureAwait(false); // Workaround for pubsub to self with purge on startup
 
@@ -69,6 +73,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
             await Task.Delay(runDuration).ConfigureAwait(false);
             Statistics.Instance.Dump();
 
+            Shutdown = true;
             await Stop().ConfigureAwait(false);
         }
         finally
@@ -301,5 +306,22 @@ public abstract class BaseRunner : IConfigurationSource, IContext
     {
         var i = 0;
         while (condition()) yield return i++;
+    }
+
+    protected async Task DrainMessages()
+    {
+        var startCount = Statistics.Instance.NumberOfMessages;
+        long current;
+
+        Log.Info("Draining queue...");
+        do
+        {
+            current = Statistics.Instance.NumberOfMessages;
+            Log.Debug("Delaying to detect receive activity...");
+            await Task.Delay(100).ConfigureAwait(false);
+        } while (Statistics.Instance.NumberOfMessages > current);
+
+        var diff = current - startCount;
+        Log.InfoFormat("Drained {0} message(s)", diff);
     }
 }

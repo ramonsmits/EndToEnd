@@ -5,14 +5,12 @@ using NServiceBus.Logging;
 partial class SagaUpdateRunner
     : BaseRunner
 {
-    public static bool Shutdown;
     readonly ILog Log = LogManager.GetLogger(nameof(SagaUpdateRunner));
 
     protected override async Task Start(ISession session)
     {
-        var maxConcurrencyLevel = ConcurrencyLevelConverter.Convert(Permutation.ConcurrencyLevel);
-        var seedSize = maxConcurrencyLevel * 2;
-        Log.InfoFormat("Seeding {0} messages based on concurrency level of {1}.", seedSize, maxConcurrencyLevel);
+        var seedSize = MaxConcurrencyLevel * 2;
+        Log.InfoFormat("Seeding {0} messages based on concurrency level of {1}.", seedSize, MaxConcurrencyLevel);
         await TaskHelper.ParallelFor(seedSize,
             i =>
             {
@@ -25,23 +23,9 @@ partial class SagaUpdateRunner
             }).ConfigureAwait(false);
     }
 
-    protected override async Task Stop()
+    protected override Task Stop()
     {
-        Shutdown = true;
-
-        long startCount = Statistics.Instance.NumberOfMessages;
-        long current;
-
-        Log.Info("Draining queue...");
-        do
-        {
-            current = Statistics.Instance.NumberOfMessages;
-            Log.Debug("Delaying to detect receive activity...");
-            await Task.Delay(100).ConfigureAwait(false);
-        } while (Statistics.Instance.NumberOfMessages > current);
-
-        var diff = current - startCount;
-        Log.InfoFormat("Drained {0} message(s)",diff);
+        return DrainMessages();
     }
 
     public class Command : ICommand

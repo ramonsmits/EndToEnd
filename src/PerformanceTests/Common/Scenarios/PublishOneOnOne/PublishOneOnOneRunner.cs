@@ -20,28 +20,17 @@ partial class PublishOneOnOneRunner : BaseRunner, IConfigureUnicastBus
     {
         Log.Warn("Sleeping 3,000ms for the instance to purge the queue and process subscriptions. Loop requires the queue to be empty.");
         await Task.Delay(3000).ConfigureAwait(false);
-        var maxConcurrencyLevel = ConcurrencyLevelConverter.Convert(Permutation.ConcurrencyLevel);
-        var seedSize = maxConcurrencyLevel * 2;
-        Log.InfoFormat("Seeding {0} messages based on concurrency level of {1}.", seedSize, maxConcurrencyLevel);
+        var seedSize = MaxConcurrencyLevel * 2;
+        Log.InfoFormat("Seeding {0} messages based on concurrency level of {1}.", seedSize, MaxConcurrencyLevel);
         await TaskHelper.ParallelFor(seedSize, i => session.Publish(new Event
         {
             Data = Data
         })).ConfigureAwait(false);
     }
 
-    protected override async Task Stop()
+    protected override Task Stop()
     {
-        Handler.Shutdown = true;
-
-        long current;
-
-        Log.Info("Draining queue...");
-        do
-        {
-            current = Handler.Count;
-            Log.Debug("Delaying to detect receive activity...");
-            await Task.Delay(100).ConfigureAwait(false);
-        } while (Handler.Count > current);
+        return DrainMessages();
     }
 
     public class Event : IEvent
@@ -67,7 +56,6 @@ partial class PublishOneOnOneRunner : BaseRunner, IConfigureUnicastBus
 
     partial class Handler
     {
-        public static bool Shutdown;
         public static long Count;
     }
 }
