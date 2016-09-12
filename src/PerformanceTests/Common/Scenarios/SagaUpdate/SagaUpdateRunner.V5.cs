@@ -1,5 +1,4 @@
 ﻿#if Version5
-using NServiceBus;
 using NServiceBus.Logging;
 using NServiceBus.Saga;
 
