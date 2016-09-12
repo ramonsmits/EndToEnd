@@ -13,7 +13,7 @@ class NHibernateProfile : IProfile, ISetup, INeedPermutation
             .UsePersistence<NHibernatePersistence>()
             .ConnectionString(ConfigurationHelper.GetConnectionString(Permutation.Persister.ToString()));
 
-        BatchHelper.Instance = new ParallelForBatch();
+        BatchHelper.Instance = new BatchHelper.ParallelFor();
     }
 
     void ISetup.Setup()

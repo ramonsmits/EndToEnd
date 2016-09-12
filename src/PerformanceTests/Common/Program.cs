@@ -75,11 +75,11 @@ namespace Host
         static void InitBatchHelper()
         {
 #if Version5
-            BatchHelper.Instance = new ParallelForBatch();
+            BatchHelper.Instance = new BatchHelper.ParallelFor();
 #endif
 
 #if Version6
-            BatchHelper.Instance = new TaskBatch();
+            BatchHelper.Instance = new BatchHelper.TaskWhenAll();
 #endif
         }
 
