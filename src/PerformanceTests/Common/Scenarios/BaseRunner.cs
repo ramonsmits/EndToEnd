@@ -89,7 +89,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 
     protected virtual Task Stop()
     {
-        return Task.FromResult(0);
+        return DrainMessages();
     }
 
     async Task CreateSeedData(ICreateSeedData instance)

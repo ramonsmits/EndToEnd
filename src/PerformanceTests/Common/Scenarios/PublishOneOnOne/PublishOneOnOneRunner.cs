@@ -28,11 +28,6 @@ partial class PublishOneOnOneRunner : BaseRunner, IConfigureUnicastBus
         })).ConfigureAwait(false);
     }
 
-    protected override Task Stop()
-    {
-        return DrainMessages();
-    }
-
     public class Event : IEvent
     {
         public byte[] Data { get; set; }

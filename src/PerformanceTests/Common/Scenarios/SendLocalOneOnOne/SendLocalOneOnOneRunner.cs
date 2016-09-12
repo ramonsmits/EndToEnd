@@ -19,11 +19,6 @@ partial class SendLocalOneOnOneRunner : BaseRunner
         return TaskHelper.ParallelFor(seedSize, i => session.SendLocal(new Command { Data = Data }));
     }
 
-    protected override Task Stop()
-    {
-        return DrainMessages();
-    }
-
     public class Command : ICommand
     {
         public byte[] Data { get; set; }
