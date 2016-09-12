@@ -31,6 +31,8 @@ namespace Host
             CheckIfWindowsDefenderIsRunning();
             CheckProcessorScheduling();
 
+            InitBatchHelper();
+
             try
             {
                 var permutation = PermutationParser.FromCommandlineArgs();
@@ -68,6 +70,17 @@ namespace Host
                 throw;
             }
             return (int)ReturnCodes.OK;
+        }
+
+        static void InitBatchHelper()
+        {
+#if Version5
+            BatchHelper.Instance = new ParallelForBatch();
+#endif
+
+#if Version6
+            BatchHelper.Instance = new TaskBatch();
+#endif
         }
 
         static void CheckIfWindowsDefenderIsRunning()
