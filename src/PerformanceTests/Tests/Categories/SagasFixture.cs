@@ -20,6 +20,12 @@ namespace Categories
             base.SagaInitiateRunner(permutation);
         }
 
+        [TestCaseSource(nameof(CreatePermutations))]
+        public void SagaCongestionRunner(Permutation permutation)
+        {
+            Tasks(permutation);
+        }
+
         static IEnumerable<Permutation> CreatePermutations()
         {
             return PermutationGenerator.Generate(new Permutations
