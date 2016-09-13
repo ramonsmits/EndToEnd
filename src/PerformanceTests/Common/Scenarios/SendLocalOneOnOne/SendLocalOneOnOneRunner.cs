@@ -12,17 +12,11 @@ using NServiceBus;
 /// </summary>
 partial class SendLocalOneOnOneRunner : BaseRunner
 {
-    const int seedSize = 1000;
 
     protected override Task Start(ISession session)
     {
-        return TaskHelper.ParallelFor(seedSize, () => session.SendLocal(new Command { Data = Data }));
-    }
-
-    protected override Task Stop()
-    {
-        Handler.Shutdown = true;
-        return Task.FromResult(0);
+        var seedSize = MaxConcurrencyLevel * 2;
+        return TaskHelper.ParallelFor(seedSize, i => session.SendLocal(new Command { Data = Data }));
     }
 
     public class Command : ICommand
@@ -32,7 +26,6 @@ partial class SendLocalOneOnOneRunner : BaseRunner
 
     partial class Handler
     {
-        public static bool Shutdown;
         public static long Count;
     }
 }

@@ -16,7 +16,6 @@ abstract class LoopRunner : BaseRunner
     static long latencySum;
 
     CancellationTokenSource stopLoop { get; set; }
-    bool Shutdown { get; set; }
     int BatchSize { get; set; } = 16;
     protected abstract Task SendMessage(ISession session);
 
@@ -28,7 +27,6 @@ abstract class LoopRunner : BaseRunner
 
     protected override Task Stop()
     {
-        Shutdown = true;
         using (stopLoop)
         {
             stopLoop.Cancel();

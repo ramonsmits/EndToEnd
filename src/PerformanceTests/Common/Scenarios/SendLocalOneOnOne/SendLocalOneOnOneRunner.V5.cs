@@ -9,7 +9,7 @@ partial class SendLocalOneOnOneRunner
 
         public void Handle(Command message)
         {
-            if(Shutdown) return;
+            if (Shutdown) return;
             Bus.SendLocal(message);
             System.Threading.Interlocked.Increment(ref Count);
         }
