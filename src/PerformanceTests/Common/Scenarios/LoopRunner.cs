@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Logging;
+using NServiceBus.Transports;
 
 abstract class LoopRunner : BaseRunner
 {
@@ -60,7 +61,7 @@ abstract class LoopRunner : BaseRunner
                     countdownEvent.Reset(BatchSize);
                     var batchDuration = Stopwatch.StartNew();
 
-                    Parallel.For((long)0, BatchSize, po, i => { SendMessage(session).ConfigureAwait(false).GetAwaiter().GetResult(); });
+                    await BatchHelper.Instance.Batch(BatchSize, i => SendMessage(session)).ConfigureAwait(false);
 
                     count += BatchSize;
 
