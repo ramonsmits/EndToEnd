@@ -1,34 +1,27 @@
 ﻿#if Version5
-using NServiceBus.Logging;
 using NServiceBus.Saga;
 
-partial class SagaUpdateRunner
+partial class SagaCongestionRunner
 {
-    public class UpdateSaga
-        : Saga<SagaUpdateData>
+    public class CongestionSaga
+        : Saga<SagaCongestionData>
         , IAmStartedByMessages<Command>
     {
-        readonly ILog Log = LogManager.GetLogger(nameof(UpdateSaga));
-
-        protected override void ConfigureHowToFindSaga(SagaPropertyMapper<SagaUpdateData> mapper)
+        protected override void ConfigureHowToFindSaga(SagaPropertyMapper<SagaCongestionData> mapper)
         {
             mapper.ConfigureMapping<Command>(m => m.Identifier).ToSaga(s => s.UniqueIdentifier);
         }
 
         public void Handle(Command message)
         {
-            if (Shutdown)
-            {
-                Log.InfoFormat("Skip processing, shutting down...");
-                return;
-            }
+            if (Shutdown) return;
             Data.UniqueIdentifier = message.Identifier;
             Data.Receives++;
             Bus.SendLocal(message);
         }
     }
 
-    public class SagaUpdateData : ContainSagaData
+    public class SagaCongestionData : ContainSagaData
     {
         [Unique]
         public virtual int UniqueIdentifier { get; set; }
