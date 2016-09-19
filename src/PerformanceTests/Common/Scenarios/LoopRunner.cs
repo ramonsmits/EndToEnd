@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Logging;
-using NServiceBus.Transports;
 
 abstract class LoopRunner : BaseRunner
 {
