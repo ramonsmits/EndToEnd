@@ -12,8 +12,6 @@ class NHibernateProfile : IProfile, ISetup, INeedPermutation
         cfg
             .UsePersistence<NHibernatePersistence>()
             .ConnectionString(ConfigurationHelper.GetConnectionString(Permutation.Persister.ToString()));
-
-        BatchHelper.Instance = new BatchHelper.ParallelFor();
     }
 
     void ISetup.Setup()
