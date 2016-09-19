@@ -51,8 +51,6 @@ abstract class LoopRunner : BaseRunner
 
             var cancellationToken = stopLoop.Token;
 
-            var po = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount };
-
             while (!Shutdown)
             {
                 try
