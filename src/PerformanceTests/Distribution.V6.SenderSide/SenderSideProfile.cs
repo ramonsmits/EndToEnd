@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NServiceBus;
 using NServiceBus.Features;
@@ -20,12 +21,6 @@ class SenderSideProfile : IProfile, INeedContext
 
         var machines = senderSideArgs.Split('|');
 
-        /*
-        // Undocumented alternative
-        var instances = machines.Select(x => new EndpointInstance(Context.EndpointName).AtMachine(x)).ToArray();
-        cfg.GetSettings().GetOrCreate<EndpointInstances>().Add(instances);
-        */
-
         cfg.RegisterComponents(x => x.RegisterSingleton(new StaticEndpointMapping { EndpointName = Context.EndpointName, Machines = machines }));
     }
 
@@ -40,8 +35,8 @@ class SenderSideProfile : IProfile, INeedContext
 
             var instances = Machines.Select(x => new EndpointInstance(EndpointName).AtMachine(x)).ToArray();
 
-            var endpointInstances = context.EndpointInstances();
-            endpointInstances.Add(instances);
+            var endpointInstances = context.Settings.Get<EndpointInstances>();
+            endpointInstances.AddOrReplaceInstances("StaticEndpointMapping", instances);
         }
     }
 }
