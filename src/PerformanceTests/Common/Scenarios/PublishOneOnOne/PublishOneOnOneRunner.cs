@@ -22,7 +22,7 @@ partial class PublishOneOnOneRunner : BaseRunner, IConfigureUnicastBus
         await Task.Delay(3000).ConfigureAwait(false);
         var seedSize = MaxConcurrencyLevel * 2;
         Log.InfoFormat("Seeding {0} messages based on concurrency level of {1}.", seedSize, MaxConcurrencyLevel);
-        await BatchHelper.Instance.Batch(seedSize, i => session.Publish(new Event
+        await BatchHelper.Batch(seedSize, i => session.Publish(new Event
         {
             Data = Data
         })).ConfigureAwait(false);

@@ -58,7 +58,7 @@ abstract class LoopRunner : BaseRunner
                     countdownEvent.Reset(BatchSize);
                     var batchDuration = Stopwatch.StartNew();
 
-                    await BatchHelper.Instance.Batch(BatchSize, i => SendMessage(session)).ConfigureAwait(false);
+                    await BatchHelper.Batch(BatchSize, i => SendMessage(session)).ConfigureAwait(false);
 
                     count += BatchSize;
 

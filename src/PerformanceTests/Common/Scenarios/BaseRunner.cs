@@ -32,6 +32,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
     protected int MaxConcurrencyLevel { private set; get; }
 
     protected static bool Shutdown { private set; get; }
+    protected readonly BatchHelper.IBatchHelper BatchHelper = global::BatchHelper.Instance;
 
     public async Task Execute(Permutation permutation, string endpointName)
     {

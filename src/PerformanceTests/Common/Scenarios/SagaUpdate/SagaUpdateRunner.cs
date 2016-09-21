@@ -11,7 +11,7 @@ partial class SagaUpdateRunner
     {
         var seedSize = MaxConcurrencyLevel * 2;
         Log.InfoFormat("Seeding {0} messages based on concurrency level of {1}.", seedSize, MaxConcurrencyLevel);
-        return BatchHelper.Instance.Batch(seedSize,
+        return BatchHelper.Batch(seedSize,
             i =>
             {
                 Log.InfoFormat("Index: {0}", i);
