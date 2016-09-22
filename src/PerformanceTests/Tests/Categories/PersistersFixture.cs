@@ -26,6 +26,7 @@ namespace Categories
             return PermutationGenerator.Generate(new Permutations
             {
                 Transports = new[] { Transport.MSMQ },
+                TransactionMode = new[] { TransactionMode.None, },
                 Persisters = (Persistence[])Enum.GetValues(typeof(Persistence)),
                 Serializers = new[] { Serialization.Json, },
                 OutboxModes = new[] { Outbox.Off, },
