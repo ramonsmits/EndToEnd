@@ -72,10 +72,10 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 
             Statistics.Instance.Reset(GetType().Name);
             await Task.Delay(runDuration).ConfigureAwait(false);
-            Statistics.Instance.Dump();
 
             Shutdown = true;
             await Stop().ConfigureAwait(false);
+            Statistics.Instance.Dump();
         }
         finally
         {
@@ -106,30 +106,28 @@ public abstract class BaseRunner : IConfigurationSource, IContext
             var cts = new CancellationTokenSource();
             cts.CancelAfter(Settings.SeedDuration);
 
-            var maxConcurrency = ConcurrencyLevelConverter.Convert(Permutation.ConcurrencyLevel);
             var count = 0L;
             var start = Stopwatch.StartNew();
 
-            var po = new ParallelOptions
-            {
-                MaxDegreeOfParallelism = maxConcurrency
-            };
+            const int minimumBatchSeedDuration = 2500;
+            var batchSize = 512;
 
-            Parallel.ForEach(IterateUntilFalse(() => !cts.Token.IsCancellationRequested), po, b =>
-            {
-                instance.SendMessage(Session).ConfigureAwait(false).GetAwaiter().GetResult();
-                Interlocked.Increment(ref count);
-            });
-
-
-            //var tasks = new List<Task>();
-            //while (!cts.IsCancellationRequested)
-            //{
-            //    tasks.Add(instance.SendMessage(Session));
-            //}
-
-            //foreach (var t in tasks)
-            //    await Task.WhenAll(tasks).ConfigureAwait(false);
+            Parallel.ForEach(IterateUntilFalse(() => !cts.Token.IsCancellationRequested),
+                new ParallelOptions { MaxDegreeOfParallelism = 4 },
+                b =>
+              {
+                  var currentBatchSize = batchSize;
+                  var sw = Stopwatch.StartNew();
+                  BatchHelper.Batch(currentBatchSize, i => instance.SendMessage(Session)).ConfigureAwait(false).GetAwaiter().GetResult();
+                  Interlocked.Add(ref count, currentBatchSize);
+                  var duration = sw.ElapsedMilliseconds;
+                  if (duration < minimumBatchSeedDuration)
+                  {
+                      batchSize = currentBatchSize * 2; // Last writer wins
+                      Log.InfoFormat("Increasing seed batch size to {0:N0} as sending took {1:N0}ms which is less then {2:N0}ms", batchSize, duration, minimumBatchSeedDuration);
+                  }
+              }
+            );
 
             var elapsed = start.Elapsed;
             var avg = count / elapsed.TotalSeconds;
@@ -319,7 +317,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         {
             current = Statistics.Instance.NumberOfMessages;
             Log.Debug("Delaying to detect receive activity...");
-            await Task.Delay(100).ConfigureAwait(false);
+            await Task.Delay(1000).ConfigureAwait(false);
         } while (Statistics.Instance.NumberOfMessages > current);
 
         var diff = current - startCount;

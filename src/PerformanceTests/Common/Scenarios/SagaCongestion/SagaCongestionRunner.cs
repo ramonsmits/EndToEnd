@@ -23,11 +23,6 @@ partial class SagaCongestionRunner
             });
     }
 
-    protected override Task Stop()
-    {
-        return DrainMessages();
-    }
-
     public class Command : ICommand
     {
         public int Identifier { get; set; }
