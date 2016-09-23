@@ -7,11 +7,11 @@ using NServiceBus.Logging;
 
 abstract class LoopRunner : BaseRunner
 {
-    protected ILog Log = LogManager.GetLogger(nameof(LoopRunner));
+    protected static ILog Log = LogManager.GetLogger(nameof(LoopRunner));
 
     Task loopTask;
 
-    static AsyncCountdownEvent countdownEvent;
+    static readonly AsyncCountdownEvent countdownEvent = new AsyncCountdownEvent(0);
     static long count;
     static long latencySum;
 
@@ -47,7 +47,7 @@ abstract class LoopRunner : BaseRunner
 
             Log.Info("Starting");
             var start = Stopwatch.StartNew();
-            countdownEvent = new AsyncCountdownEvent(BatchSize);
+            countdownEvent.Reset(BatchSize);
 
             while (!stopLoopCancellationToken.IsCancellationRequested)
             {
@@ -95,8 +95,22 @@ abstract class LoopRunner : BaseRunner
 
     static void Signal()
     {
+        if (countdownEvent == null)
+        {
+            Log.Warn("Count down event not initialized yet, probably receiving message from previous session.");
+            return;
+        }
+
         Interlocked.Increment(ref count);
-        countdownEvent.Signal();
+
+        try
+        {
+            countdownEvent.Signal();
+        }
+        catch (InvalidOperationException)
+        {
+            Log.Warn("Receiving more messages than originally send, probably receiving message from previous session.");
+        }
     }
 
     static void AddLatency(TimeSpan latency)
