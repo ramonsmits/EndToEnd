@@ -9,14 +9,14 @@ using Tests.Permutations;
 [Serializable]
 public class Statistics : IDisposable
 {
-    long First;
-    long Last;
-    readonly long ApplicationStart = GetTimestamp();
-    long Warmup;
-    long NumberOfMessages;
-    long NumberOfRetries;
-    TimeSpan SendTimeNoTx = TimeSpan.Zero;
-    TimeSpan SendTimeWithTx = TimeSpan.Zero;
+    long first;
+    long last;
+    readonly long applicationStart = GetTimestamp();
+    long warmup;
+    long numberOfMessages;
+    long numberOfRetries;
+    TimeSpan sendTimeNoTx = TimeSpan.Zero;
+    TimeSpan sendTimeWithTx = TimeSpan.Zero;
 
     Process process;
     PerformanceCounter privateBytesCounter;
@@ -26,6 +26,10 @@ public class Statistics : IDisposable
     static ConcurrentBag<double> perfCounterValues = new ConcurrentBag<double>();
 
     static Logger logger = LogManager.GetLogger("Statistics");
+
+    public long NumberOfMessages => numberOfMessages;
+    public long NumberOfRetries => numberOfRetries;
+
 
     ~Statistics()
     {
@@ -91,11 +95,11 @@ public class Statistics : IDisposable
 
     public void Reset(string testName)
     {
-        Warmup = GetTimestamp();
-        Interlocked.Exchange(ref NumberOfMessages, 0);
-        Interlocked.Exchange(ref NumberOfRetries, 0);
-        SendTimeNoTx = TimeSpan.Zero;
-        SendTimeWithTx = TimeSpan.Zero;
+        warmup = GetTimestamp();
+        Interlocked.Exchange(ref numberOfMessages, 0);
+        Interlocked.Exchange(ref numberOfRetries, 0);
+        sendTimeNoTx = TimeSpan.Zero;
+        sendTimeWithTx = TimeSpan.Zero;
         perfCountersTimer.Dispose();
 
         GlobalDiagnosticsContext.Set("testname", testName);
@@ -103,7 +107,7 @@ public class Statistics : IDisposable
 
     public void Dump()
     {
-        var durationSeconds = Math.Max(-1, ToSeconds(Warmup, Last));
+        var durationSeconds = Math.Max(-1, ToSeconds(warmup, last));
 
         LogStats("ReceiveFirstLastDuration", durationSeconds, "s");
         LogStats("NumberOfMessages", NumberOfMessages, "#");
@@ -114,15 +118,15 @@ public class Statistics : IDisposable
 
         LogStats("NumberOfRetries", NumberOfRetries, "#");
 
-        var ttfm = Math.Max(-1, ToSeconds(ApplicationStart, First));
+        var ttfm = Math.Max(-1, ToSeconds(applicationStart, first));
 
         LogStats("TimeToFirstMessage", ttfm, "s");
 
-        if (SendTimeNoTx != TimeSpan.Zero)
-            LogStats("Sending", Convert.ToDouble(NumberOfMessages / 2) / SendTimeNoTx.TotalSeconds, "msg/s");
+        if (sendTimeNoTx != TimeSpan.Zero)
+            LogStats("Sending", Convert.ToDouble(NumberOfMessages / 2) / sendTimeNoTx.TotalSeconds, "msg/s");
 
-        if (SendTimeWithTx != TimeSpan.Zero)
-            LogStats("SendingInsideTX", Convert.ToDouble(NumberOfMessages / 2) / SendTimeWithTx.TotalSeconds, "msg/s");
+        if (sendTimeWithTx != TimeSpan.Zero)
+            LogStats("SendingInsideTX", Convert.ToDouble(NumberOfMessages / 2) / sendTimeWithTx.TotalSeconds, "msg/s");
 
         var counterValues = perfCounterValues.ToList();
         LogStats("PrivateBytes-Min", counterValues.Min() / 1024, "kb");
@@ -151,25 +155,25 @@ public class Statistics : IDisposable
 
     public void UpdateFirst()
     {
-        if (First == 0)
+        if (first == 0)
         {
-            First = GetTimestamp();
+            first = GetTimestamp();
         }
     }
 
     public void UpdateLast()
     {
-        Last = GetTimestamp();
+        last = GetTimestamp();
     }
 
 
     public void IncMessages()
     {
-        Interlocked.Increment(ref NumberOfMessages);
+        Interlocked.Increment(ref numberOfMessages);
     }
 
     public void IncRetries()
     {
-        Interlocked.Increment(ref NumberOfRetries);
+        Interlocked.Increment(ref numberOfRetries);
     }
 }
