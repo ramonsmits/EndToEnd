@@ -1,6 +1,5 @@
 ﻿
 using System;
-using System.Threading;
 using System.Transactions;
 using NServiceBus;
 using NServiceBus.UnitOfWork;
@@ -11,6 +10,8 @@ using NServiceBus.Config;
 
 public class StatisticsUoW : IManageUnitsOfWork, INeedInitialization
 {
+    readonly Statistics Statistics = Statistics.Instance;
+
 #if Version6
     public System.Threading.Tasks.Task Begin()
     {
@@ -27,10 +28,7 @@ public class StatisticsUoW : IManageUnitsOfWork, INeedInitialization
 
     void DoBegin()
     {
-        if (!Statistics.Instance.First.HasValue)
-        {
-            Statistics.Instance.First = DateTime.UtcNow;
-        }
+        Statistics.UpdateFirst();
 
         if (Transaction.Current != null)
             Transaction.Current.TransactionCompleted += OnCompleted;
@@ -48,8 +46,8 @@ public class StatisticsUoW : IManageUnitsOfWork, INeedInitialization
 
     void RecordSuccess()
     {
-        Statistics.Instance.Last = DateTime.UtcNow;
-        Interlocked.Increment(ref Statistics.Instance.NumberOfMessages);
+        Statistics.UpdateLast();
+        Statistics.IncMessages();
     }
 
 #if Version6
@@ -70,7 +68,7 @@ public class StatisticsUoW : IManageUnitsOfWork, INeedInitialization
     {
         if (ex != null)
         {
-            Interlocked.Increment(ref Statistics.Instance.NumberOfRetries);
+            Statistics.IncRetries();
             return;
         }
 
