@@ -16,6 +16,7 @@ namespace Categories
     {
         public static string SessionId;
         static readonly bool InvokeEnabled = bool.Parse(ConfigurationManager.AppSettings["InvokeEnabled"]);
+        static readonly TimeSpan MaxDuration = TimeSpan.Parse(ConfigurationManager.AppSettings["MaxDuration"]);
 
         public virtual void ReceiveRunner(Permutation permutation)
         {
@@ -109,7 +110,11 @@ namespace Categories
 
             using (var p = Process.Start(pi))
             {
-                p.WaitForExit();
+                if (!p.WaitForExit((int)MaxDuration.TotalMilliseconds))
+                {
+                    p.Kill();
+                    Assert.Fail($"Killed process because execution took more then {MaxDuration}.");
+                }
                 if (p.ExitCode == (int)ReturnCodes.NotSupported)
                 {
                     Assert.Inconclusive("Not supported");
