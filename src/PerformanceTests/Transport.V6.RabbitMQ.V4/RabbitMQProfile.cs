@@ -10,15 +10,13 @@ class RabbitMQProfile : IProfile, INeedPermutation
 
     public void Configure(EndpointConfiguration endpointConfiguration)
     {
-        var prefetchMultiplier = 1;
         var cs = ConfigurationHelper.GetConnectionString("RabbitMQ");
         var builder = new DbConnectionStringBuilder { ConnectionString = cs };
         if (builder.Remove("prefetchcount")) NServiceBus.Logging.LogManager.GetLogger(nameof(RabbitMQProfile)).Warn("Removed 'prefetchcount' value from connection string.");
-        if (builder.ContainsKey("PrefetchMultiplier")) prefetchMultiplier = int.Parse((string) builder["PrefetchMultiplier"]);
 
         var transport = endpointConfiguration
             .UseTransport<RabbitMQTransport>()
-            .PrefetchMultiplier(prefetchMultiplier);
+            .PrefetchMultiplier(Permutation.PrefetchMultiplier);
 
         transport
             .ConnectionString(builder.ToString());

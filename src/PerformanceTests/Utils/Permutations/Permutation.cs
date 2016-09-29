@@ -4,6 +4,7 @@ namespace Tests.Permutations
 
     public class Permutation
     {
+        public int PrefetchMultiplier => 3;
         public string Category { get; set; }
         public string Description { get; set; }
         public string Id => GenerateSplunkId();

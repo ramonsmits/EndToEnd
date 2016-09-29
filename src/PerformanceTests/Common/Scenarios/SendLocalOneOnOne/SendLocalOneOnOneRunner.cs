@@ -15,7 +15,7 @@ partial class SendLocalOneOnOneRunner : BaseRunner
 
     protected override Task Start(ISession session)
     {
-        var seedSize = MaxConcurrencyLevel * 2;
+        var seedSize = MaxConcurrencyLevel * Permutation.PrefetchMultiplier * 2;
         return BatchHelper.Batch(seedSize, i => session.SendLocal(new Command { Data = Data }));
     }
 

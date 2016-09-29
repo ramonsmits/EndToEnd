@@ -9,7 +9,7 @@ partial class SagaCongestionRunner
 
     protected override Task Start(ISession session)
     {
-        var seedSize = MaxConcurrencyLevel * 2;
+        var seedSize = MaxConcurrencyLevel * Permutation.PrefetchMultiplier * 2;
         Log.InfoFormat("Seeding {0} messages based on concurrency level of {1}.", seedSize, MaxConcurrencyLevel);
         return BatchHelper.Batch(seedSize,
             i =>
