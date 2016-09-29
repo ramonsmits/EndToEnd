@@ -16,7 +16,7 @@ class AzureServiceBusProfile : IProfile, INeedPermutation
             .UseTransport<AzureServiceBusTransport>();
 
         var concurrencyLevel = ConcurrencyLevelConverter.Convert(Permutation.ConcurrencyLevel);
-        transport.MessageReceivers().PrefetchCount(concurrencyLevel * 3);
+        transport.MessageReceivers().PrefetchCount(concurrencyLevel * Permutation.PrefetchMultiplier);
 
         transport
             .UseTopology<ForwardingTopology>()
