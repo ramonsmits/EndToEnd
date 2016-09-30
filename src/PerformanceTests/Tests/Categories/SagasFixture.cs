@@ -1,5 +1,6 @@
 namespace Categories
 {
+    using System;
     using System.Collections.Generic;
     using NUnit.Framework;
     using Tests.Permutations;
@@ -34,7 +35,7 @@ namespace Categories
                 Persisters = new[] { Persistence.Azure, Persistence.NHibernate, Persistence.RavenDB, },
                 Serializers = new[] { Serialization.Json, },
                 OutboxModes = new[] { Outbox.Off, },
-                ConcurrencyLevels = new[] { ConcurrencyLevel.Sequential, ConcurrencyLevel.EnvCores, ConcurrencyLevel.EnvCores4x, },
+                ConcurrencyLevels = new[] { ConcurrencyLevel.Sequential, ConcurrencyLevel.EnvCores04x, },
                 TransactionMode = new[] { TransactionMode.Atomic, TransactionMode.Transactional, }
             },
             p => p.Persister == Persistence.Azure && p.TransactionMode != TransactionMode.Transactional || p.Persister != Persistence.Azure

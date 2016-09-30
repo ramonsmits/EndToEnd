@@ -27,7 +27,7 @@ namespace Categories
                 ConcurrencyLevels = new[] {
                     ConcurrencyLevel.Sequential,
                     ConcurrencyLevel.EnvCores,
-                    ConcurrencyLevel.EnvCores4x,
+                    ConcurrencyLevel.EnvCores04x,
                 }
             });
         }
