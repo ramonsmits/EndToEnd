@@ -20,6 +20,7 @@ partial class PublishOneOnOneRunner : PerpetualRunner, IConfigureUnicastBus
     {
         Log.Warn("Sleeping 3,000ms for the instance to purge the queue and process subscriptions. Loop requires the queue to be empty.");
         await Task.Delay(3000).ConfigureAwait(false);
+        await base.Start(session);
     }
 
     protected override Task Seed(int i, ISession session)
