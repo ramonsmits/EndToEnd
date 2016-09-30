@@ -17,7 +17,7 @@ namespace ArtifactsParser
             var csv = ScanLogs.ToCsvString(path);
             var dst = Path.Combine(path, "report.csv");
             File.WriteAllText(dst, csv);
-            Console.WriteLine("Parsed '{0}' recursively and written to '{0}'", path, dst);
+            Console.WriteLine("Parsed '{0}' recursively and written to '{1}'", path, dst);
         }
     }
 }
