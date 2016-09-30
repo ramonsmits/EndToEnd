@@ -1,16 +1,12 @@
 ﻿using System.Threading.Tasks;
 using NServiceBus;
-using NServiceBus.Logging;
 
 partial class SagaUpdateRunner
-    : BaseRunner
+    : PerpetualRunner
 {
-    readonly ILog Log = LogManager.GetLogger(nameof(SagaUpdateRunner));
-
-    protected override Task Start(ISession session)
+    protected override Task Seed(int i, ISession session)
     {
-        var seedSize = MaxConcurrencyLevel * Permutation.PrefetchMultiplier * 2;
-        return Zeed(SeedWindow, seedSize, i => session.SendLocal(new Command { Identifier = ++i, Data = Data }));
+        return session.SendLocal(new Command { Identifier = ++i, Data = Data });
     }
 
     public class Command : ICommand

@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\BaseRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\GatedSendLocal\GatedSendLocalRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\ICreateSeedData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenarios\PerpetualRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\PublishOneOnOne\PublishOneOnOneRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\PublishOneOnOne\PublishOneOnOneRunner.V5.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenarios\PublishOneOnOne\PublishOneOnOneRunner.V6.cs" />

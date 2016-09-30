@@ -12,7 +12,7 @@ using NServiceBus.Logging;
 /// When the test is stopped, the handler stops forwarding the message. The test
 /// continues until no new messages are received.
 /// </summary>
-partial class PublishOneOnOneRunner : BaseRunner, IConfigureUnicastBus
+partial class PublishOneOnOneRunner : PerpetualRunner, IConfigureUnicastBus
 {
     readonly ILog Log = LogManager.GetLogger(nameof(PublishOneOnOneRunner));
 
@@ -20,8 +20,11 @@ partial class PublishOneOnOneRunner : BaseRunner, IConfigureUnicastBus
     {
         Log.Warn("Sleeping 3,000ms for the instance to purge the queue and process subscriptions. Loop requires the queue to be empty.");
         await Task.Delay(3000).ConfigureAwait(false);
-        var seedSize = MaxConcurrencyLevel * Permutation.PrefetchMultiplier * 2;
-        await BatchHelper.Batch(seedSize, i => session.Publish(new Event { Data = Data })).ConfigureAwait(false);
+    }
+
+    protected override Task Seed(int i, ISession session)
+    {
+        return session.Publish(new Event { Data = Data });
     }
 
     public class Event : IEvent

@@ -10,13 +10,11 @@ using NServiceBus;
 /// Then the test is stopped the handler stops forwarding the message. The test
 /// waits until no new messages are received.
 /// </summary>
-partial class SendLocalOneOnOneRunner : BaseRunner
+partial class SendLocalOneOnOneRunner : PerpetualRunner
 {
-
-    protected override Task Start(ISession session)
+    protected override Task Seed(int i, ISession session)
     {
-        var seedSize = MaxConcurrencyLevel * Permutation.PrefetchMultiplier * 2;
-        return BatchHelper.Batch(seedSize, i => session.SendLocal(new Command { Data = Data }));
+        return session.SendLocal(new Command { Data = Data });
     }
 
     public class Command : ICommand

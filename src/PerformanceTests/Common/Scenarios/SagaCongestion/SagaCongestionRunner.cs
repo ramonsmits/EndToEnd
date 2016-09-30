@@ -2,12 +2,11 @@
 using NServiceBus;
 
 partial class SagaCongestionRunner
-    : BaseRunner
+    : PerpetualRunner
 {
-    protected override Task Start(ISession session)
+    protected override Task Seed(int i, ISession session)
     {
-        var seedSize = MaxConcurrencyLevel * Permutation.PrefetchMultiplier * 2;
-        return Zeed(SeedWindow, seedSize, i => session.SendLocal(new Command { Data = Data }));
+        return session.SendLocal(new Command { Data = Data });
     }
 
     public class Command : ICommand
