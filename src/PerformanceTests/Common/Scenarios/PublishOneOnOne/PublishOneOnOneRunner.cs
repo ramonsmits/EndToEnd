@@ -21,11 +21,7 @@ partial class PublishOneOnOneRunner : BaseRunner, IConfigureUnicastBus
         Log.Warn("Sleeping 3,000ms for the instance to purge the queue and process subscriptions. Loop requires the queue to be empty.");
         await Task.Delay(3000).ConfigureAwait(false);
         var seedSize = MaxConcurrencyLevel * Permutation.PrefetchMultiplier * 2;
-        Log.InfoFormat("Seeding {0} messages based on concurrency level of {1}.", seedSize, MaxConcurrencyLevel);
-        await BatchHelper.Batch(seedSize, i => session.Publish(new Event
-        {
-            Data = Data
-        })).ConfigureAwait(false);
+        await BatchHelper.Batch(seedSize, i => session.Publish(new Event { Data = Data })).ConfigureAwait(false);
     }
 
     public class Event : IEvent
