@@ -56,7 +56,9 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 
         try
         {
+            Log.Info("Starting...");
             await Start(Session).ConfigureAwait(false);
+            Log.Info("Started");
 
             if (!IsSeedingData)
             {
@@ -74,7 +76,9 @@ public abstract class BaseRunner : IConfigurationSource, IContext
             await Task.Delay(runDuration).ConfigureAwait(false);
 
             Shutdown = true;
+            Log.Info("Stopping...");
             await Stop().ConfigureAwait(false);
+            Log.Info("Stopped");
             Statistics.Instance.Dump();
         }
         finally
