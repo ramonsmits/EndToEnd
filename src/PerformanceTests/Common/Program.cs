@@ -55,7 +55,7 @@ namespace Host
                     runnableTest.Execute(permutation, endpointName)
                         .ConfigureAwait(false).GetAwaiter().GetResult();
 
-                    if (PostCheckFailed()) return (int)ReturnCodes.PostCheckFailed;
+                    PostChecks();
                 }
             }
             catch (NotSupportedException nsex)
@@ -137,21 +137,17 @@ namespace Host
             }
         }
 
-        static bool PostCheckFailed()
+        static void PostChecks()
         {
             if (Statistics.Instance.NumberOfMessages == 0)
             {
-                Log.Fatal("NumberOfMessages equals 0, expected atleast one message to be processed.");
-                return true;
+                Log.Error("NumberOfMessages equals 0, expected atleast one message to be processed.");
             }
 
             if (Statistics.Instance.NumberOfRetries > Statistics.Instance.NumberOfMessages)
             {
-                Log.Fatal("NumberOfRetries is great than NumberOfMessages, too many errors occured during processing.");
-                return true;
+                Log.Error("NumberOfRetries is great than NumberOfMessages, too many errors occured during processing.");
             }
-
-            return false;
         }
 
         static void CheckPowerPlan()
