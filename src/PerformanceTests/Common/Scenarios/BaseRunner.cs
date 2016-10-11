@@ -69,6 +69,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
             await Wait().ConfigureAwait(false);
 
             Statistics.Dump();
+            WritePermutationSeedDurationFactor();
 
             Shutdown = true;
             Log.Info("Stopping...");
