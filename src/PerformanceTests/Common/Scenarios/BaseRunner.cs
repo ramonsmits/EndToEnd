@@ -33,6 +33,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 
     protected static bool Shutdown { private set; get; }
     protected readonly BatchHelper.IBatchHelper BatchHelper = global::BatchHelper.Instance;
+    protected readonly Statistics Statistics = Statistics.Instance;
 
     public async Task Execute(Permutation permutation, string endpointName)
     {
@@ -51,6 +52,10 @@ public abstract class BaseRunner : IConfigurationSource, IContext
             await CreateSeedData(seedCreator).ConfigureAwait(false);
         }
 
+
+        await Setup().ConfigureAwait(false);
+        Statistics.Reset(GetType().Name);
+
         Log.InfoFormat("Create receiving endpoint...");
         await CreateEndpoint().ConfigureAwait(false);
 
@@ -60,22 +65,9 @@ public abstract class BaseRunner : IConfigurationSource, IContext
             await Start(Session).ConfigureAwait(false);
             Log.Info("Started");
 
-            if (!IsSeedingData)
-            {
-                Log.InfoFormat("Warmup: {0}", Settings.WarmupDuration);
-                await Task.Delay(Settings.WarmupDuration).ConfigureAwait(false);
-            }
+            await Wait().ConfigureAwait(false);
 
-            var runDuration = IsSeedingData
-                ? Settings.RunDuration - Settings.SeedDuration
-                : Settings.RunDuration;
-
-            Log.InfoFormat("Run: {0}", runDuration);
-
-            Statistics.Instance.Reset(GetType().Name);
-            await Task.Delay(runDuration).ConfigureAwait(false);
-
-            Statistics.Instance.Dump();
+            Statistics.Dump();
             Shutdown = true;
             Log.Info("Stopping...");
             await Stop().ConfigureAwait(false);
@@ -87,13 +79,25 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         }
     }
 
+    protected virtual Task Wait()
+    {
+        Log.InfoFormat("Run: Duration {0}, until {1}", Settings.RunDuration, DateTime.UtcNow + Settings.RunDuration);
+        return Task.Delay(Settings.RunDuration);
+    }
+
     protected virtual Task Start(ISession session)
+    {
+        return Task.FromResult(0);
+    }
+
+    protected virtual Task Setup()
     {
         return Task.FromResult(0);
     }
 
     protected virtual Task Stop()
     {
+        //return DrainMessages();
         return Task.FromResult(0);
     }
 
