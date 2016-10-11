@@ -134,7 +134,7 @@ public class Statistics : IDisposable
         LogStats("PrivateBytes-Avg", counterValues.Average() / 1024, "kb");
     }
 
-    static void LogStats(string key, double value, string unit)
+    public static void LogStats(string key, double value, string unit)
     {
         logger.Info("{0}: {1:0.0} ({2})", key, value, unit);
     }
