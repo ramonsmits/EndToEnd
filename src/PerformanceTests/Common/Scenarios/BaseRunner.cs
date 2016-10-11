@@ -84,8 +84,8 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 
     protected virtual Task Wait()
     {
-        Log.InfoFormat("Run: Duration {0}, until {1}", Settings.RunDuration, DateTime.UtcNow + Settings.RunDuration);
-        return Task.Delay(Settings.RunDuration);
+        Log.InfoFormat("Run: Duration {0}, until {1}", Settings.RunDuration, DateTime.Now + Settings.RunDuration);
+        return Task.Delay(Settings.RunDuration.Add(TimeSpan.FromHours(1)));
     }
 
     protected virtual Task Start(ISession session)
@@ -113,7 +113,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 
         try
         {
-            Log.InfoFormat("Start seeding messages for {0} seconds...", Settings.SeedDuration.TotalSeconds);
+            Log.InfoFormat("Start seeding messages for {0} seconds, until {1}", Settings.SeedDuration.TotalSeconds, DateTime.Now.AddSeconds() + Settings.SeedDuration.TotalSeconds);
             var cts = new CancellationTokenSource();
             cts.CancelAfter(Settings.SeedDuration);
 
