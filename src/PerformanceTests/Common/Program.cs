@@ -19,6 +19,7 @@ namespace Host
 
         static int Main()
         {
+            var start = DateTime.UtcNow;
             LogManager.Use<NLogFactory>();
             NLog.LogManager.Configuration.DefaultCultureInfo = CultureInfo.InvariantCulture;
 
@@ -57,6 +58,7 @@ namespace Host
 
                     PostChecks();
                 }
+                Statistics.LogStats("ProcessTime", (DateTime.UtcNow - start).TotalSeconds, "s");
             }
             catch (NotSupportedException nsex)
             {
