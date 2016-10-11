@@ -77,7 +77,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         }
         finally
         {
-            await Session.Close().ConfigureAwait(false);
+            await Session.CloseWithSuppress().ConfigureAwait(false);
         }
     }
 
@@ -149,7 +149,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         }
         finally
         {
-            await Session.Close().ConfigureAwait(false);
+            await Session.CloseWithSuppress().ConfigureAwait(false);
         }
     }
 
@@ -158,10 +158,9 @@ public abstract class BaseRunner : IConfigurationSource, IContext
     {
         var configuration = CreateConfiguration();
         if (IsPurgingSupported) configuration.PurgeOnStartup(true);
-        using (Bus.Create(configuration).Start())
-        {
-            await DrainMessages().ConfigureAwait(false);
-        }
+        var instance = Bus.Create(configuration).Start();
+        await DrainMessages().ConfigureAwait(false);
+        await new Session(instance).CloseWithSuppress().ConfigureAwait(false);
     }
 
     Task CreateSendOnlyEndpoint()
@@ -226,7 +225,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
             try
             {
                 Log.Fatal("OnCriticalError", exception);
-                Session.Close();
+                Session.CloseWithSuppress().ConfigureAwait(false).GetAwaiter().GetResult();
             }
             finally
             {
@@ -246,7 +245,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         if (IsPurgingSupported) configuration.PurgeOnStartup(true);
         var instance = await Endpoint.Start(configuration).ConfigureAwait(false);
         await DrainMessages().ConfigureAwait(false);
-        await instance.Stop().ConfigureAwait(false);
+        await new Session(instance).CloseWithSuppress().ConfigureAwait(false);
     }
 
     async Task CreateSendOnlyEndpoint()
