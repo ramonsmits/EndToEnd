@@ -33,6 +33,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 
     protected static bool Shutdown { private set; get; }
     protected readonly BatchHelper.IBatchHelper BatchHelper = global::BatchHelper.Instance;
+    protected readonly Statistics Statistics = Statistics.Instance;
 
     public async Task Execute(Permutation permutation, string endpointName)
     {
@@ -52,7 +53,8 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         }
 
 
-        Statistics.Instance.Reset(GetType().Name);
+        await Setup().ConfigureAwait(false);
+        Statistics.Reset(GetType().Name);
 
         Log.InfoFormat("Create receiving endpoint...");
         await CreateEndpoint().ConfigureAwait(false);
@@ -63,25 +65,13 @@ public abstract class BaseRunner : IConfigurationSource, IContext
             await Start(Session).ConfigureAwait(false);
             Log.Info("Started");
 
-            if (!IsSeedingData)
-            {
-                Log.InfoFormat("Warmup: {0}", Settings.WarmupDuration);
-                await Task.Delay(Settings.WarmupDuration).ConfigureAwait(false);
-            }
-
-            var runDuration = IsSeedingData
-                ? Settings.RunDuration - Settings.SeedDuration
-                : Settings.RunDuration;
-
-            Log.InfoFormat("Run: {0}", runDuration);
-
-            await Task.Delay(runDuration).ConfigureAwait(false);
+            await Wait().ConfigureAwait(false);
 
             Shutdown = true;
             Log.Info("Stopping...");
             await Stop().ConfigureAwait(false);
             Log.Info("Stopped");
-            Statistics.Instance.Dump();
+            Statistics.Dump();
         }
         finally
         {
@@ -89,14 +79,26 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         }
     }
 
+    protected virtual Task Wait()
+    {
+        Log.InfoFormat("Run: Duration {0}, until {1}", Settings.RunDuration, DateTime.UtcNow + Settings.RunDuration);
+        return Task.Delay(Settings.RunDuration);
+    }
+
     protected virtual Task Start(ISession session)
+    {
+        return Task.FromResult(0);
+    }
+
+    protected virtual Task Setup()
     {
         return Task.FromResult(0);
     }
 
     protected virtual Task Stop()
     {
-        return DrainMessages();
+        return Task.FromResult(0);
+        //return DrainMessages();
     }
 
     async Task CreateSeedData(ICreateSeedData instance)
@@ -356,16 +358,16 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 
     protected async Task DrainMessages()
     {
-        var startCount = Statistics.Instance.NumberOfMessages;
+        var startCount = Statistics.NumberOfMessages;
         long current;
 
         Log.Info("Draining queue...");
         do
         {
-            current = Statistics.Instance.NumberOfMessages;
+            current = Statistics.NumberOfMessages;
             Log.Debug("Delaying to detect receive activity...");
             await Task.Delay(1000).ConfigureAwait(false);
-        } while (Statistics.Instance.NumberOfMessages > current);
+        } while (Statistics.NumberOfMessages > current);
 
         var diff = current - startCount;
         Log.InfoFormat("Drained {0} message(s)", diff);
