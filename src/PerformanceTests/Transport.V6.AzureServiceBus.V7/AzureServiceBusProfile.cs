@@ -26,6 +26,7 @@ class AzureServiceBusProfile : IProfile, INeedPermutation
             .Sanitization().UseStrategy<ValidateAndHashIfNeeded>()
             ;
 
+        transport.Queues().LockDuration(TimeSpan.FromMinutes(2));
         transport.MessagingFactories().BatchFlushInterval(TimeSpan.FromMilliseconds(100)); // Improves batched sends
 
         var numberOfFactoriesAndClients = 64; // Making sure that number of (receive) clients is equal to the number of factories, improves receive performance
