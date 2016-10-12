@@ -113,7 +113,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
 
         try
         {
-            Log.InfoFormat("Start seeding messages for {0} seconds, until {1}", Settings.SeedDuration.TotalSeconds, DateTime.Now.AddSeconds() + Settings.SeedDuration.TotalSeconds);
+            Log.InfoFormat("Start seeding messages for {0} seconds, until {1}", Settings.SeedDuration.TotalSeconds, DateTime.Now.AddSeconds(Settings.SeedDuration.TotalSeconds));
             var cts = new CancellationTokenSource();
             cts.CancelAfter(Settings.SeedDuration);
 
