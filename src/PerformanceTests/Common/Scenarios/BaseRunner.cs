@@ -413,7 +413,7 @@ public abstract class BaseRunner : IConfigurationSource, IContext
         var ratio = lines.Select(l => double.Parse(l, System.Globalization.CultureInfo.InvariantCulture)).Average();
         ratio = Math.Min(SeedDurationMax, Math.Max(SeedDurationMin, ratio));
         Log.InfoFormat("Set SeedDurationFactor to {0:N}.", ratio);
-        Settings.SeedDuration = TimeSpan.FromSeconds((Settings.RunDuration + Settings.WarmupDuration).TotalSeconds * ratio);
+        Settings.SeedDurationFactor = ratio;
     }
 
     void WritePermutationSeedDurationFactor()
