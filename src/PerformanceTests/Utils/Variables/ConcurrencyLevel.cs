@@ -10,5 +10,7 @@ namespace Variables
         EnvCores16x = 16,
         EnvCores32x = 32,
         EnvCores64x = 64,
+        EnvCores128x = 128,
+        EnvCores256x = 256,
     }
 }

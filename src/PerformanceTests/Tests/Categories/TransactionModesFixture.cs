@@ -31,7 +31,7 @@ namespace Categories
         {
             return PermutationGenerator.Generate(new Permutations
             {
-                Transports = (Transport[])Enum.GetValues(typeof(Transport)),
+                Transports = new[] { Transport.MSMQ, Transport.RabbitMQ, },
                 Persisters = new[] { Persistence.InMemory, },
                 OutboxModes = new[] { Outbox.Off, },
                 TransactionMode = new[] { TransactionMode.Receive, TransactionMode.Atomic, TransactionMode.Transactional, TransactionMode.None }
