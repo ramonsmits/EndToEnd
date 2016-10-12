@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Common.Scenarios;
 using NServiceBus;
@@ -30,7 +31,14 @@ partial class ReceiveRunner : BaseRunner, ICreateSeedData
 
     static void Signal()
     {
-        countdownEvent.Signal();
+        try
+        {
+            countdownEvent.Signal();
+        }
+        catch (Exception ex)
+        {
+            Log.Warn("Signal", ex);
+        }
     }
 
     protected override Task Wait()
